@@ -1,0 +1,19 @@
+# Folder
+.vscode
+.idea
+.obj
+.bin
+doxygen
+build
+
+# Binaries
+unit_test
+vgcore.*
+a.out
+42sh
+
+# Extension
+*.o
+*.a
+*.gcda
+*.gcno
