@@ -274,5 +274,5 @@ NAME="Segfault program"
 SETUP=""
 CLEAN=""
 TESTS=
-    echo './tester/.bin/segf'
+    echo './tests/tester/.bin/segf'
 [909-END]

@@ -5,7 +5,7 @@
 ## Makefile
 ##
 
-NAME		:=	mysh
+NAME		:=	42sh
 
 DIR			:=	./
 SRC			:=
@@ -102,9 +102,9 @@ $(UNIT_TEST):
 	@$(MAKE) $(UNIT_TEST)
 
 tester:				all
-	@./$@/tester.sh
+	@./tests/$@/tester.sh
 
-tests_run:
+tests_run:			tester
 	@$(MAKE) $@
 
 lib_all:

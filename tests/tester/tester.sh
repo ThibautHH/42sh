@@ -25,7 +25,7 @@ done
 disp_test()
 {
   id=$1
-  $CAT ./tester/tests | $GREP -A1000 "\[$id\]" | $GREP -B1000 "^\[$id-END\]" | $GREP -v "^\[.*\]"
+  $CAT ./tests/tester/tests | $GREP -A1000 "\[$id\]" | $GREP -B1000 "^\[$id-END\]" | $GREP -v "^\[.*\]"
 }
 
 run_script()
@@ -128,7 +128,7 @@ then
   done
 fi
 
-if [ ! -f ./tester/tests ]
+if [ ! -f ./tests/tester/tests ]
 then
   echo "No tests file. Please read README.ME" >&2
   exit 1
@@ -150,7 +150,7 @@ fi
 
 if [ $# -eq 0 ]
 then
-  for lst in `cat ./tester/tests | grep "^\[.*\]$" | grep -vi end | sed s/'\['// | sed s/'\]'//`
+  for lst in `cat ./tests/tester/tests | grep "^\[.*\]$" | grep -vi end | sed s/'\['// | sed s/'\]'//`
   do
     path_backup=$PATH
     load_test $lst 1
