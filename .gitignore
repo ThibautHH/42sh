@@ -10,7 +10,7 @@ build
 unit_test
 vgcore.*
 a.out
-mysh
+42sh
 
 # Extension
 *.o
