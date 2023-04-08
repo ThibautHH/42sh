@@ -49,6 +49,7 @@ jobs:
           done
       - name: 'Check fclean rule'
         run: |
+          make fclean || exit 1
           for executable in $(echo "$EXECUTABLES" | tr ',' ' ')
           do
             if [ -f "$executable" ]
