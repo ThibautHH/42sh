@@ -56,16 +56,12 @@ static bool loop_env(env_t *env)
 
 static int mysh(char **env)
 {
-    env_t st_env = {0};
+    env_t *local_env = load_env(env);
 
-    st_env.env = dup_env(env);
-    if (!st_env.env)
+    if (!local_env || loop_env(local_env))
         return 84;
-    st_env.env = fix_env(st_env.env);
-    if (!st_env.env || loop_env(&st_env))
-        return 84;
-    ice_free_array((void **)st_env.env);
-    return st_env.status;
+    ice_free_array((void **)local_env->env);
+    return local_env->status;
 }
 
 int main(int ac, UNUSED char **av, char **env)

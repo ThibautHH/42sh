@@ -89,6 +89,14 @@ env_t *builtin_unsetenv(char **av, env_t *env);
 bool execute_binary(char *path, char **av,  env_t *env);
 
 /**
+ * @brief Get the path of the binary
+ * @param av The arguments
+ * @param env The environment
+ * @return char* The path of the binary
+ */
+env_t *load_env(char **env);
+
+/**
  * @brief Create a new environment
  * @param env The environment
  * @return char** The new environment
