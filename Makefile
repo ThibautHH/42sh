@@ -47,6 +47,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				load_env.c		\
 				dup_env.c		\
 				fix_env.c		\
+				destroy_env.c	\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./search/)

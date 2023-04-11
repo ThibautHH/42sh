@@ -50,17 +50,13 @@ static bool loop_input(env_t *env)
 static int mysh(char **global_env)
 {
     env_t *env = load_env(global_env);
-    int exit_status;
 
     if (!env)
         return 84;
     while (!env->exit)
         if (loop_input(env))
             return 84;
-    exit_status = env->status;
-    ice_free_array((void **)env->env);
-    free(env);
-    return exit_status;
+    return destroy_env(env);
 }
 
 int main(int ac, UNUSED char **av, char **env)

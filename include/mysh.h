@@ -111,6 +111,13 @@ char **dup_env(char **env);
 char **fix_env(char **env);
 
 /**
+ * @brief Destroy the environment
+ * @param env The environment
+ * @return int The status
+ */
+int destroy_env(env_t *env);
+
+/**
  * @brief Get an environment variable
  * @param name The name of the variable
  * @param env The environment
