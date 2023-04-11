@@ -5,28 +5,7 @@
 ** mysh.c
 */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <malloc.h>
-
 #include "mysh.h"
-#include "list.h"
-#include "ice/array.h"
-#include "ice/string.h"
-#include "redirection.h"
-
-bool handle_sequence(char *buffer, env_t *env)
-{
-    char **sequence = ice_strsplit(buffer, ";");
-
-    if (!sequence)
-        return true;
-    for (int i = 0; sequence[i]; i++)
-        if (handle_pipe(env, sequence[i]))
-            return true;
-    ice_free_array((void **)sequence);
-    return false;
-}
 
 static int mysh(char **global_env)
 {
