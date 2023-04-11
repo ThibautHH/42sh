@@ -44,7 +44,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 
 DIR			+= 	$(addprefix $(DIR_SRC), ./env/initialisation/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				malloc_env.c					\
+				dup_env.c					\
 				fix_env.c						\
 				)
 

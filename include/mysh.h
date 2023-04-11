@@ -98,7 +98,7 @@ bool execute_binary(char *path, char **av,  env_t *env);
  * @param env The environment
  * @return char** The new environment
  */
-char **malloc_env(char **env);
+char **dup_env(char **env);
 
 /**
  * @brief Fix the environment

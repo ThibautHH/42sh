@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2023
 ** minishell2
 ** File description:
-** malloc_env.c
+** dup_env.c
 */
 
 #include <stdlib.h>
@@ -10,7 +10,7 @@
 #include "mysh.h"
 #include "ice/string.h"
 
-char **malloc_env(char **env)
+char **dup_env(char **env)
 {
     ull_t size = 0;
     char **new_env;

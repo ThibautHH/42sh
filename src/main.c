@@ -58,7 +58,7 @@ static int mysh(char **env)
 {
     env_t st_env = {0};
 
-    st_env.env = malloc_env(env);
+    st_env.env = dup_env(env);
     if (!st_env.env)
         return 84;
     st_env.env = fix_env(st_env.env);
