@@ -15,7 +15,7 @@
 #include "ice/string.h"
 #include "redirection.h"
 
-static bool handle_input(char *buffer, env_t *env)
+bool handle_sequence(char *buffer, env_t *env)
 {
     char **sequence = ice_strsplit(buffer, ";");
 
@@ -28,25 +28,6 @@ static bool handle_input(char *buffer, env_t *env)
     return false;
 }
 
-static bool loop_input(env_t *env)
-{
-    char *buffer;
-    size_t size = 0;
-
-    if (isatty(STDIN_FILENO)
-        && (write(STDOUT_FILENO, "$> ", 3) == -1))
-        return true;
-    if (getline(&buffer, &size, stdin) == -1) {
-        if (isatty(STDIN_FILENO)
-            && write(STDOUT_FILENO, "exit\n", 5) == -1)
-            return true;
-        env->exit = true;
-        return false;
-    }
-    buffer[ice_strlen(buffer) - 1] = '\0';
-    return handle_input(buffer, env);
-}
-
 static int mysh(char **global_env)
 {
     env_t *env = load_env(global_env);
@@ -54,7 +35,7 @@ static int mysh(char **global_env)
     if (!env)
         return 84;
     while (!env->exit)
-        if (loop_input(env))
+        if (handle_input(env))
             return 84;
     return destroy_env(env);
 }

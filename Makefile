@@ -57,12 +57,13 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 
 DIR			+=	$(addprefix $(DIR_SRC), ./parser/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				handle_pipe.c					\
-				redirection.c					\
-				output.c						\
-				input.c							\
-				get_input.c						\
-				extract.c						\
+				handle_input.c		\
+				handle_pipe.c		\
+				redirection.c		\
+				output.c			\
+				input.c				\
+				get_input.c			\
+				extract.c			\
 				)
 
 DIR_TEST	:=	./tests/
