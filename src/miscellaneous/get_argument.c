@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2023
 ** minishell2
 ** File description:
-** get_av.c
+** get_argument.c
 */
 
 #include <stdlib.h>
@@ -49,7 +49,7 @@ static char *get_word(char *buffer, int *index)
     return word;
 }
 
-char **get_av(char *buffer)
+char **get_argument(char *buffer)
 {
     int i = 0;
     int index = 0;

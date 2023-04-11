@@ -19,9 +19,9 @@ SRC			+=	$(addprefix $(DIR_SRC),\
 
 DIR			+=	$(addprefix $(DIR_SRC), ./miscellaneous/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				get_av.c						\
-				display_error.c					\
-				execute_binary.c				\
+				get_argument.c		\
+				display_error.c		\
+				execute_binary.c	\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./builtin/)

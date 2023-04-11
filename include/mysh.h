@@ -38,7 +38,7 @@ bool search_function(char **av, env_t *env);
  * @return char** The arguments
  * @note The string must be null terminated
  */
-char **get_av(char *buffer);
+char **get_argument(char *buffer);
 
 /**
  * @brief Change the current working directory
