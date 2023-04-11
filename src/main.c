@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <malloc.h>
 
 #include "mysh.h"
 #include "list.h"
@@ -46,22 +47,20 @@ static bool loop_input(env_t *env)
     return handle_input(buffer, env);
 }
 
-static bool loop_env(env_t *env)
+static int mysh(char **global_env)
 {
+    env_t *env = load_env(global_env);
+    int exit_status;
+
+    if (!env)
+        return 84;
     while (!env->exit)
         if (loop_input(env))
-            return true;
-    return false;
-}
-
-static int mysh(char **env)
-{
-    env_t *local_env = load_env(env);
-
-    if (!local_env || loop_env(local_env))
-        return 84;
-    ice_free_array((void **)local_env->env);
-    return local_env->status;
+            return 84;
+    exit_status = env->status;
+    ice_free_array((void **)env->env);
+    free(env);
+    return exit_status;
 }
 
 int main(int ac, UNUSED char **av, char **env)
