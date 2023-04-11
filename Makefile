@@ -39,9 +39,13 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				set_env.c						\
 				unset_env.c						\
 				display_env.c					\
+				exit_env.c						\
+				)
+
+DIR			+= 	$(addprefix $(DIR_SRC), ./env/initialisation/)
+SRC			+=	$(addprefix $(lastword $(DIR)),\
 				malloc_env.c					\
 				fix_env.c						\
-				exit_env.c						\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./search/)
