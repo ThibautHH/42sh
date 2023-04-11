@@ -60,6 +60,10 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				handle_input.c		\
 				handle_sequence.c	\
 				handle_pipe.c		\
+				)
+
+DIR			+=	$(addprefix $(DIR_SRC), ./parser/redirection/)
+SRC			+=	$(addprefix $(lastword $(DIR)),\
 				redirection.c		\
 				output.c			\
 				input.c				\
