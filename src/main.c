@@ -32,12 +32,7 @@ static int mysh(char **global_env)
 {
     env_t *env = load_env(global_env);
 
-    if (!env)
-        return 84;
-    while (!env->exit)
-        if (handle_input(env))
-            return 84;
-    return destroy_env(env);
+    return !env || handle_input(env) ? 84 : destroy_env(env);
 }
 
 int main(int ac, UNUSED char **av, char **env)

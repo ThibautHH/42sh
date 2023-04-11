@@ -15,15 +15,17 @@ bool handle_input(env_t *env)
     size_t size = 0;
     ssize_t len;
 
-    if (isatty(STDIN_FILENO) && (write(STDOUT_FILENO, "$> ", 3) < 0))
-        return true;
-    len = getline(&buffer, &size, stdin);
-    if (len < 0) {
-        if (isatty(STDIN_FILENO) && write(STDOUT_FILENO, "exit\n", 5) < 0)
+    while (!env->exit) {
+        if (isatty(STDIN_FILENO)
+            && (write(STDOUT_FILENO, "$> ", 3) < 0))
             return true;
-        env->exit = true;
-        return false;
+        len = getline(&buffer, &size, stdin);
+        if (len < 0)
+            return isatty(STDIN_FILENO)
+                && write(STDOUT_FILENO, "exit\n", 5) < 0;
+        buffer[len - 1] = '\0';
+        if (handle_sequence(buffer, env))
+            return true;
     }
-    buffer[len - 1] = '\0';
-    return handle_sequence(buffer, env);
+    return false;
 }
