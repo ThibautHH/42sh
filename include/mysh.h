@@ -24,11 +24,6 @@ typedef struct env_s {
     bool exit;
 } env_t;
 
-typedef struct output_s {
-    char *buffer;
-    size_t size;
-} output_t;
-
 /**
  * @brief Search for a function
  * @param av The arguments
