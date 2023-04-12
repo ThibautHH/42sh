@@ -86,7 +86,7 @@ env_t *builtin_unsetenv(char **av, env_t *env);
  * @param buffer The buffer
  * @return env The new environment
  */
-bool execute_binary(char *path, char **av,  env_t *env);e
+bool execute_binary(char *path, char **av,  env_t *env);
 
 /**
  * @brief Get the current working directory
