@@ -6,6 +6,7 @@
 */
 
 #include <malloc.h>
+#include <unistd.h>
 
 #include "mysh.h"
 #include "ice/array.h"

@@ -5,6 +5,8 @@
 ** buitlin_exit.c
 */
 
+#include <unistd.h>
+
 #include "mysh.h"
 
 env_t *builtin_exit(UNUSED char **av, env_t *env)
