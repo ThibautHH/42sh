@@ -12,5 +12,5 @@ void display_error(env_t *env, const char *format, const char *str)
 {
     ice_printf(format, str);
     env->status = 1;
-    env->exit = 1;
+    env->exit = true;
 }
