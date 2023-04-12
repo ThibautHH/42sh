@@ -15,15 +15,16 @@
 //
 
 /**
- * @brief Get the path of the binary
- * @param av The arguments
+ * @brief Load the environment
+ *
  * @param env The environment
- * @return char* The path of the binary
+ * @return env_t* The new environment
  */
 env_t *load_env(char **env);
 
 /**
- * @brief Create a new environment
+ * @brief Duplicate the environment
+ *
  * @param env The environment
  * @return char** The new environment
  */
@@ -31,6 +32,7 @@ char **dup_env(char **env);
 
 /**
  * @brief Fix the environment
+ *
  * @param env The environment
  * @return char** The new environment
  */
@@ -42,6 +44,7 @@ char **fix_env(char **env);
 
 /**
  * @brief Destroy the environment
+ *
  * @param env The environment
  * @return int The status
  */
@@ -53,6 +56,7 @@ int destroy_env(env_t *env);
 
 /**
  * @brief Get an environment variable
+ *
  * @param name The name of the variable
  * @param env The environment
  * @return char* The value of the variable
@@ -61,6 +65,7 @@ char *get_env(char *name, env_t *env);
 
 /**
  * @brief Set an environment variable
+ *
  * @param env The environment
  * @param name The name of the variable
  * @param value The value of the variable
@@ -70,6 +75,7 @@ char **set_env(env_t *env, char *name, char *value) ;
 
 /**
  * @brief Unset an environment variable
+ *
  * @param env The environment
  * @param name The name of the variable
  * @return char** The new environment
@@ -78,15 +84,18 @@ char **unset_env(char **env, char *name);
 
 /**
  * @brief Display the environment
+ *
  * @param env The environment
  * @return bool True if write failed
  */
 bool display_env(char **env);
 
 /**
- * @brief Get the current working directory
+ * @brief Set exit as true adn set the status as 1
+ *
  * @param env The environment
- * @return char* The current working directory
+ * @param status The status
+ * @return env_t* The new environment
  */
 void exit_env(env_t *env);
 
