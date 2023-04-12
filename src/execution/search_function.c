@@ -8,10 +8,10 @@
 #include <malloc.h>
 #include <unistd.h>
 
-#include "mysh.h"
 #include "ice/array.h"
 #include "ice/string.h"
 #include "ice/printf.h"
+#include "mysh/execution.h"
 #include "mysh/builtins.h"
 
 static bool command_not_found(char *cmd, env_t *env)

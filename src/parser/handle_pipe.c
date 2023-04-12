@@ -11,6 +11,7 @@
 
 #include "ice/array.h"
 #include "ice/string.h"
+#include "mysh/execution.h"
 #include "mysh/redirection.h"
 
 static bool execute(char *sequence, env_t *env, int pid)
