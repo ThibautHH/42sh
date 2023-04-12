@@ -10,6 +10,10 @@
 
     #include "mysh.h"
 
+//
+// Handle
+//
+
 /**
  * @brief Handle the input of the user
  *
@@ -30,10 +34,10 @@ bool handle_sequence(char *buffer, env_t *env);
 /**
  * @brief Handle the pipe of commands
  *
- * @param env The environment
  * @param buffer The buffer
+ * @param env The environment
  * @return bool True if error occurred
  */
-bool handle_pipe(env_t *env, char *buffer);
+bool handle_pipe(char *buffer, env_t *env);
 
 #endif /* !INC_42SH_PARSER_H */

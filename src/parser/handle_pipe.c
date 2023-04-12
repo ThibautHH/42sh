@@ -56,7 +56,7 @@ static bool set_pipe(int *pipefd, char *line, env_t *env, int *pid)
     return (*pid != 0) ? execute(line, env, *pid) : false;
 }
 
-bool handle_pipe(env_t *env, char *line)
+bool handle_pipe(char *line, env_t *env)
 {
     char **sequence = ice_strsplit(line, "|");
     int len = (int)ice_array_len((void **)sequence);

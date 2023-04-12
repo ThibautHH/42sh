@@ -16,7 +16,7 @@ bool handle_sequence(char *buffer, env_t *env)
     if (!sequence)
         return true;
     for (int i = 0; sequence[i]; i++)
-        if (handle_pipe(env, sequence[i]))
+        if (handle_pipe(sequence[i], env))
             return true;
     ice_free_array((void **)sequence);
     return false;
