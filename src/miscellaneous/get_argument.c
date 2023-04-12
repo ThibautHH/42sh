@@ -5,7 +5,7 @@
 ** get_argument.c
 */
 
-#include <stdlib.h>
+#include <malloc.h>
 
 #include "mysh.h"
 
