@@ -14,7 +14,6 @@
 #include "ice/string.h"
 #include "redirection.h"
 
-
 static bool read_input(redir_t *redir, const char *str)
 {
     size_t size = 0;
@@ -36,7 +35,7 @@ static bool read_input(redir_t *redir, const char *str)
     return false;
 }
 
-bool get_input(redir_t *redir, const char *str)
+static bool get_input(redir_t *redir, const char *str)
 {
     int pid;
 

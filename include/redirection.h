@@ -57,8 +57,6 @@ bool set_input(redir_t *redir, char *str, env_t *env);
  */
 bool unset_input(redir_t *redir);
 
-bool get_input(redir_t *redir, const char *str);
-
 /**
  * @brief Count the number of input redirection
  * @param redir The redirection
