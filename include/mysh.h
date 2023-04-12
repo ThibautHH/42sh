@@ -41,45 +41,6 @@ bool search_function(char **av, env_t *env);
 char **get_argument(char *buffer);
 
 /**
- * @brief Change the current working directory
- * @param path The path to change to
- * @param env The environment
- * @return env The new environment
- */
-env_t *builtin_cd(char **av, env_t *env);
-
-/**
- * @brief Exit the shell
- * @param env The environment
- * @param av The arguments
- * @return env The new environment
- */
-env_t *builtin_exit(UNUSED char **av, env_t *env);
-
-/**
- * @brief Display the environment
- * @param env The environment
- * @return env The new environment
- */
-env_t *builtin_env(UNUSED char **av, env_t *env);
-
-/**
- * @brief Exit the shell
- * @param env The environment
- * @param av The arguments
- * @return env The new environment
- */
-env_t *builtin_setenv(char **av, env_t *env);
-
-/**
- * @brief Unset an environment variable
- * @param env The environment
- * @param buffer The buffer
- * @return env The new environment
- */
-env_t *builtin_unsetenv(char **av, env_t *env);
-
-/**
  * @brief Set an environment variable
  * @param path The path of the binary
  * @param env The environment

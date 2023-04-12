@@ -50,7 +50,7 @@ static char *search_in_path(char **av, env_t *env)
     return NULL;
 }
 
-bool builtin_function(char **av, env_t **env)
+static bool builtin_function(char **av, env_t **env)
 {
     for (ui_t i = 0; builtins[i].name; i++)
         if (ice_strcmp(builtins[i].name, av[0]) == 0) {
