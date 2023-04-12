@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "mysh.h"
+#include "mysh/parser.h"
 
 bool handle_input(env_t *env)
 {

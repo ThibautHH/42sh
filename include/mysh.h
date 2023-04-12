@@ -53,25 +53,4 @@ bool execute_binary(char *path, char **av,  env_t *env);
  */
 void display_error(env_t *env, const char *format, const char *str);
 
-/**
- * @brief Get the current working directory
- * @param env The environment
- * @return char* The current working directory
- */
-bool handle_input(env_t *env);
-
-/**
- * @brief Get the current working directory
- * @param env The environment
- * @return char* The current working directory
- */
-bool handle_sequence(char *buffer, env_t *env);
-
-/**
- * @brief Get the current working directory
- * @param env The environment
- * @return char* The current working directory
- */
-bool handle_pipe(env_t *env, char *buffer);
-
 #endif /* !MYSH_H */

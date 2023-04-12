@@ -6,6 +6,7 @@
 */
 
 #include "mysh/env.h"
+#include "mysh/parser.h"
 
 static int mysh(char **global_env)
 {
