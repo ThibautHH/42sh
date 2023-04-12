@@ -5,7 +5,7 @@
 ** mysh.c
 */
 
-#include "mysh.h"
+#include "mysh/env.h"
 
 static int mysh(char **global_env)
 {

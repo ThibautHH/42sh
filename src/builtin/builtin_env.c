@@ -5,7 +5,7 @@
 ** builtins_env.c
 */
 
-#include "mysh.h"
+#include "mysh/env.h"
 
 env_t *builtin_env(UNUSED char **av, env_t *env)
 {

@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 
+#include "mysh/env.h"
 #include "ice/output.h"
 #include "ice/string.h"
 #include "mysh/redirection.h"

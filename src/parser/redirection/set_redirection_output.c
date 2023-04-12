@@ -7,6 +7,7 @@
 
 #include <fcntl.h>
 
+#include "mysh/env.h"
 #include "ice/output.h"
 #include "mysh/redirection.h"
 

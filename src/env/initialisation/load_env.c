@@ -5,7 +5,7 @@
 ** load_env.c
 */
 
-#include "mysh.h"
+#include "mysh/env.h"
 #include "ice/memory.h"
 
 env_t *load_env(char **env)

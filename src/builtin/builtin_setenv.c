@@ -5,7 +5,7 @@
 ** builtin_setenv.c
 */
 
-#include "mysh.h"
+#include "mysh/env.h"
 #include "ice/array.h"
 
 env_t *builtin_setenv(char **av, env_t *env)

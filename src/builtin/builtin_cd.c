@@ -9,7 +9,7 @@
 #include <malloc.h>
 #include <sys/stat.h>
 
-#include "mysh.h"
+#include "mysh/env.h"
 #include "ice/array.h"
 #include "ice/string.h"
 #include "ice/printf.h"

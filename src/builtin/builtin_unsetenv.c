@@ -5,7 +5,7 @@
 ** builtin_unsetenv.c
 */
 
-#include "mysh.h"
+#include "mysh/env.h"
 
 env_t *builtin_unsetenv(char **av, env_t *env)
 {
