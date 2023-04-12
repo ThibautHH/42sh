@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2023
-** minishell2
+** 42sh
 ** File description:
 ** builtin_unsetenv.c
 */

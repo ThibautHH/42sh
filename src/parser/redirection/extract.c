@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2023
-** mysh
+** 42sh
 ** File description:
 ** extract.c
 */
