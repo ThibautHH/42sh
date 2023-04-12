@@ -94,7 +94,7 @@ static bool count_input(redir_t *redir, char *str)
     return handle_extract(redir, str, read, input);
 }
 
-bool set_input(redir_t *redir, char *str, env_t *env)
+bool set_redirection_input(redir_t *redir, char *str, env_t *env)
 {
     if (!count_input(redir, str))
         return true;

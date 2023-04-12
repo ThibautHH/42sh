@@ -9,5 +9,6 @@
 
 bool set_redirection(redir_t *redir, char *str, env_t *env)
 {
-    return set_output(redir, str, env) || set_input(redir, str, env);
+    return set_redirection_output(redir, str, env)
+        || set_redirection_input(redir, str, env);
 }

@@ -9,5 +9,6 @@
 
 bool unset_redirection(redir_t *redir)
 {
-    return unset_output(redir) || unset_input(redir);
+    return unset_redirection_output(redir)
+        || unset_redirection_input(redir);
 }

@@ -45,7 +45,7 @@ static bool count_output(redir_t *redir, char *str)
     return handle_extract(redir, str, add, append);
 }
 
-bool set_output(redir_t *redir, char *str, env_t *env)
+bool set_redirection_output(redir_t *redir, char *str, env_t *env)
 {
     int flags = O_WRONLY | O_CREAT;
 

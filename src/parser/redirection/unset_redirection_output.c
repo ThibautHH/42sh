@@ -9,7 +9,7 @@
 
 #include "mysh/redirection.h"
 
-bool unset_output(redir_t *redir)
+bool unset_redirection_output(redir_t *redir)
 {
     if (!redir->file_out)
         return false;

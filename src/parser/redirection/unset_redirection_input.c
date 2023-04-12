@@ -9,7 +9,7 @@
 
 #include "mysh/redirection.h"
 
-bool unset_input(redir_t *redir)
+bool unset_redirection_input(redir_t *redir)
 {
     if (!redir->file_in)
         return false;

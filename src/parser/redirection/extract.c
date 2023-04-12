@@ -10,7 +10,7 @@
 #include "ice/string.h"
 #include "mysh/redirection.h"
 
-ui_t extract_len(const char *str, char end)
+static ui_t extract_len(const char *str, char end)
 {
     ui_t len = 0;
 
