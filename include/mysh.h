@@ -21,19 +21,4 @@ typedef struct env_s {
     bool exit;
 } env_t;
 
-/**
- * @brief Get the arguments of the command
- * @param string The string
- * @return char** The arguments
- * @note The string must be null terminated
- */
-char **get_argument(char *buffer);
-
-/**
- * @brief Get the current working directory
- * @param env The environment
- * @return char* The current working directory
- */
-void display_error(env_t *env, const char *format, const char *str);
-
 #endif /* !MYSH_H */

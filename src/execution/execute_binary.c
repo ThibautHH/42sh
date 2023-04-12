@@ -14,6 +14,7 @@
 #include "mysh.h"
 #include "ice/output.h"
 #include "mysh/signals.h"
+#include "mysh/miscellaneous.h"
 
 static void handle_signal(int child_status)
 {

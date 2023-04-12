@@ -13,6 +13,7 @@
 #include "ice/string.h"
 #include "mysh/execution.h"
 #include "mysh/redirection.h"
+#include "mysh/miscellaneous.h"
 
 static bool execute(char *sequence, env_t *env, int pid)
 {

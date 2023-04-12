@@ -6,6 +6,7 @@
 */
 
 #include "mysh/env.h"
+#include "mysh/miscellaneous.h"
 
 env_t *builtin_unsetenv(char **av, env_t *env)
 {

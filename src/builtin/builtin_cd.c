@@ -13,6 +13,7 @@
 #include "ice/array.h"
 #include "ice/string.h"
 #include "ice/printf.h"
+#include "mysh/miscellaneous.h"
 
 static bool verif_pwd(char *pwd, char *path, env_t *env)
 {

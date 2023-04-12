@@ -7,6 +7,7 @@
 
 #include "mysh/env.h"
 #include "ice/array.h"
+#include "mysh/miscellaneous.h"
 
 env_t *builtin_setenv(char **av, env_t *env)
 {
