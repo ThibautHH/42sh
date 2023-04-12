@@ -7,7 +7,6 @@
 
 #include <malloc.h>
 
-#include "mysh.h"
 #include "ice/string.h"
 #include "mysh/redirection.h"
 
