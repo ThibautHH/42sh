@@ -57,11 +57,11 @@ int destroy_env(env_t *env);
 /**
  * @brief Get an environment variable
  *
- * @param name The name of the variable
  * @param env The environment
+ * @param name The name of the variable
  * @return char* The value of the variable
  */
-char *get_env(char *name, env_t *env);
+char *get_env(env_t *env, char *name);
 
 /**
  * @brief Set an environment variable
@@ -94,7 +94,6 @@ bool display_env(env_t *env);
  * @brief Set exit as true adn set the status as 1
  *
  * @param env The environment
- * @param status The status
  * @return env_t* The new environment
  */
 void exit_env(env_t *env);

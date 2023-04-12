@@ -40,7 +40,7 @@ static env_t *update_pwd(char *src, char *path, env_t *env)
         return env;
     if (chdir(pwd +4))
         return env;
-    env->env = set_env(env, "OLDPWD", get_env("PWD", env));
+    env->env = set_env(env, "OLDPWD", get_env(env, "PWD"));
     env->env = set_env(env, "PWD", pwd + 4);
     free(pwd);
     if (!env->env)
@@ -50,7 +50,7 @@ static env_t *update_pwd(char *src, char *path, env_t *env)
 
 static env_t *update_pwd_home(env_t *env)
 {
-    char *home = get_env("HOME", env);
+    char *home = get_env(env, "HOME");
 
     if (!home) {
         display_error(env, "No $home set.\n", NULL);
@@ -61,7 +61,7 @@ static env_t *update_pwd_home(env_t *env)
 
 static env_t *update_pwd_oldpwd(env_t *env)
 {
-    char *oldpwd = get_env("OLDPWD", env);
+    char *oldpwd = get_env(env, "OLDPWD");
 
     if (!oldpwd) {
         display_error(env, "cd: No such file or directory.\n", NULL);
@@ -82,5 +82,5 @@ env_t *builtin_cd(char **av, env_t *env)
         return update_pwd("", av[1], env);
     if (ice_strcmp(av[1], "-") == 0)
         return update_pwd_oldpwd(env);
-    return update_pwd(get_env("PWD", env), av[1], env);
+    return update_pwd(get_env(env,"PWD"), av[1], env);
 }
