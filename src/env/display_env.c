@@ -5,8 +5,6 @@
 ** display_env.c
 */
 
-#include <stdbool.h>
-
 #include "mysh.h"
 #include "ice/printf.h"
 
