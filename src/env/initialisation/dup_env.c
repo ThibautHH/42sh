@@ -5,7 +5,7 @@
 ** dup_env.c
 */
 
-#include <stdlib.h>
+#include <malloc.h>
 
 #include "mysh.h"
 #include "ice/string.h"
