@@ -30,15 +30,17 @@ typedef struct redir_s {
 
 /**
  * @brief Set the redirection
+ *
  * @param redir The redirection
  * @param str The string
  * @param env The environment
- * @return bool False if error occurred
+ * @return bool True if error occurred
  */
 bool set_redirection(redir_t *redir, char *str, env_t *env);
 
 /**
  * @brief Set the output redirection
+ *
  * @param redir The redirection
  * @param str The string
  * @param env The environment
@@ -48,6 +50,7 @@ bool set_redirection_output(redir_t *redir, char *str, env_t *env);
 
 /**
  * @brief Set the input redirection
+ *
  * @param redir The redirection
  * @param str The string
  * @param env The environment
@@ -61,13 +64,15 @@ bool set_redirection_input(redir_t *redir, char *str, env_t *env);
 
 /**
  * @brief Unset the redirection
+ *
  * @param redir The redirection
- * @return bool False if error occurred
+ * @return bool True if error occurred
  */
 bool unset_redirection(redir_t *redir);
 
 /**
  * @brief Unset the output redirection
+ *
  * @param redir The redirection
  * @return bool False if error occurred
  */
@@ -75,6 +80,7 @@ bool unset_redirection_output(redir_t *redir);
 
 /**
  * @brief Unset the input redirection
+ *
  * @param redir The redirection
  * @return bool False if error occurred
  */
@@ -86,19 +92,19 @@ bool unset_redirection_input(redir_t *redir);
 
 /**
  * @brief Extract the output redirection
+ *
  * @param redir The redirection
  * @param str The string
  * @param start The start of the string
- * @param end The end of the string
  */
 bool extract_output(redir_t *redir, char *str, char *start);
 
 /**
  * @brief Extract the input redirection
+ *
  * @param redir The redirection
  * @param str The string
  * @param start The start of the string
- * @param end The end of the string
  */
 bool extract_input(redir_t *redir, char *str, char *start);
 
