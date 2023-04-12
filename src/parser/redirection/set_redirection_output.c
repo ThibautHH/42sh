@@ -1,14 +1,12 @@
 /*
-** EPITECH PROJECT, 2023
-** mysh
+** EPITECH PROJECT, 2022
+** 42sh
 ** File description:
-** output.c
+** set_redirection_output.c
 */
 
 #include <fcntl.h>
-#include <malloc.h>
 
-#include "mysh.h"
 #include "ice/output.h"
 #include "redirection.h"
 
@@ -64,17 +62,5 @@ bool set_output(redir_t *redir, char *str, env_t *env)
         exit_env(env);
         return true;
     }
-    return false;
-}
-
-bool unset_output(redir_t *redir)
-{
-    if (!redir->file_out)
-        return false;
-    if (dup2(redir->fd_out[0], STDOUT_FILENO) == -1)
-        return true;
-    close(redir->fd_out[0]);
-    close(redir->fd_out[1]);
-    free(redir->file_out);
     return false;
 }

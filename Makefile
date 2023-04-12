@@ -52,7 +52,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 
 DIR			+=	$(addprefix $(DIR_SRC), ./search/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				search_function.c				\
+				search_function.c	\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./parser/)
@@ -64,11 +64,13 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 
 DIR			+=	$(addprefix $(DIR_SRC), ./parser/redirection/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				redirection.c		\
-				output.c			\
-				input.c				\
-				get_input.c			\
-				extract.c			\
+				extract.c					\
+				set_redirection.c			\
+				set_redirection_input.c		\
+				set_redirection_output.c	\
+				unset_redirection.c			\
+				unset_redirection_input.c	\
+				unset_redirection_output.c	\
 				)
 
 DIR_TEST	:=	./tests/
