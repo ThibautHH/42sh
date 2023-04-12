@@ -21,7 +21,6 @@ DIR			+=	$(addprefix $(DIR_SRC), ./miscellaneous/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				get_argument.c		\
 				display_error.c		\
-				execute_binary.c	\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./builtin/)
@@ -50,9 +49,10 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				destroy_env.c	\
 				)
 
-DIR			+=	$(addprefix $(DIR_SRC), ./search/)
+DIR			+=	$(addprefix $(DIR_SRC), ./execution/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				search_function.c	\
+				execute_binary.c	\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./parser/)
