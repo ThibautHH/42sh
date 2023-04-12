@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2023
 ** 42sh
 ** File description:
-** builtins_env.c
+** builtin_env.c
 */
 
 #include "mysh/env.h"

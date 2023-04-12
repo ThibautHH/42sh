@@ -23,7 +23,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				display_error.c		\
 				)
 
-DIR			+=	$(addprefix $(DIR_SRC), ./builtin/)
+DIR			+=	$(addprefix $(DIR_SRC), ./builtins/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				builtin_cd.c					\
 				builtin_exit.c					\

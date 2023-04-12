@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2023
 ** 42sh
 ** File description:
-** builtins_cd.c
+** builtin_cd.c
 */
 
 #include <unistd.h>

@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2023
 ** 42sh
 ** File description:
-** buitlin_exit.c
+** builtin_exit.c
 */
 
 #include <unistd.h>
