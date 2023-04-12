@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 
-#include "mysh.h"
 #include "ice/array.h"
 #include "ice/string.h"
 #include "mysh/redirection.h"
