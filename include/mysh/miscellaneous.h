@@ -10,6 +10,10 @@
 
     #include "mysh.h"
 
+//
+// Miscellaneous
+//
+
 /**
  * @brief Get the arguments of the command
  *
