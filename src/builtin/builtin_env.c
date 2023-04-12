@@ -9,6 +9,6 @@
 
 env_t *builtin_env(UNUSED char **av, env_t *env)
 {
-    display_env(env->env);
+    display_env(env);
     return env;
 }

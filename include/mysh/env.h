@@ -88,7 +88,7 @@ char **unset_env(char **env, char *name);
  * @param env The environment
  * @return bool True if write failed
  */
-bool display_env(char **env);
+bool display_env(env_t *env);
 
 /**
  * @brief Set exit as true adn set the status as 1
