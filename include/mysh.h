@@ -8,11 +8,8 @@
 #ifndef MYSH_H
     #define MYSH_H
 
-    #include <stdarg.h>
-    #include <unistd.h>
     #include <stdbool.h>
 
-    #include "ice/types.h"
     #include "ice/macro.h"
 
     #define IS_END(x) ((x == '\0') || (x == '\n'))
