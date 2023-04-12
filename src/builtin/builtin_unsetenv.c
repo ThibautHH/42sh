@@ -14,6 +14,6 @@ env_t *builtin_unsetenv(char **av, env_t *env)
         return env;
     }
     for (ull_t i = 1; av[i]; i++)
-        env->env = unset_env(env->env, av[i]);
+        env->env = unset_env(env, av[i]);
     return env;
 }

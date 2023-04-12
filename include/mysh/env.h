@@ -80,7 +80,7 @@ char **set_env(env_t *env, char *name, char *value) ;
  * @param name The name of the variable
  * @return char** The new environment
  */
-char **unset_env(char **env, char *name);
+char **unset_env(env_t *env, char *name);
 
 /**
  * @brief Display the environment
