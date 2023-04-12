@@ -177,4 +177,11 @@ bool handle_input(env_t *env);
  */
 bool handle_sequence(char *buffer, env_t *env);
 
+/**
+ * @brief Get the current working directory
+ * @param env The environment
+ * @return char* The current working directory
+ */
+bool handle_pipe(env_t *env, char *buffer);
+
 #endif /* !MYSH_H */

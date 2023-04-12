@@ -5,9 +5,9 @@
 ** handle_sequence.c
 */
 
+#include "mysh.h"
 #include "ice/array.h"
 #include "ice/string.h"
-#include "redirection.h"
 
 bool handle_sequence(char *buffer, env_t *env)
 {

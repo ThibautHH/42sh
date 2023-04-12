@@ -19,8 +19,6 @@ typedef struct redir_s {
     char *file_in;
 } redir_t;
 
-bool handle_pipe(env_t *env, char *line);
-
 bool set_redirection(redir_t *redir, char *str, env_t *env);
 
 bool unset_redirection(redir_t *redir);
