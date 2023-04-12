@@ -7,13 +7,13 @@
 
 #include <wait.h>
 #include <errno.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <sys/stat.h>
-#include <stdlib.h>
 
 #include "mysh.h"
-#include "mysh/signals.h"
 #include "ice/output.h"
+#include "mysh/signals.h"
 
 static void handle_signal(int child_status)
 {
