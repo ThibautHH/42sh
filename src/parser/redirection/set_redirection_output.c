@@ -6,6 +6,7 @@
 */
 
 #include <fcntl.h>
+#include <unistd.h>
 
 #include "mysh/env.h"
 #include "ice/output.h"
