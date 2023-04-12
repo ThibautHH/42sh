@@ -5,7 +5,7 @@
 ** set_redirection.c
 */
 
-#include "redirection.h"
+#include "mysh/redirection.h"
 
 bool set_redirection(redir_t *redir, char *str, env_t *env)
 {

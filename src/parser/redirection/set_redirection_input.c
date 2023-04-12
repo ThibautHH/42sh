@@ -12,7 +12,7 @@
 
 #include "ice/output.h"
 #include "ice/string.h"
-#include "redirection.h"
+#include "mysh/redirection.h"
 
 static bool read_input(redir_t *redir, const char *str)
 {

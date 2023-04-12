@@ -12,7 +12,7 @@
 #include <stdlib.h>
 
 #include "mysh.h"
-#include "signals.h"
+#include "mysh/signals.h"
 #include "ice/output.h"
 
 static void handle_signal(int child_status)

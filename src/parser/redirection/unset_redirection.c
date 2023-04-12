@@ -5,7 +5,7 @@
 ** unset_redirection.c
 */
 
-#include "redirection.h"
+#include "mysh/redirection.h"
 
 bool unset_redirection(redir_t *redir)
 {

@@ -7,7 +7,7 @@
 
 #include <malloc.h>
 
-#include "redirection.h"
+#include "mysh/redirection.h"
 
 bool unset_input(redir_t *redir)
 {

@@ -9,7 +9,7 @@
 
 #include "mysh.h"
 #include "ice/string.h"
-#include "redirection.h"
+#include "mysh/redirection.h"
 
 ui_t extract_len(const char *str, char end)
 {

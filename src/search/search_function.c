@@ -10,7 +10,7 @@
 #include <stdbool.h>
 
 #include "mysh.h"
-#include "builtins.h"
+#include "mysh/builtins.h"
 #include "ice/array.h"
 #include "ice/string.h"
 #include "ice/printf.h"
