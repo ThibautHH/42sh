@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2023
-** minishell2
+** 42sh
 ** File description:
 ** mysh.h
 */
@@ -12,8 +12,8 @@
 
     #include "ice/macro.h"
 
-    #define IS_END(x) ((x == '\0') || (x == '\n'))
-    #define IS_SPACE(x) ((x == ' ') || (x == '\t'))
+    #define IS_END(x) (((x) == '\0') || ((x) == '\n'))
+    #define IS_SPACE(x) (((x) == ' ') || ((x) == '\t'))
 
 typedef struct env_s {
     char **env;
