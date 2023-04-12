@@ -7,13 +7,12 @@
 
 #include <malloc.h>
 #include <unistd.h>
-#include <stdbool.h>
 
 #include "mysh.h"
-#include "mysh/builtins.h"
 #include "ice/array.h"
 #include "ice/string.h"
 #include "ice/printf.h"
+#include "mysh/builtins.h"
 
 static bool command_not_found(char *cmd, env_t *env)
 {
