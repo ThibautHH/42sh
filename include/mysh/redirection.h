@@ -11,7 +11,7 @@
     #include "mysh.h"
 
 //
-// Struct
+// Structs
 //
 
 typedef struct redir_s {

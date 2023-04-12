@@ -11,6 +11,10 @@
     #include <unistd.h>
     #include <signal.h>
 
+//
+// Structs
+//
+
 typedef struct signal_s {
     int sig;
     char *name;
