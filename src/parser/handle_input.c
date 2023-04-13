@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "mysh/parser.h"
 
@@ -20,10 +21,11 @@ bool handle_input(env_t *env)
         if (isatty(STDIN_FILENO)
             && (write(STDOUT_FILENO, "$> ", 3) < 0))
             return true;
+        errno = 0;
         len = getline(&buffer, &size, stdin);
         if (len < 0)
-            return isatty(STDIN_FILENO)
-                && write(STDOUT_FILENO, "exit\n", 5) < 0;
+            return (errno == 0) ? isatty(STDIN_FILENO)
+                && write(STDOUT_FILENO, "exit\n", 5) < 0 : true;
         buffer[len - 1] = '\0';
         if (handle_sequence(buffer, env))
             return true;
