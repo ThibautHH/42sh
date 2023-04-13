@@ -12,7 +12,7 @@ static int mysh(char **global_env)
 {
     env_t *env = load_env(global_env);
 
-    return (!env || handle_input(env)) ? 84 : destroy_env(env);
+    return (env && !handle_input(env)) ? destroy_env(env) : 84;
 }
 
 int main(int ac, UNUSED char **av, char **env)
