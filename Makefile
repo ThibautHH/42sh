@@ -41,7 +41,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				exit_env.c						\
 				)
 
-DIR			+= 	$(addprefix $(DIR_SRC), ./env/initialisation/)
+DIR			+= 	$(addprefix $(DIR_SRC), ./env/initialization/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				load_env.c		\
 				dup_env.c		\
