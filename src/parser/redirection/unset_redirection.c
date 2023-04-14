@@ -7,8 +7,8 @@
 
 #include "mysh/redirection.h"
 
-bool unset_redirection(redir_t *redir)
+bool unset_redirection(redirs_t *redirs)
 {
-    return unset_redirection_output(redir)
-        || unset_redirection_input(redir);
+    return unset_redirection_output(redirs)
+        || unset_redirection_input(redirs);
 }

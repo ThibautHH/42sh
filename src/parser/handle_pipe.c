@@ -18,16 +18,16 @@
 static bool execute(char *sequence, env_t *env, int pid)
 {
     char **av;
-    redir_t redir = {0};
+    redirs_t redirs = {0};
 
-    if (set_redirection(&redir, sequence, env))
+    if (set_redirection(&redirs, sequence, env))
         return true;
     av = get_argument(sequence);
     if (!av || search_function(av, env))
         return true;
     if (pid > 0 && waitpid(pid, NULL, 0) == -1)
         return false;
-    if (unset_redirection(&redir))
+    if (unset_redirection(&redirs))
         return true;
     ice_free_array((void **)av);
     if (pid > 0)

@@ -16,7 +16,7 @@
 #include "ice/string.h"
 #include "mysh/redirection.h"
 
-static bool read_input(redir_t *redir, const char *str)
+static bool read_input(redirs_t *redirs, const char *str)
 {
     size_t size = 0;
     char *line = NULL;
@@ -30,51 +30,51 @@ static bool read_input(redir_t *redir, const char *str)
             return true;
         if (str_len == line_len - 1 && !ice_strncmp(line, str, str_len))
             break;
-        if (write(redir->fd_in[1], line, line_len) < 0)
+        if (write(redirs->fd_in[1], line, line_len) < 0)
             return true;
     }
     free(line);
     return false;
 }
 
-static bool get_input(redir_t *redir, const char *str)
+static bool get_input(redirs_t *redirs, const char *str)
 {
     int pid;
 
-    if (pipe(redir->fd_in) == -1)
+    if (pipe(redirs->fd_in) == -1)
         return true;
     pid = fork();
     if (pid == -1)
         return true;
     if (pid == 0) {
-        close(redir->fd_in[0]);
-        if (read_input(redir, str))
+        close(redirs->fd_in[0]);
+        if (read_input(redirs, str))
             exit(1);
         exit(0);
     } else {
-        close(redir->fd_in[1]);
-        redir->fd_in[1] = dup(STDIN_FILENO);
-        dup2(redir->fd_in[0], STDIN_FILENO);
-        redir->fd_in[0] = redir->fd_in[1];
+        close(redirs->fd_in[1]);
+        redirs->fd_in[1] = dup(STDIN_FILENO);
+        dup2(redirs->fd_in[0], STDIN_FILENO);
+        redirs->fd_in[0] = redirs->fd_in[1];
         waitpid(pid, NULL, 0);
     }
     return false;
 }
 
-static bool handle_extract(redir_t *redir, char *str, bool read, bool input)
+static bool handle_extract(redirs_t *redirs, char *str, bool read, bool input)
 {
     if (read && input) {
         ice_puts("Ambiguous output redirect.\n");
         return false;
     }
     if (read)
-        return extract_input(redir, str, "<");
+        return extract_input(redirs, str, "<");
     if (input)
-        return extract_input(redir, str, "<<");
+        return extract_input(redirs, str, "<<");
     return true;
 }
 
-static bool count_input(redir_t *redir, char *str)
+static bool count_input(redirs_t *redirs, char *str)
 {
     ui_t read = 0;
     ui_t input = 0;
@@ -85,30 +85,30 @@ static bool count_input(redir_t *redir, char *str)
         if (str[i] == '<' && str[i + 1] == '<') {
             input++;
             i++;
-            redir->input = INPUT;
+            redirs->input = INPUT;
             continue;
         }
         if (str[i] == '<') {
             read++;
-            redir->input = READ;
+            redirs->input = READ;
         }
     }
-    return handle_extract(redir, str, read, input);
+    return handle_extract(redirs, str, read, input);
 }
 
-bool set_redirection_input(redir_t *redir, char *str, env_t *env)
+bool set_redirection_input(redirs_t *redirs, char *str, env_t *env)
 {
-    if (!count_input(redir, str))
+    if (!count_input(redirs, str))
         return true;
-    if (!redir->file_in)
+    if (!redirs->file_in)
         return false;
-    if (redir->input == INPUT)
-        return get_input(redir, redir->file_in);
-    redir->fd_in[0] = dup(STDIN_FILENO);
-    if (redir->fd_in[0] == -1)
+    if (redirs->input == INPUT)
+        return get_input(redirs, redirs->file_in);
+    redirs->fd_in[0] = dup(STDIN_FILENO);
+    if (redirs->fd_in[0] == -1)
         return true;
-    redir->fd_in[1] = open(redir->file_in, O_RDONLY);
-    if (redir->fd_in[1] == -1 || dup2(redir->fd_in[1], STDIN_FILENO) == -1) {
+    redirs->fd_in[1] = open(redirs->file_in, O_RDONLY);
+    if (redirs->fd_in[1] == -1 || dup2(redirs->fd_in[1], STDIN_FILENO) == -1) {
         exit_env(env);
         return true;
     }

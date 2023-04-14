@@ -7,8 +7,8 @@
 
 #include "mysh/redirection.h"
 
-bool set_redirection(redir_t *redir, char *str, env_t *env)
+bool set_redirection(redirs_t *redirs, char *str, env_t *env)
 {
-    return set_redirection_output(redir, str, env)
-        || set_redirection_input(redir, str, env);
+    return set_redirection_output(redirs, str, env)
+        || set_redirection_input(redirs, str, env);
 }

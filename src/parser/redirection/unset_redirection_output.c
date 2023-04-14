@@ -10,14 +10,14 @@
 
 #include "mysh/redirection.h"
 
-bool unset_redirection_output(redir_t *redir)
+bool unset_redirection_output(redirs_t *redirs)
 {
-    if (!redir->file_out)
+    if (!redirs->file_out)
         return false;
-    if (dup2(redir->fd_out[0], STDOUT_FILENO) == -1)
+    if (dup2(redirs->fd_out[0], STDOUT_FILENO) == -1)
         return true;
-    close(redir->fd_out[0]);
-    close(redir->fd_out[1]);
-    free(redir->file_out);
+    close(redirs->fd_out[0]);
+    close(redirs->fd_out[1]);
+    free(redirs->file_out);
     return false;
 }
