@@ -24,7 +24,8 @@ static bool read_input(redirs_t *redirs, const char *str)
     int str_len = (int)ice_strlen(str);
 
     while (true) {
-        write(STDOUT_FILENO, "> ", 2);
+        if (isatty(STDIN_FILENO) && write(STDOUT_FILENO, "? ", 2) < 0)
+            return true;
         line_len = (int)getline(&line, &size, stdin);
         if (line_len == -1)
             return true;
