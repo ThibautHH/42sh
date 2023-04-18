@@ -6,12 +6,12 @@
 */
 
 #include "ice/array.h"
-#include "ice/string.h"
 #include "mysh/parser.h"
+#include "mysh/parser_commands.h"
 
 bool handle_sequence(char *buffer, env_t *env)
 {
-    char **sequence = ice_strsplit(buffer, ";");
+    char **sequence = parse_command_line(buffer);
 
     if (!sequence)
         return true;

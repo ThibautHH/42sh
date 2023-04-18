@@ -62,6 +62,11 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				handle_pipe.c		\
 				)
 
+DIR			+=	$(addprefix $(DIR_SRC), ./parser/commands/)
+SRC			+=	$(addprefix $(lastword $(DIR)),\
+				parse_command_line.c	\
+				)
+
 DIR			+=	$(addprefix $(DIR_SRC), ./parser/redirection/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				extract.c					\
