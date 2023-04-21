@@ -25,6 +25,7 @@ static bool init(mysh_t *context, char **env)
 static void cleanup(mysh_t *context)
 {
     destroy_env(context);
+    free(LINE);
 }
 
 void die(mysh_t *context, uc_t status)
