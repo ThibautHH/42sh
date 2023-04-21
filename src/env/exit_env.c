@@ -7,8 +7,8 @@
 
 #include "mysh.h"
 
-void exit_env(env_t *env)
+void exit_env(mysh_t *context)
 {
-    env->exit = true;
-    env->status = 84;
+    EXIT = true;
+    STATUS = 84;
 }

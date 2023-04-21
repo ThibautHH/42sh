@@ -97,7 +97,7 @@ static bool count_input(redirs_t *redirs, char *str)
     return handle_extract(redirs, str, read, input);
 }
 
-bool set_redirection_input(redirs_t *redirs, char *str, env_t *env)
+bool set_redirection_input(redirs_t *redirs, char *str, mysh_t *context)
 {
     if (!count_input(redirs, str))
         return true;
@@ -110,7 +110,7 @@ bool set_redirection_input(redirs_t *redirs, char *str, env_t *env)
         return true;
     redirs->fd_in[1] = open(redirs->file_in, O_RDONLY);
     if (redirs->fd_in[1] == -1 || dup2(redirs->fd_in[1], STDIN_FILENO) == -1) {
-        exit_env(env);
+        exit_env(context);
         return true;
     }
     return false;

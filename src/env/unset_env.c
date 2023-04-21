@@ -7,17 +7,17 @@
 
 #include <malloc.h>
 
-#include "mysh.h"
+#include "mysh/env.h"
 #include "ice/string.h"
 
-char **unset_env(env_t *env, char *name)
+char **unset_env(mysh_t *context, char *name)
 {
     ull_t i = 0;
     ull_t len = ice_strlen(name);
 
-    for (; env->env[i] && ice_strncmp(env->env[i], name, len); i++);
-    free(env->env[i]);
-    for (; env->env[i]; i++)
-        env->env[i] = env->env[i + 1];
-    return env->env;
+    for (; ENV->env[i] && ice_strncmp(ENV->env[i], name, len); i++);
+    free(ENV->env[i]);
+    for (; ENV->env[i]; i++)
+        ENV->env[i] = ENV->env[i + 1];
+    return ENV->env;
 }

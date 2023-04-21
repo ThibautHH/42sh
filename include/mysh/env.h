@@ -10,6 +10,10 @@
 
     #include "mysh.h"
 
+typedef struct env_s {
+    char **env;
+} env_t;
+
 //
 // Initialisation
 //
@@ -48,7 +52,7 @@ char **fix_env(char **env);
  * @param env The environment
  * @return int The status
  */
-int destroy_env(env_t *env);
+int destroy_env(mysh_t *context);
 
 //
 // Environment functions
@@ -61,7 +65,7 @@ int destroy_env(env_t *env);
  * @param name The name of the variable
  * @return char* The value of the variable
  */
-char *get_env(env_t *env, char *name);
+char *get_env(mysh_t *context, char *name);
 
 /**
  * @brief Set an environment variable
@@ -71,7 +75,7 @@ char *get_env(env_t *env, char *name);
  * @param value The value of the variable
  * @return char** The new environment
  */
-char **set_env(env_t *env, char *name, char *value) ;
+char **set_env(mysh_t *context, char *name, char *value) ;
 
 /**
  * @brief Unset an environment variable
@@ -80,7 +84,7 @@ char **set_env(env_t *env, char *name, char *value) ;
  * @param name The name of the variable
  * @return char** The new environment
  */
-char **unset_env(env_t *env, char *name);
+char **unset_env(mysh_t *context, char *name);
 
 /**
  * @brief Display the environment
@@ -88,7 +92,7 @@ char **unset_env(env_t *env, char *name);
  * @param env The environment
  * @return bool True if write failed
  */
-bool display_env(env_t *env);
+bool display_env(mysh_t *context);
 
 /**
  * @brief Set exit as true adn set the status as 1
@@ -96,6 +100,6 @@ bool display_env(env_t *env);
  * @param env The environment
  * @return env_t* The new environment
  */
-void exit_env(env_t *env);
+void exit_env(mysh_t *context);
 
 #endif /* !INC_42SH_ENV_H */

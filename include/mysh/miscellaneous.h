@@ -29,6 +29,6 @@ char **get_argument(char *buffer);
  * @param format The format
  * @param str The string
  */
-void display_error(env_t *env, const char *format, const char *str);
+void display_error(mysh_t *context, const char *format, const char *str);
 
 #endif /* !INC_42SH_MISCELLANEOUS_H */

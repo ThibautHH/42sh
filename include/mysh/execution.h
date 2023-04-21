@@ -17,7 +17,7 @@
  * @param env The environment
  * @return bool True if error occurred
  */
-bool search_function(char **av, env_t *env);
+bool search_function(char **av, mysh_t *context);
 
 /**
  * @brief Execute a binary
@@ -26,6 +26,6 @@ bool search_function(char **av, env_t *env);
  * @param av The arguments
  * @param env The environment
  */
-bool execute_binary(char *path, char **av,  env_t *env);
+bool execute_binary(char *path, char **av,  mysh_t *context);
 
 #endif /* !INC_42SH_EXECUTION_H */

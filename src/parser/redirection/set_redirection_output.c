@@ -47,7 +47,7 @@ static bool count_output(redirs_t *redirs, char *str)
     return handle_extract(redirs, str, add, append);
 }
 
-bool set_redirection_output(redirs_t *redirs, char *str, env_t *env)
+bool set_redirection_output(redirs_t *redirs, char *str, mysh_t *context)
 {
     int flags = O_WRONLY | O_CREAT;
 
@@ -62,7 +62,7 @@ bool set_redirection_output(redirs_t *redirs, char *str, env_t *env)
     redirs->fd_out[0] = dup(STDOUT_FILENO);
     if (redirs->fd_out[0] == -1
         || dup2(redirs->fd_out[1], STDOUT_FILENO) == -1) {
-        exit_env(env);
+        exit_env(context);
         return true;
     }
     return false;

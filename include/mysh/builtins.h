@@ -19,7 +19,7 @@
  * @param env The environment
  * @return env The new environment
  */
-env_t *builtin_cd(char **av, env_t *env);
+env_t *builtin_cd(char **av, mysh_t *context);
 
 /**
  * @brief Exit the shell
@@ -28,7 +28,7 @@ env_t *builtin_cd(char **av, env_t *env);
  * @param env The environment
  * @return env The new environment
  */
-env_t *builtin_exit(UNUSED char **av, env_t *env);
+env_t *builtin_exit(UNUSED char **av, mysh_t *context);
 
 /**
  * @brief Display the environment
@@ -36,7 +36,7 @@ env_t *builtin_exit(UNUSED char **av, env_t *env);
  * @param env The environment
  * @return env The new environment
  */
-env_t *builtin_env(UNUSED char **av, env_t *env);
+env_t *builtin_env(UNUSED char **av, mysh_t *context);
 
 /**
  * @brief Set an environment variable
@@ -45,7 +45,7 @@ env_t *builtin_env(UNUSED char **av, env_t *env);
  * @param env The environment
  * @return env The new environment
  */
-env_t *builtin_setenv(char **av, env_t *env);
+env_t *builtin_setenv(char **av, mysh_t *context);
 
 /**
  * @brief Unset an environment variable
@@ -54,7 +54,7 @@ env_t *builtin_setenv(char **av, env_t *env);
  * @param env The environment
  * @return env The new environment
  */
-env_t *builtin_unsetenv(char **av, env_t *env);
+env_t *builtin_unsetenv(char **av, mysh_t *context);
 
 //
 // Structs
@@ -62,7 +62,7 @@ env_t *builtin_unsetenv(char **av, env_t *env);
 
 typedef struct builtin_s {
     char *name;
-    env_t *(*func)(char **, env_t *);
+    env_t *(*func)(char **, mysh_t *);
 } builtin_t;
 
 const builtin_t builtins[] = {

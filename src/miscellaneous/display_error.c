@@ -8,9 +8,9 @@
 #include "mysh.h"
 #include "ice/printf.h"
 
-void display_error(env_t *env, const char *format, const char *str)
+void display_error(mysh_t *context, const char *format, const char *str)
 {
     ice_printf(format, str);
-    env->status = 1;
-    env->exit = true;
+    STATUS = 1;
+    EXIT = true;
 }

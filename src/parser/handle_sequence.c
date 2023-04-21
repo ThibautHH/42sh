@@ -9,14 +9,14 @@
 #include "mysh/parser.h"
 #include "mysh/parser_commands.h"
 
-bool handle_sequence(char *buffer, env_t *env)
+bool handle_sequence(char *buffer, mysh_t *context)
 {
     char **sequence = parse_command_line(buffer);
 
     if (!sequence)
         return true;
     for (int i = 0; sequence[i]; i++)
-        if (handle_pipe(sequence[i], env))
+        if (handle_pipe(sequence[i], context))
             return true;
     ice_free_array((void **)sequence);
     return false;

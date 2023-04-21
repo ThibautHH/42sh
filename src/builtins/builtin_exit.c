@@ -9,11 +9,9 @@
 
 #include "mysh.h"
 
-env_t *builtin_exit(UNUSED char **av, env_t *env)
+env_t *builtin_exit(UNUSED char **av, mysh_t *context)
 {
-    if (write(1, "exit\n", 5) < 0)
-        return env;
-    env->exit = true;
-    env->status = 0;
-    return env;
+    EXIT = true;
+    STATUS = 0;
+    return ENV;
 }

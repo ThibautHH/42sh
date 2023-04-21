@@ -20,7 +20,7 @@
  * @param env The environment
  * @return bool True if error occurred
  */
-bool handle_input(env_t *env);
+bool handle_input(mysh_t *context);
 
 /**
  * @brief Handle the sequence of commands
@@ -29,7 +29,7 @@ bool handle_input(env_t *env);
  * @param env The environment
  * @return bool True if error occurred
  */
-bool handle_sequence(char *buffer, env_t *env);
+bool handle_sequence(char *buffer, mysh_t *context);
 
 /**
  * @brief Handle the pipe of commands
@@ -38,6 +38,6 @@ bool handle_sequence(char *buffer, env_t *env);
  * @param env The environment
  * @return bool True if error occurred
  */
-bool handle_pipe(char *buffer, env_t *env);
+bool handle_pipe(char *buffer, mysh_t *context);
 
 #endif /* !INC_42SH_PARSER_H */

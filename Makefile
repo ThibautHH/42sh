@@ -15,12 +15,14 @@ DIR_SRC		+=	./src/
 
 SRC			+=	$(addprefix $(DIR_SRC),\
 				main.c				\
+				mysh.c				\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./miscellaneous/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				get_argument.c		\
 				display_error.c		\
+				prompt.c			\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./builtins/)
@@ -57,7 +59,6 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 
 DIR			+=	$(addprefix $(DIR_SRC), ./parser/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				handle_input.c		\
 				handle_sequence.c	\
 				handle_pipe.c		\
 				)

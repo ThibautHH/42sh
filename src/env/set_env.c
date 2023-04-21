@@ -7,7 +7,7 @@
 
 #include <malloc.h>
 
-#include "mysh.h"
+#include "mysh/env.h"
 #include "ice/array.h"
 #include "ice/string.h"
 #include "ice/printf.h"
@@ -43,13 +43,13 @@ char **update_env(char **env, char *name, char *value)
     return new_env;
 }
 
-char **set_env(env_t *env, char *name, char *value)
+char **set_env(mysh_t *context, char *name, char *value)
 {
     if (name_is_allowed(name)) {
         ice_puts("setenv: Variable name must "
             "contain alphanumeric characters.\n");
-        env->status = 1;
-        return env->env;
+        STATUS = 1;
+        return ENV->env;
     }
-    return update_env(env->env, name, value);
+    return update_env(ENV->env, name, value);
 }

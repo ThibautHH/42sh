@@ -8,13 +8,13 @@
 #include "mysh/env.h"
 #include "mysh/miscellaneous.h"
 
-env_t *builtin_unsetenv(char **av, env_t *env)
+env_t *builtin_unsetenv(char **av, mysh_t *context)
 {
     if (!av[1]) {
-        display_error(env, "unsetenv: Too few arguments.\n", NULL);
-        return env;
+        display_error(context, "unsetenv: Too few arguments.\n", NULL);
+        return ENV;
     }
     for (ull_t i = 1; av[i]; i++)
-        env->env = unset_env(env, av[i]);
-    return env;
+        ENV->env = unset_env(context, av[i]);
+    return ENV;
 }

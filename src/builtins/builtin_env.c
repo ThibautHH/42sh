@@ -7,8 +7,8 @@
 
 #include "mysh/env.h"
 
-env_t *builtin_env(UNUSED char **av, env_t *env)
+env_t *builtin_env(UNUSED char **av, mysh_t *context)
 {
-    display_env(env);
-    return env;
+    display_env(context);
+    return ENV;
 }

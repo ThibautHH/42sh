@@ -36,7 +36,7 @@ typedef struct redir_s {
  * @param env The environment
  * @return bool True if error occurred
  */
-bool set_redirection(redirs_t *redir, char *str, env_t *env);
+bool set_redirection(redirs_t *redir, char *str, mysh_t *context);
 
 /**
  * @brief Set the output redirection
@@ -46,7 +46,7 @@ bool set_redirection(redirs_t *redir, char *str, env_t *env);
  * @param env The environment
  * @return bool False if error occurred
  */
-bool set_redirection_output(redirs_t *redirs, char *str, env_t *env);
+bool set_redirection_output(redirs_t *redirs, char *str, mysh_t *context);
 
 /**
  * @brief Set the input redirection
@@ -56,7 +56,7 @@ bool set_redirection_output(redirs_t *redirs, char *str, env_t *env);
  * @param env The environment
  * @return bool False if error occurred
  */
-bool set_redirection_input(redirs_t *redirs, char *str, env_t *env);
+bool set_redirection_input(redirs_t *redirs, char *str, mysh_t *context);
 
 //
 // Unset redirection
