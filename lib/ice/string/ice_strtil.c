@@ -10,6 +10,7 @@
 size_t ice_strtil(const char *str, char c)
 {
     register size_t offset = 0;
+
     while (str[offset] && str[offset] != c)
         offset++;
     return offset;
