@@ -1,11 +1,11 @@
 /*
 ** EPITECH PROJECT, 2023
-** minishell2
+** 42sh
 ** File description:
-** get_av.c
+** get_argument.c
 */
 
-#include <stdlib.h>
+#include <malloc.h>
 
 #include "mysh.h"
 
@@ -28,7 +28,6 @@ static int get_len(const char *buffer)
 
     for (; IS_SPACE(buffer[i]) && !IS_END(buffer[i]) ; i++);
     for (j = i; !IS_SPACE(buffer[j]) && !IS_END(buffer[j]) ; j++);
-
     return j - i;
 }
 
@@ -43,13 +42,11 @@ static char *get_word(char *buffer, int *index)
     for (; IS_SPACE(buffer[*index]) ; (*index)++);
     for (int i = 0 ; i < len ; i++, (*index)++)
         word[i] = buffer[*index];
-
     (*index)++;
-
     return word;
 }
 
-char **get_av(char *buffer)
+char **get_argument(char *buffer)
 {
     int i = 0;
     int index = 0;

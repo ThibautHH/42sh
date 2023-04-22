@@ -1,11 +1,12 @@
 /*
 ** EPITECH PROJECT, 2023
-** minishell2
+** 42sh
 ** File description:
 ** fix_env.c
 */
 
 #include <malloc.h>
+#include <unistd.h>
 
 #include "mysh.h"
 #include "ice/array.h"

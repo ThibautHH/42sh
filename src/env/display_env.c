@@ -1,19 +1,17 @@
 /*
 ** EPITECH PROJECT, 2023
-** minishell2
+** 42sh
 ** File description:
 ** display_env.c
 */
 
-#include <stdbool.h>
-
 #include "mysh.h"
 #include "ice/printf.h"
 
-bool display_env(char **env)
+void display_env(mysh_t *context)
 {
-    for (ui_t i = 0; env[i]; i++)
-        if (ice_printf("%s\n", env[i]) == -1)
-            return true;
-    return false;
+    env_t *env;
+    TAILQ_FOREACH(env, ENVQ, entries)
+        if (ice_printf("%s\n", env->name) < 0)
+            DIE;
 }

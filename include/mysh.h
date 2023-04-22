@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2023
-** minishell2
+** 42sh
 ** File description:
 ** mysh.h
 */
@@ -8,149 +8,65 @@
 #ifndef MYSH_H
     #define MYSH_H
 
-    #include <stdarg.h>
-    #include <unistd.h>
+    #include <sys/queue.h>
+
     #include <stdbool.h>
+    #include <unistd.h>
 
-    #include "ice/types.h"
     #include "ice/macro.h"
+    #include "ice/string.h"
 
-    #define IS_END(x) ((x == '\0') || (x == '\n'))
-    #define IS_SPACE(x) ((x == ' ') || (x == '\t'))
+    #include "mysh/env.h"
 
-typedef struct env_s {
-    char **env;
-    int status;
+    #define IS_END(x) (((x) == '\0') || ((x) == '\n'))
+    #define IS_SPACE(x) (((x) == ' ') || ((x) == '\t'))
+    #define _SC ;
+    #define _TQFSIT_(v, f, t)  ((t) = TAILQ_NEXT(v, f), 1)_SC (v) = (t)
+    #define _TQFSIT(v, h, f, t) (v) && _TQFSIT_(v, f, t)
+    #define _TQFS(v, h, f, t) (v) = TAILQ_FIRST(h)_SC _TQFSIT(v, h, f, t)
+    #define	TAILQ_FOREACH_SAFE(v, h, f, t) for (_TQFS(v, h, f, t))
+
+    #define GET_LINE (len = getline(&LINE, &size, stdin))
+
+    #define LINE (context->line)
+    #define ENV (&(context->env))
+    #define ENVQ (&(ENV)->head)
+    #define ENVC (ENV->count)
+    #define STATUS (context->status)
+    #define EXIT (context->exit)
+
+    #define DIE die(context, 84)
+
+    #define _DWSLEN(s, l) (l > 0 ? l : ice_strlen(s))
+    #define DWRITE(fd, s, l) if (write(fd, s, _DWSLEN(s, l)) < 0)DIE
+    #define WRITE(s, l) DWRITE(STDOUT_FILENO, s, l)
+    #define TTY_WRITE(s, l) tty_write(context, s, l)
+
+typedef struct mysh_s {
+    env_head_t env;
+    char *line;
+    uc_t status;
     bool exit;
-} env_t;
+} mysh_t;
 
-typedef struct output_s {
-    char *buffer;
-    size_t size;
-} output_t;
+void mysh(mysh_t *context, char **env);
+void prompt(mysh_t *context);
+void die(mysh_t *context, uc_t status);
 
-/**
- * @brief Search for a function
- * @param av The arguments
- * @param env The environment
- * @return bool True if error occurred
- */
-bool search_function(char **av, env_t *env);
+static inline bool is_stdin_tty(mysh_t *context)
+{
+    int is_tty = isatty(STDIN_FILENO);
 
-/**
- * @brief Get the arguments of the command
- * @param string The string
- * @return char** The arguments
- * @note The string must be null terminated
- */
-char **get_av(char *buffer);
+    if (is_tty < 0)
+        DIE;
+    return is_tty;
+}
 
-/**
- * @brief Change the current working directory
- * @param path The path to change to
- * @param env The environment
- * @return env The new environment
- */
-env_t *builtin_cd(char **av, env_t *env);
-
-/**
- * @brief Exit the shell
- * @param env The environment
- * @param av The arguments
- * @return env The new environment
- */
-env_t *builtin_exit(UNUSED char **av, env_t *env);
-
-/**
- * @brief Display the environment
- * @param env The environment
- * @return env The new environment
- */
-env_t *builtin_env(UNUSED char **av, env_t *env);
-
-/**
- * @brief Exit the shell
- * @param env The environment
- * @param av The arguments
- * @return env The new environment
- */
-env_t *builtin_setenv(char **av, env_t *env);
-
-/**
- * @brief Unset an environment variable
- * @param env The environment
- * @param buffer The buffer
- * @return env The new environment
- */
-env_t *builtin_unsetenv(char **av, env_t *env);
-
-/**
- * @brief Set an environment variable
- * @param path The path of the binary
- * @param env The environment
- * @param buffer The buffer
- * @return env The new environment
- */
-bool execute_binary(char *path, char **av,  env_t *env);
-
-/**
- * @brief Create a new environment
- * @param env The environment
- * @return char** The new environment
- */
-char **malloc_env(char **env);
-
-/**
- * @brief Fix the environment
- * @param env The environment
- * @return char** The new environment
- */
-char **fix_env(char **env);
-
-/**
- * @brief Get an environment variable
- * @param name The name of the variable
- * @param env The environment
- * @return char* The value of the variable
- */
-char *get_env(char *name, env_t *env);
-
-/**
- * @brief Set an environment variable
- * @param env The environment
- * @param name The name of the variable
- * @param value The value of the variable
- * @return char** The new environment
- */
-char **set_env(env_t *env, char *name, char *value) ;
-
-/**
- * @brief Unset an environment variable
- * @param env The environment
- * @param name The name of the variable
- * @return char** The new environment
- */
-char **unset_env(char **env, char *name);
-
-/**
- * @brief Display the environment
- * @param env The environment
- * @return bool True if write failed
- */
-bool display_env(char **env);
-
-/**
- * @brief Get the current working directory
- * @param env The environment
- * @return char* The current working directory
- */
-void exit_env(env_t *env);
-
-/**
- * @brief Get the current working directory
- * @param env The environment
- * @return char* The current working directory
- */
-void display_error(env_t *env, const char *format, const char *str);
+static inline void tty_write(mysh_t *context, const char *str, size_t len)
+{
+    if (!is_stdin_tty(context))
+        return;
+    WRITE(str, len);
+}
 
 #endif /* !MYSH_H */

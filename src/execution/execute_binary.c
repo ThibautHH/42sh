@@ -1,19 +1,20 @@
 /*
 ** EPITECH PROJECT, 2023
-** minishell2
+** 42sh
 ** File description:
 ** execute_binary.c
 */
 
 #include <wait.h>
 #include <errno.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <sys/stat.h>
-#include <stdlib.h>
 
 #include "mysh.h"
-#include "signals.h"
 #include "ice/output.h"
+#include "mysh/signals.h"
+#include "mysh/miscellaneous.h"
 
 static void handle_signal(int child_status)
 {
@@ -30,24 +31,24 @@ static void handle_signal(int child_status)
         write(1, "\n", 1);
 }
 
-static void handle_execve(char *path, char **av, env_t *env)
+static void handle_execve(char *path, char **av, mysh_t *context)
 {
     struct stat st;
 
     stat(path, &st);
     if (S_ISDIR(st.st_mode))
-        display_error(env, "%s: Permission denied.\n", path);
-    else if (execve(path, av, env->env) != -1)
+        display_error(context, "%s: Permission denied.\n", path);
+    else if (execve(path, av, dup_env(context)) != -1)
         exit(84);
     if (errno == EACCES)
-        display_error(env, "%s: Permission denied.\n", path);
+        display_error(context, "%s: Permission denied.\n", path);
     if (errno == ENOEXEC)
-        display_error(env, "%s: Exec format error. Wrong Architecture.\n",
+        display_error(context, "%s: Exec format error. Wrong Architecture.\n",
             path);
     exit(0);
 }
 
-bool execute_binary(char *path, char **av, env_t *env)
+bool execute_binary(char *path, char **av, mysh_t *context)
 {
     int pid = fork();
     int child_status;
@@ -55,10 +56,10 @@ bool execute_binary(char *path, char **av, env_t *env)
     if (pid == -1)
         return true;
     if (pid == 0)
-        handle_execve(path, av, env);
+        handle_execve(path, av, context);
     if (waitpid(pid, &child_status, 0) == -1)
         return true;
-    env->status = WEXITSTATUS(child_status)
+    STATUS = WEXITSTATUS(child_status)
         + WTERMSIG(child_status) + WCOREDUMP(child_status);
     if (WIFSIGNALED(child_status))
         handle_signal(child_status);

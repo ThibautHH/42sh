@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2022
+** EPITECH PROJECT, 2023
 ** libice/string
 ** File description:
 ** ice_strcpy.c

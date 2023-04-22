@@ -91,6 +91,8 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				ice_strsplit.c	\
 				ice_strstr.c	\
 				ice_strchr.c	\
+				ice_strtil.c	\
+				ice_strcmp2.c	\
 				ice_strtrim.c	\
 				)
 

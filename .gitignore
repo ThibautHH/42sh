@@ -17,3 +17,11 @@ a.out
 *.a
 *.gcda
 *.gcno
+
+# Backup files
+*~
+\#*#
+.#*
+
+# Temporary files
+*tmp*

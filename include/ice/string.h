@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2022
+** EPITECH PROJECT, 2023
 ** libice
 ** File description:
 ** ice/string.h
@@ -125,6 +125,17 @@ char *ice_strstr(const char *haystack, const char *needle);
  */
 char *ice_strchr(const char *str, char c);
 
+/**
+ * @brief Get the offset to next \p c in \p str .
+ * @param str String to be searched in.
+ * @param c Character to look for.
+ * @return Offset of the first occurence of the \p c
+ * in \p str or its length.
+ */
+size_t ice_strtil(const char *str, char c);
+
+int ice_strcmp2(const char *a, const char *b);
+int ice_strncmp2(const char *a, const char *b, size_t n);
 void ice_strtrim(char *str);
 
 #endif /* !ICE_STRING_H */
