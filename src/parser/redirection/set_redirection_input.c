@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-#include "mysh/env.h"
+#include "mysh.h"
 #include "ice/output.h"
 #include "ice/string.h"
 #include "mysh/redirection.h"
@@ -109,9 +109,7 @@ bool set_redirection_input(redirs_t *redirs, char *str, mysh_t *context)
     if (redirs->fd_in[0] == -1)
         return true;
     redirs->fd_in[1] = open(redirs->file_in, O_RDONLY);
-    if (redirs->fd_in[1] == -1 || dup2(redirs->fd_in[1], STDIN_FILENO) == -1) {
-        exit_env(context);
-        return true;
-    }
+    if (redirs->fd_in[1] == -1 || dup2(redirs->fd_in[1], STDIN_FILENO) == -1)
+        DIE;
     return false;
 }

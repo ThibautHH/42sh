@@ -8,6 +8,8 @@
 #ifndef MINISHELL1_BUILTINS_H
     #define MINISHELL1_BUILTINS_H
 
+    #include "mysh.h"
+
 //
 // Builtins
 //
@@ -19,7 +21,7 @@
  * @param env The environment
  * @return env The new environment
  */
-env_t *builtin_cd(char **av, mysh_t *context);
+bool builtin_cd(char **av, mysh_t *context);
 
 /**
  * @brief Exit the shell
@@ -28,7 +30,7 @@ env_t *builtin_cd(char **av, mysh_t *context);
  * @param env The environment
  * @return env The new environment
  */
-env_t *builtin_exit(UNUSED char **av, mysh_t *context);
+bool builtin_exit(UNUSED char **av, mysh_t *context);
 
 /**
  * @brief Display the environment
@@ -36,7 +38,7 @@ env_t *builtin_exit(UNUSED char **av, mysh_t *context);
  * @param env The environment
  * @return env The new environment
  */
-env_t *builtin_env(UNUSED char **av, mysh_t *context);
+bool builtin_env(UNUSED char **av, mysh_t *context);
 
 /**
  * @brief Set an environment variable
@@ -45,7 +47,7 @@ env_t *builtin_env(UNUSED char **av, mysh_t *context);
  * @param env The environment
  * @return env The new environment
  */
-env_t *builtin_setenv(char **av, mysh_t *context);
+bool builtin_setenv(char **av, mysh_t *context);
 
 /**
  * @brief Unset an environment variable
@@ -54,7 +56,7 @@ env_t *builtin_setenv(char **av, mysh_t *context);
  * @param env The environment
  * @return env The new environment
  */
-env_t *builtin_unsetenv(char **av, mysh_t *context);
+bool builtin_unsetenv(char **av, mysh_t *context);
 
 //
 // Structs
@@ -62,10 +64,10 @@ env_t *builtin_unsetenv(char **av, mysh_t *context);
 
 typedef struct builtin_s {
     char *name;
-    env_t *(*func)(char **, mysh_t *);
+    bool (*func)(char **, mysh_t *);
 } builtin_t;
 
-const builtin_t builtins[] = {
+static const builtin_t builtins[] = {
     {"cd", builtin_cd},
     {"exit", builtin_exit},
     {"env", builtin_env},

@@ -11,7 +11,7 @@
 #include <stdbool.h>
 #include <sys/stat.h>
 
-#include "mysh/env.h"
+#include "mysh.h"
 #include "ice/output.h"
 #include "mysh/signals.h"
 #include "mysh/miscellaneous.h"
@@ -38,7 +38,7 @@ static void handle_execve(char *path, char **av, mysh_t *context)
     stat(path, &st);
     if (S_ISDIR(st.st_mode))
         display_error(context, "%s: Permission denied.\n", path);
-    else if (execve(path, av, ENV->env) != -1)
+    else if (execve(path, av, dup_env(context)) != -1)
         exit(84);
     if (errno == EACCES)
         display_error(context, "%s: Permission denied.\n", path);

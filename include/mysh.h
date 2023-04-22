@@ -8,19 +8,30 @@
 #ifndef MYSH_H
     #define MYSH_H
 
+    #include <sys/queue.h>
+
     #include <stdbool.h>
     #include <unistd.h>
 
     #include "ice/macro.h"
     #include "ice/string.h"
 
+    #include "mysh/env.h"
+
     #define IS_END(x) (((x) == '\0') || ((x) == '\n'))
     #define IS_SPACE(x) (((x) == ' ') || ((x) == '\t'))
+    #define _SC ;
+    #define _TQFSIT_(v, f, t)  ((t) = TAILQ_NEXT(v, f), 1)_SC (v) = (t)
+    #define _TQFSIT(v, h, f, t) (v) && _TQFSIT_(v, f, t)
+    #define _TQFS(v, h, f, t) (v) = TAILQ_FIRST(h)_SC _TQFSIT(v, h, f, t)
+    #define	TAILQ_FOREACH_SAFE(v, h, f, t) for (_TQFS(v, h, f, t))
 
     #define GET_LINE (len = getline(&LINE, &size, stdin))
 
     #define LINE (context->line)
-    #define ENV (context->env)
+    #define ENV (&(context->env))
+    #define ENVQ (&(ENV)->head)
+    #define ENVC (ENV->count)
     #define STATUS (context->status)
     #define EXIT (context->exit)
 
@@ -31,10 +42,8 @@
     #define WRITE(s, l) DWRITE(STDOUT_FILENO, s, l)
     #define TTY_WRITE(s, l) tty_write(context, s, l)
 
-typedef struct env_s env_t;
-
 typedef struct mysh_s {
-    env_t *env;
+    env_head_t env;
     char *line;
     uc_t status;
     bool exit;

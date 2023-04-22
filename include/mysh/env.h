@@ -10,96 +10,34 @@
 
     #include "mysh.h"
 
+    #include <sys/queue.h>
+
+    #define ENVN(env) ((env) ? (env)->name : NULL)
+    #define ENVV(env) ((env) ? (env)->value : NULL)
+
+    #define GET_ENV(n) ({env_t *v = env_get(context, n);ENVV(v);})
+
 typedef struct env_s {
-    char **env;
+    char *name;
+    char name_buffer[256];
+    char value[4096];
+    TAILQ_ENTRY(env_s) entries;
 } env_t;
 
-//
-// Initialisation
-//
+typedef struct env_head_s {
+    TAILQ_HEAD(, env_s) head;
+    size_t count;
+} env_head_t;
 
-/**
- * @brief Load the environment
- *
- * @param env The environment
- * @return env_t* The new environment
- */
-env_t *load_env(char **env);
+typedef struct mysh_s mysh_t;
 
-/**
- * @brief Duplicate the environment
- *
- * @param env The environment
- * @return char** The new environment
- */
-char **dup_env(char **env);
-
-/**
- * @brief Fix the environment
- *
- * @param env The environment
- * @return char** The new environment
- */
-char **fix_env(char **env);
-
-//
-// Destroy
-//
-
-/**
- * @brief Destroy the environment
- *
- * @param env The environment
- * @return int The status
- */
-int destroy_env(mysh_t *context);
-
-//
-// Environment functions
-//
-
-/**
- * @brief Get an environment variable
- *
- * @param env The environment
- * @param name The name of the variable
- * @return char* The value of the variable
- */
-char *get_env(mysh_t *context, char *name);
-
-/**
- * @brief Set an environment variable
- *
- * @param env The environment
- * @param name The name of the variable
- * @param value The value of the variable
- * @return char** The new environment
- */
-char **set_env(mysh_t *context, char *name, char *value) ;
-
-/**
- * @brief Unset an environment variable
- *
- * @param env The environment
- * @param name The name of the variable
- * @return char** The new environment
- */
-char **unset_env(mysh_t *context, char *name);
-
-/**
- * @brief Display the environment
- *
- * @param env The environment
- * @return bool True if write failed
- */
-bool display_env(mysh_t *context);
-
-/**
- * @brief Set exit as true adn set the status as 1
- *
- * @param env The environment
- * @return env_t* The new environment
- */
-void exit_env(mysh_t *context);
+void load_env(mysh_t *context, char **env);
+void destroy_env(mysh_t *context);
+char **dup_env(mysh_t *context);
+env_t *env_get(mysh_t *context, char *name);
+void env_add(mysh_t *context, char *var);
+void env_remove(mysh_t *context, char *name);
+void env_update(mysh_t *context, char *name, char *value);
+void display_env(mysh_t *context);
 
 #endif /* !INC_42SH_ENV_H */

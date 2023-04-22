@@ -11,14 +11,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "mysh/env.h"
+#include "mysh.h"
 #include "mysh/parser.h"
 
 static bool init(mysh_t *context, char **env)
 {
-    context->env = load_env(env);
-    if (!context->env)
-        return true;
+    TAILQ_INIT(ENVQ);
+    load_env(context, env);
     return false;
 }
 

@@ -5,83 +5,53 @@
 ** builtin_cd.c
 */
 
-#include <unistd.h>
+#include <errno.h>
 #include <malloc.h>
-#include <sys/stat.h>
+#include <unistd.h>
 
-#include "mysh/env.h"
+#include "mysh.h"
 #include "ice/array.h"
 #include "ice/string.h"
 #include "ice/printf.h"
 #include "mysh/miscellaneous.h"
 
-static bool verif_pwd(char *pwd, char *path, mysh_t *context)
+static uc_t handle_cd_errors(mysh_t *context, char *path)
 {
-    struct stat st;
-
-    if (!pwd)
-        return true;
-    if (stat((pwd + 4), &st) == -1) {
-        display_error(context, "%s: No such file or directory.\n", path);
-        return true;
+    switch (errno) {
+    case EACCES:
+        if (ice_dprintf(STDERR_FILENO, "%s: Permission denied.\n", path) < 0)
+            DIE;
+        break;
+    case ENOENT:
+        if (ice_dprintf(STDERR_FILENO, "%s: No such file "
+            "or directory.\n", path) < 0)
+            DIE;
+        break;
+    case ENOTDIR:
+        if (ice_dprintf(STDERR_FILENO, "%s: Not a directory.\n", path) < 0)
+            DIE;
+        break;
+    default: DIE;
     }
-    if (!S_ISDIR(st.st_mode)) {
-        display_error(context, "%s: Not a directory.\n", path);
-        return true;
-    }
-    return false;
+    return 1;
 }
 
-static env_t *update_pwd(char *src, char *path, mysh_t *context)
+bool builtin_cd(char **av, mysh_t *context)
 {
-    char *pwd;
-
-    ice_asprintf(&pwd, "PWD=%s/%s", src, path);
-    if (verif_pwd(pwd, path, context))
-        return ENV;
-    if (chdir(pwd +4))
-        return ENV;
-    ENV->env = set_env(context, "OLDPWD", get_env(context, "PWD"));
-    ENV->env = set_env(context, "PWD", pwd + 4);
-    free(pwd);
-    if (!ENV->env)
-        return ENV;
-    return ENV;
-}
-
-static env_t *update_pwd_home(mysh_t *context)
-{
-    char *home = get_env(context, "HOME");
-
-    if (!home) {
-        display_error(context, "No $home set.\n", NULL);
-        return ENV;
+    size_t argc = ice_array_len((void **)av);
+    if (argc > 2) {
+        DWRITE(STDERR_FILENO, "cd: Too many arguments.\n", 24);
+        return (STATUS = 1);
     }
-    return update_pwd(home, "", context);
-}
-
-static env_t *update_pwd_oldpwd(mysh_t *context)
-{
-    char *oldpwd = get_env(context, "OLDPWD");
-
-    if (!oldpwd) {
-        display_error(context, "cd: No such file or directory.\n", NULL);
-        return ENV;
-    }
-    return update_pwd(oldpwd, "", context);
-}
-
-env_t *builtin_cd(char **av, mysh_t *context)
-{
-    if (ice_array_len((void **)av) > 2) {
-        display_error(context, "cd: Too many arguments.\n", NULL);
-        return ENV;
-    }
-    if (!av[1] || !ice_strcmp(av[1], "~"))
-        return update_pwd_home(context);
-    if (av[1][0] == '/')
-        return update_pwd("", av[1], context);
-    if (ice_strcmp(av[1], "-") == 0)
-        return update_pwd_oldpwd(context);
-    return update_pwd(get_env(context, "PWD"), av[1], context);
+    char *prev_pwd = ice_strdup(GET_ENV("PWD"));
+    char *path = argc == 2
+        ? (ice_strcmp(av[1], "-")
+            ? av[1] : GET_ENV("OLDPWD"))
+        : GET_ENV("HOME");
+    if (chdir(path ? path : "") == -1)
+        return (STATUS = handle_cd_errors(context, path));
+    getcwd(GET_ENV("PWD"), 4096);
+    env_update(context, "OLDPWD", prev_pwd);
+    free(prev_pwd);
+    return (STATUS = 0);
 }

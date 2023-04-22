@@ -8,7 +8,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "mysh/env.h"
+#include "mysh.h"
 #include "ice/output.h"
 #include "mysh/redirection.h"
 
@@ -61,9 +61,7 @@ bool set_redirection_output(redirs_t *redirs, char *str, mysh_t *context)
         return true;
     redirs->fd_out[0] = dup(STDOUT_FILENO);
     if (redirs->fd_out[0] == -1
-        || dup2(redirs->fd_out[1], STDOUT_FILENO) == -1) {
-        exit_env(context);
-        return true;
-    }
+        || dup2(redirs->fd_out[1], STDOUT_FILENO) == -1)
+        DIE;
     return false;
 }

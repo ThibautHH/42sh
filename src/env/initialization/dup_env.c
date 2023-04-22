@@ -10,20 +10,14 @@
 #include "mysh.h"
 #include "ice/string.h"
 
-char **dup_env(char **env)
+char **dup_env(mysh_t *context)
 {
-    ull_t size = 0;
-    char **new_env;
-
-    for (; env[size]; size++);
-    new_env = malloc(sizeof(char *) * (size + 1));
-    if (!new_env)
-        return NULL;
-    for (unsigned int i = 0 ; env[i] ; i++) {
-        new_env[i] = ice_strdup(env[i]);
-        if (!new_env[i])
-            return NULL;
-    }
-    new_env[size] = NULL;
-    return new_env;
+    char **env = malloc(sizeof(char *) * (ENVC + 1));
+    if (!env)
+        DIE;
+    env[ENVC] = NULL;
+    env_t *var; size_t i = 0;
+    TAILQ_FOREACH(var, ENVQ, entries)
+        env[i++] = ENVN(var);
+    return env;
 }

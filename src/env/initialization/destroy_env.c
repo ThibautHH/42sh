@@ -7,14 +7,14 @@
 
 #include <malloc.h>
 
-#include "mysh/env.h"
+#include "mysh.h"
 #include "ice/array.h"
 
-int destroy_env(mysh_t *context)
+void destroy_env(mysh_t *context)
 {
-    int exit_status = STATUS;
-
-    ice_free_array((void **)ENV->env);
-    free(ENV);
-    return exit_status;
+    env_t *env, *tmp;
+    TAILQ_FOREACH_SAFE(env, ENVQ, entries, tmp) {
+        TAILQ_REMOVE(ENVQ, env, entries);
+        free(env);
+    }
 }

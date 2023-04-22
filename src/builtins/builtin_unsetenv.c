@@ -5,16 +5,21 @@
 ** builtin_unsetenv.c
 */
 
-#include "mysh/env.h"
+#include "ice/array.h"
+
+#include "mysh.h"
 #include "mysh/miscellaneous.h"
 
-env_t *builtin_unsetenv(char **av, mysh_t *context)
+bool builtin_unsetenv(char **av, mysh_t *context)
 {
-    if (!av[1]) {
-        display_error(context, "unsetenv: Too few arguments.\n", NULL);
-        return ENV;
+    size_t argc = ice_array_len((void **) av);
+    if (argc != 2) {
+        if (argc < 2) {
+            DWRITE(STDERR_FILENO, "unsetenv: Too few arguments.\n", 29);
+        } else
+            DWRITE(STDERR_FILENO, "unsetenv: Too many arguments.\n", 30);
+        return (STATUS = 1);
     }
-    for (ull_t i = 1; av[i]; i++)
-        ENV->env = unset_env(context, av[i]);
-    return ENV;
+    env_remove(context, av[1]);
+    return (STATUS = 0);
 }

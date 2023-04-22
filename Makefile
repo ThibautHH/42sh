@@ -36,11 +36,8 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 
 DIR			+=	$(addprefix $(DIR_SRC), ./env/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				get_env.c						\
-				set_env.c						\
-				unset_env.c						\
+				environment_manipulation.c		\
 				display_env.c					\
-				exit_env.c						\
 				)
 
 DIR			+= 	$(addprefix $(DIR_SRC), ./env/initialization/)

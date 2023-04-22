@@ -22,20 +22,16 @@ static bool command_not_found(char *cmd, mysh_t *context)
     return false;
 }
 
-static char **get_path(char **env)
+static char **get_path(mysh_t *context)
 {
-    ull_t i = 0;
-
-    for (; env[i] && ice_strncmp(env[i], "PATH=", 5); i++);
-    if (!env[i])
-        return NULL;
-    return ice_strsplit(env[i] + 5, ":");
+    char *path = GET_ENV("PATH");
+    return path ? ice_strsplit(path, ":") : NULL;
 }
 
 static char *search_in_path(char **av, mysh_t *context)
 {
     char *binary;
-    char **path = get_path(ENV->env);
+    char **path = get_path(context);
 
     for (ull_t i = 0; path[i]; i++) {
         ice_asprintf(&binary, "%s/%s", path[i], av[0]);
@@ -55,7 +51,7 @@ static bool builtin_function(char **av, mysh_t *context)
 {
     for (ui_t i = 0; builtins[i].name; i++)
         if (ice_strcmp(builtins[i].name, av[0]) == 0) {
-            ENV = builtins[i].func(av, context);
+            builtins[i].func(av, context);
             return false;
         }
     return true;
@@ -63,7 +59,7 @@ static bool builtin_function(char **av, mysh_t *context)
 
 bool search_function(char **av, mysh_t *context)
 {
-    char *binary = search_in_path(av, context);
+    char *binary;
 
     if (!av[0]) {
         STATUS = 0;
@@ -71,6 +67,7 @@ bool search_function(char **av, mysh_t *context)
     }
     if (!builtin_function(av, context))
         return false;
+    binary = search_in_path(av, context);
     if (!binary)
         return command_not_found(av[0], context);
     if (execute_binary(binary, av, context))

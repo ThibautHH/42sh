@@ -5,13 +5,13 @@
 ** display_env.c
 */
 
-#include "mysh/env.h"
+#include "mysh.h"
 #include "ice/printf.h"
 
-bool display_env(mysh_t *context)
+void display_env(mysh_t *context)
 {
-    for (ui_t i = 0; ENV->env[i]; i++)
-        if (ice_printf("%s\n", ENV->env[i]) == -1)
-            return true;
-    return false;
+    env_t *env;
+    TAILQ_FOREACH(env, ENVQ, entries)
+        if (ice_printf("%s\n", env->name) < 0)
+            DIE;
 }

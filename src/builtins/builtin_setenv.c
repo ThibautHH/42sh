@@ -5,20 +5,28 @@
 ** builtin_setenv.c
 */
 
-#include "mysh/env.h"
+#include "mysh.h"
 #include "ice/array.h"
 #include "mysh/miscellaneous.h"
+#include "mysh/builtins.h"
 
-env_t *builtin_setenv(char **av, mysh_t *context)
+bool builtin_setenv(char **av, mysh_t *context)
 {
-    ull_t av_len = ice_array_len((void **)av);
-
-    switch (av_len) {
-        case 1: display_env(context); break;
-        case 2: ENV->env = set_env(context, av[1], ""); break;
-        case 3: ENV->env = set_env(context, av[1], av[2]); break;
-        default:
-            display_error(context, "setenv: Too many arguments.\n", NULL); break;
+    size_t argc = ice_array_len((void **) av);
+    if (argc < 2)
+        return builtin_env(av, context);
+    if (argc > 3) {
+        DWRITE(STDERR_FILENO, "setenv: Too many arguments.\n", 28);
+        return (STATUS = 1);
     }
-    return ENV;
+    char *name = av[1];
+    for (size_t i = 0; name[i]; i++)
+        if (!(IS_ALPHANUM(name[i]) || name[i] == '_')) {
+            DWRITE(STDERR_FILENO, "setenv: Variable name must contain "
+                "alphanumeric characters.\n", 60);
+            return (STATUS = 1);
+        }
+    char *value = argc == 3 ? av[2] : "";
+    env_update(context, name, value);
+    return (STATUS = 0);
 }

@@ -5,10 +5,10 @@
 ** builtin_env.c
 */
 
-#include "mysh/env.h"
+#include "mysh.h"
 
-env_t *builtin_env(UNUSED char **av, mysh_t *context)
+bool builtin_env(UNUSED char **av, mysh_t *context)
 {
     display_env(context);
-    return ENV;
+    return (STATUS = 0);
 }
