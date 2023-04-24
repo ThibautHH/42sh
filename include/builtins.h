@@ -13,12 +13,23 @@ typedef struct builtin_s {
     env_t *(*func)(char **, env_t *);
 } builtin_t;
 
+typedef struct event_s {
+    char *name;
+    env_t *(*func)(char **, env_t *);
+} event_t;
+
 const builtin_t builtins[] = {
     {"cd", builtin_cd},
     {"exit", builtin_exit},
     {"env", builtin_env},
     {"setenv", builtin_setenv},
     {"unsetenv", builtin_unsetenv},
+    {"history", builtin_history},
+    {NULL, NULL}
+};
+
+const event_t event[] = {
+    {"!", event_history},
     {NULL, NULL}
 };
 

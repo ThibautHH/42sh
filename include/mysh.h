@@ -11,17 +11,32 @@
     #include <stdarg.h>
     #include <unistd.h>
     #include <stdbool.h>
+    #include <stdio.h>
 
     #include "ice/types.h"
     #include "ice/macro.h"
+    #include "ice/array.h"
+    #include "ice/string.h"
+    #include "ice/output.h"
+    #include "ice/printf.h"
+    #include "list.h"
+    #include "list/struct.h"
 
     #define IS_END(x) ((x == '\0') || (x == '\n'))
     #define IS_SPACE(x) ((x == ' ') || (x == '\t'))
+
+typedef struct history_s {
+    char *cmd;
+    int index;
+    char *date;
+} history_t;
 
 typedef struct env_s {
     char **env;
     int status;
     bool exit;
+    int ch;
+    list_t *history;
 } env_t;
 
 typedef struct output_s {
@@ -152,5 +167,11 @@ void exit_env(env_t *env);
  * @return char* The current working directory
  */
 void display_error(env_t *env, const char *format, const char *str);
+
+env_t *builtin_history(char **av, env_t *env);
+
+void get_history_data(char *buffer, env_t *env, history_t *history);
+
+env_t *event_history(char **av, env_t *env);
 
 #endif /* !MYSH_H */
