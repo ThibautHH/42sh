@@ -12,8 +12,11 @@
 
     #include <stdbool.h>
     #include <stdio.h>
+<<<<<<< HEAD
     #include <stdlib.h>
     #include <unistd.h>
+=======
+>>>>>>> c16914e (FEAT(<history>): add history builtin)
 
     #include "ice/macro.h"
     #include "ice/array.h"
@@ -38,6 +41,19 @@
     #define TQFSCND(v, h, f, t) (v) && TQFSCND2(v, f, t)SMCLN TQFSIT(v, f, t)
     #define TQFS(v, h, f, t) (v) = TAILQ_FIRST(h)SMCLN TQFSCND(v, h, f, t)
     #define	TAILQ_FOREACH_SAFE(v, h, f, t) for (TQFS(v, h, f, t))
+typedef struct history_s {
+    char *cmd;
+    int index;
+    char *date;
+} history_t;
+
+typedef struct env_s {
+    char **env;
+    int status;
+    bool exit;
+    int ch;
+    list_t *history;
+} env_t;
 
     #define GET_LINE (LEN = getline(&LINE, &LINESZ, stdin))
     #define LINE_ITERATION (prompt(context), free_pipelines(context), errno = 0)
@@ -99,3 +115,102 @@ static inline void tty_write(mysh_t *context, const char *str, size_t len)
 }
 
 #endif
+/**
+ * @brief Display the environment
+ * @param env The environment
+ * @return env The new environment
+ */
+env_t *builtin_env(UNUSED char **av, env_t *env);
+
+/**
+ * @brief Exit the shell
+ * @param env The environment
+ * @param av The arguments
+ * @return env The new environment
+ */
+env_t *builtin_setenv(char **av, env_t *env);
+
+/**
+ * @brief Unset an environment variable
+ * @param env The environment
+ * @param buffer The buffer
+ * @return env The new environment
+ */
+env_t *builtin_unsetenv(char **av, env_t *env);
+
+/**
+ * @brief Set an environment variable
+ * @param path The path of the binary
+ * @param env The environment
+ * @param buffer The buffer
+ * @return env The new environment
+ */
+bool execute_binary(char *path, char **av,  env_t *env);
+
+/**
+ * @brief Create a new environment
+ * @param env The environment
+ * @return char** The new environment
+ */
+char **malloc_env(char **env);
+
+/**
+ * @brief Fix the environment
+ * @param env The environment
+ * @return char** The new environment
+ */
+char **fix_env(char **env);
+
+/**
+ * @brief Get an environment variable
+ * @param name The name of the variable
+ * @param env The environment
+ * @return char* The value of the variable
+ */
+char *get_env(char *name, env_t *env);
+
+/**
+ * @brief Set an environment variable
+ * @param env The environment
+ * @param name The name of the variable
+ * @param value The value of the variable
+ * @return char** The new environment
+ */
+char **set_env(env_t *env, char *name, char *value) ;
+
+/**
+ * @brief Unset an environment variable
+ * @param env The environment
+ * @param name The name of the variable
+ * @return char** The new environment
+ */
+char **unset_env(char **env, char *name);
+
+/**
+ * @brief Display the environment
+ * @param env The environment
+ * @return bool True if write failed
+ */
+bool display_env(char **env);
+
+/**
+ * @brief Get the current working directory
+ * @param env The environment
+ * @return char* The current working directory
+ */
+void exit_env(env_t *env);
+
+/**
+ * @brief Get the current working directory
+ * @param env The environment
+ * @return char* The current working directory
+ */
+void display_error(env_t *env, const char *format, const char *str);
+
+env_t *builtin_history(char **av, env_t *env);
+
+void get_history_data(char *buffer, env_t *env, history_t *history);
+
+env_t *event_history(char **av, env_t *env);
+
+#endif /* !MYSH_H */

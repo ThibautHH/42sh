@@ -42,6 +42,13 @@ SRC			+= $(addprefix $(lastword $(DIR)),\
 DIR			+=	$(addprefix $(DIR_SRC), env/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				environment_manipulation.c		\
+				builtin_history.c				\
+				)
+
+DIR			+= $(addprefix $(DIR_SRC), ./builtin/history/)
+SRC			+= $(addprefix $(lastword $(DIR)),\
+				event_history.c					\
+				get_history_data.c				\
 				)
 
 DIR			+= 	$(addprefix $(DIR_SRC), env/initialization/)
