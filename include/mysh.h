@@ -11,10 +11,17 @@
     #include <sys/queue.h>
 
     #include <stdbool.h>
+    #include <stdio.h>
     #include <stdlib.h>
     #include <unistd.h>
 
     #include "ice/macro.h"
+    #include "ice/array.h"
+    #include "ice/string.h"
+    #include "ice/output.h"
+    #include "ice/printf.h"
+    #include "list.h"
+    #include "list/struct.h"
     #include "ice/string.h"
 
     #include "mysh/parsing.h"
@@ -57,6 +64,12 @@
     #define WRITE(s, l) DWRITE(STDOUT_FILENO, s, l)
     #define TTY_WRITE(s, l) tty_write(context, s, l)
 
+typedef struct history_s {
+    char *cmd;
+    int index;
+    char *date;
+} history_t;
+
 typedef struct mysh_s {
     env_head_t env;
     char *line;
@@ -68,6 +81,8 @@ typedef struct mysh_s {
     int pipefds[2];
     uc_t status;
     bool exit;
+    int ch;
+    list_t *history;
 } mysh_t;
 
 void mysh(mysh_t *context, char **env);

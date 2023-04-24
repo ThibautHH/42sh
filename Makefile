@@ -30,6 +30,13 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				builtin_env.c					\
 				builtin_setenv.c				\
 				builtin_unsetenv.c				\
+				builtin_history.c				\
+				)
+
+DIR			+= $(addprefix $(DIR_SRC), ./builtin/history/)
+SRC			+= $(addprefix $(lastword $(DIR)),\
+				event_history.c					\
+				get_history_data.c				\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), env/)
