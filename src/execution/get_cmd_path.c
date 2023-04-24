@@ -44,11 +44,9 @@ static char *compose_path(mysh_t *context, char **p)
     ice_strcpy(binpath + dirlen, CMDCMD);
     binpath[pathsize - slash - 1] = '\0';
     if (!access(binpath, F_OK)) {
-        char *tmp = binpath;
-        binpath = NULL;
+        char *tmp = binpath; binpath = NULL;
         return tmp;
-    }
-    *p += dirlen - !slash + 1;
+    } *p += dirlen - !slash + 1;
     return NULL;
 }
 
