@@ -53,6 +53,11 @@ static char *search_in_path(char **av, env_t *env)
 
 bool builtin_function(char **av, env_t **env)
 {
+    for (ui_t i = 0; event[i].name; i++)
+        if (ice_strncmp(event[i].name, av[0], 1) == 0) {
+            *env = event[i].func(av, *env);
+            return false;
+        }
     for (ui_t i = 0; builtins[i].name; i++)
         if (ice_strcmp(builtins[i].name, av[0]) == 0) {
             *env = builtins[i].func(av, *env);

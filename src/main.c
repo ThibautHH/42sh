@@ -7,6 +7,8 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "mysh.h"
 #include "list.h"
@@ -16,8 +18,10 @@
 
 static bool handle_input(char *buffer, env_t *env)
 {
+    history_t *history = malloc(sizeof(history_t));
     char **sequence = ice_strsplit(buffer, ";");
 
+    get_history_data(buffer, env, history);
     if (!sequence)
         return true;
     for (int i = 0; sequence[i]; i++)
@@ -57,6 +61,7 @@ static bool loop_env(env_t *env)
 static int mysh(char **env)
 {
     env_t st_env = {0};
+    st_env.history = list_create();
 
     st_env.env = malloc_env(env);
     if (!st_env.env)
