@@ -12,6 +12,9 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
+
 #include "mysh.h"
 
 static _Bool is_shebang_invoked(char *arg, char *av0)

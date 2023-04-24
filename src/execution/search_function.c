@@ -52,6 +52,7 @@ static bool builtin_function(char **av, mysh_t *context)
     for (ui_t i = 0; event[i].name; i++)
         if (ice_strncmp(event[i].name, av[0], 1) == 0) {
             event[i].func(av, context);
+            *env = event[i].func(av, *env);
             return false;
         }
     for (ui_t i = 0; builtins[i].name; i++)
