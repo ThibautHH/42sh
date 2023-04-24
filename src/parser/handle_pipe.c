@@ -11,7 +11,6 @@
 
 #include "ice/array.h"
 #include "ice/string.h"
-#include "mysh/execution.h"
 #include "mysh/redirection.h"
 #include "mysh/miscellaneous.h"
 
@@ -23,8 +22,8 @@ static bool execute(char *sequence, mysh_t *context, int pid)
     if (set_redirection(&redirs, sequence, context))
         return true;
     av = get_argument(sequence);
-    if (!av || search_function(av, context))
-        return true;
+//    if (!av || search_function(av, context))
+//        return true;
     if (pid > 0 && waitpid(pid, NULL, 0) == -1)
         return false;
     if (unset_redirection(&redirs))

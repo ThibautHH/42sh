@@ -20,6 +20,18 @@
 void *ice_realloc(void *ptr, ull_t size);
 
 /**
+ * @brief Extend a memory block from originalLength to newLength
+ * @param ptr The pointer to the memory block
+ * @param originalLength The original length of the memory block
+ * @param newLength The new length of the memory block
+ * @return A pointer to the allocated memory or NULL if newLength is 0
+ * or if an error occurred
+ * @note If newLength is 0, ptr is free'd
+ * @note If ptr is NULL, a new memory block of size newLength is allocated
+ */
+void *ice_realloc2(void *ptr, size_t originalLength, size_t newLength);
+
+/**
  * @brief Allocate n bytes of memory
  * @param nmemb The number of elements
  * @param size The size of each element

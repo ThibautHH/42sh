@@ -136,6 +136,8 @@ size_t ice_strtil(const char *str, char c);
 
 int ice_strcmp2(const char *a, const char *b);
 int ice_strncmp2(const char *a, const char *b, size_t n);
+char *ice_strncpy2(char *dest, const char *src, size_t n);
+
 void ice_strtrim(char *str);
 
 #endif /* !ICE_STRING_H */

@@ -11,15 +11,15 @@
 #include "ice/int.h"
 
 #include "mysh.h"
+#include "mysh/parsing.h"
 
-bool builtin_exit(char **av, mysh_t *context)
+bool builtin_exit(mysh_t *context)
 {
-    size_t argc = ice_array_len((void **) av);
-    if (argc > 2) {
+    if (CMDARGC > 2) {
         DWRITE(STDERR_FILENO, "exit: Expression Syntax.\n", 25);
         return (STATUS = 1);
     }
-    STATUS = argc == 2 ? ice_atoi(av[1]) : STATUS;
+    STATUS = CMDARGC == 2 ? ice_atoi(CMDARGS[1]) : STATUS;
     EXIT = 1;
     return false;
 }

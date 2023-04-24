@@ -9,11 +9,11 @@
 #include <malloc.h>
 #include <unistd.h>
 
-#include "mysh.h"
 #include "ice/array.h"
 #include "ice/string.h"
 #include "ice/printf.h"
 #include "mysh/miscellaneous.h"
+#include "mysh/parsing.h"
 
 static uc_t handle_cd_errors(mysh_t *context, char *path)
 {
@@ -36,17 +36,16 @@ static uc_t handle_cd_errors(mysh_t *context, char *path)
     return 1;
 }
 
-bool builtin_cd(char **av, mysh_t *context)
+bool builtin_cd(mysh_t *context)
 {
-    size_t argc = ice_array_len((void **)av);
-    if (argc > 2) {
+    if (CMDARGC > 2) {
         DWRITE(STDERR_FILENO, "cd: Too many arguments.\n", 24);
         return (STATUS = 1);
     }
     char *prev_pwd = ice_strdup(GET_ENV("PWD"));
-    char *path = argc == 2
-        ? (ice_strcmp(av[1], "-")
-            ? av[1] : GET_ENV("OLDPWD"))
+    char *path = CMDARGC == 2
+        ? (ice_strcmp(CMDARGS[1], "-")
+            ? CMDARGS[1] : GET_ENV("OLDPWD"))
         : GET_ENV("HOME");
     if (chdir(path ? path : "") == -1)
         return (STATUS = handle_cd_errors(context, path));

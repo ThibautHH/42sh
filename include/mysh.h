@@ -16,6 +16,7 @@
     #include "ice/macro.h"
     #include "ice/string.h"
 
+    #include "mysh/parsing.h"
     #include "mysh/env.h"
 
     #define IS_END(x) (((x) == '\0') || ((x) == '\n'))
@@ -35,6 +36,8 @@
     #define STATUS (context->status)
     #define EXIT (context->exit)
 
+    #define ARGV (CMDARGS ? CMDARGS : (char *[]){CMDCMD, NULL})
+
     #define DIE die(context, 84)
 
     #define _DWSLEN(s, l) (l > 0 ? l : ice_strlen(s))
@@ -45,6 +48,9 @@
 typedef struct mysh_s {
     env_head_t env;
     char *line;
+    TAILQ_HEAD(, pipeline_s) pipelines;
+    pipeline_t *current_pipeline;
+    parsing_context_t parsing;
     uc_t status;
     bool exit;
 } mysh_t;
@@ -68,5 +74,7 @@ static inline void tty_write(mysh_t *context, const char *str, size_t len)
         return;
     WRITE(str, len);
 }
+
+void run_pipeline(mysh_t *context);
 
 #endif /* !MYSH_H */

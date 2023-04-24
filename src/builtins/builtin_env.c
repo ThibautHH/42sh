@@ -7,7 +7,7 @@
 
 #include "mysh.h"
 
-bool builtin_env(UNUSED char **av, mysh_t *context)
+bool builtin_env(mysh_t *context)
 {
     display_env(context);
     return (STATUS = 0);

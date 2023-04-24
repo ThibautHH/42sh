@@ -8,8 +8,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "mysh.h"
 #include "ice/output.h"
+#include "mysh.h"
 #include "mysh/redirection.h"
 
 static bool handle_extract(redirs_t *redirs, char *str, bool add, bool append)

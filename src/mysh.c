@@ -12,11 +12,12 @@
 #include <unistd.h>
 
 #include "mysh.h"
-#include "mysh/parser.h"
+#include "mysh/commands.h"
 
 static bool init(mysh_t *context, char **env)
 {
     TAILQ_INIT(ENVQ);
+    TAILQ_INIT(&context->pipelines);
     load_env(context, env);
     return false;
 }
@@ -24,6 +25,7 @@ static bool init(mysh_t *context, char **env)
 static void cleanup(mysh_t *context)
 {
     destroy_env(context);
+    free_pipelines(context);
     free(LINE);
 }
 
@@ -41,14 +43,18 @@ void mysh(mysh_t *context, char **env)
         exit(84);
     prompt(context), errno = 0;
     for (ssize_t len; GET_LINE != -1; prompt(context), errno = 0) {
-        if (len == 1)
-            continue;
         LINE[len - 1] = '\0';
-        if (handle_sequence(LINE, context))
-            DIE;
+        if (len == 1 || parse_command_line(context))
+            continue;
+        TAILQ_FOREACH(PIPELINE, &context->pipelines, entries)
+            if ((PIPELINE->mode == SEQ_NONE)
+                || (PIPELINE->mode == SEQ_AND && !STATUS)
+                || (PIPELINE->mode == SEQ_OR && STATUS)) {
+                STATUS = 0; run_pipeline(context);
+            }
+        free_pipelines(context);
     }
-    if (errno)
-        DIE;
+    if (errno) DIE;
     TTY_WRITE("exit\n", 5);
     cleanup(context);
 }

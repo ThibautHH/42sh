@@ -50,19 +50,16 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 
 DIR			+=	$(addprefix $(DIR_SRC), ./execution/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				search_function.c	\
+				get_cmd_path.c	\
 				execute_binary.c	\
+				run_sequence.c		\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./parser/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				handle_sequence.c	\
-				handle_pipe.c		\
-				)
-
-DIR			+=	$(addprefix $(DIR_SRC), ./parser/commands/)
-SRC			+=	$(addprefix $(lastword $(DIR)),\
+				handle_pipe.c			\
 				parse_command_line.c	\
+				commands.c				\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./parser/redirection/)

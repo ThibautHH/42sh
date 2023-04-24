@@ -8,7 +8,7 @@
 #ifndef MYSH_REDIRECTION_H
     #define MYSH_REDIRECTION_H
 
-    #include "mysh.h"
+    #include <stdbool.h>
 
 //
 // Structs
@@ -23,6 +23,8 @@ typedef struct redir_s {
     char *file_in;
 } redirs_t;
 
+
+typedef struct mysh_s mysh_t;
 
 //
 // Set redirection

@@ -32,6 +32,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 DIR			+=	$(addprefix $(DIR_ICE), ./memory/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				ice_realloc.c	\
+				ice_realloc2.c	\
 				ice_calloc.c	\
 				ice_memchr.c	\
 				ice_memcmp.c	\
@@ -79,6 +80,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				ice_strcat.c	\
 				ice_strcmp.c	\
 				ice_strcpy.c	\
+				ice_strncpy2.c	\
 				ice_strdup.c	\
 				ice_strlen.c	\
 				ice_strncat.c	\

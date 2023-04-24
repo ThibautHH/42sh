@@ -11,9 +11,9 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-#include "mysh.h"
 #include "ice/output.h"
 #include "ice/string.h"
+#include "mysh.h"
 #include "mysh/redirection.h"
 
 static bool read_input(redirs_t *redirs, const char *str)
