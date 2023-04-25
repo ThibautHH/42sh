@@ -19,6 +19,7 @@
 #include "mysh/builtins.h"
 #include "mysh/commands.h"
 #include "mysh/parsing.h"
+#include "mysh/piping.h"
 
 static const char EXECFMT_ERRFMT[] = "%s: Exec format error. \
 Wrong Architecture.\n";
@@ -36,27 +37,35 @@ static void execute(mysh_t *context)
     die(context, 1);
 }
 
+static void execute_unforked_builtin(mysh_t *context)
+{
+    int stdio[2];
+    if ((stdio[0] = dup(STDIN_FILENO)) == -1 ||
+        (stdio[1] = dup(STDOUT_FILENO)) == -1) DIE;
+    if (CMDPREV && CMDPREV->is_piped)
+        MVFD_STD(CMDPREV->outlet, IN);
+    BUILTINS[CMDCOMMAND.id].builtin(context);
+    MVFD_STD(stdio[0], IN);
+    MVFD_STD(stdio[1], OUT);
+    if (CMDPREV && CMDPREV->is_piped && close(CMDPREV->outlet)) DIE;
+}
+
 static pid_t run(mysh_t *context)
 {
     if (CMD->is_builtin
-        && (CMD == TAILQ_LAST(&PIPELINE->commands, commands_s))) {
-        int stdio[2];
-        if ((stdio[0] = dup(STDIN_FILENO)) == -1 ||
-            (stdio[1] = dup(STDOUT_FILENO)) == -1) DIE;
-        BUILTINS[CMDCOMMAND.id].builtin(context);
-        if (dup2(stdio[0], STDIN_FILENO) == -1 ||
-            dup2(stdio[1], STDOUT_FILENO) == -1 ||
-            close(stdio[0]) == -1 || close(stdio[1]) == -1) DIE;
-            return 0;
-    }
+        && (CMD == TAILQ_LAST(&PIPELINE->commands, commands_s)))
+        return (execute_unforked_builtin(context), 0);
+    if (CMD->is_piped && pipe(PIPEFDS) == -1) DIE;
     pid_t pid = fork();
     if (pid == -1) DIE;
     if (pid == 0) {
+        setup_pipe_command(context);
         if (!CMD->is_builtin)
             execute(context);
         BUILTINS[CMDCOMMAND.id].builtin(context);
         exit(STATUS);
     }
+    setup_pipe_shell(context);
     return pid;
 }
 

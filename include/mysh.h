@@ -33,6 +33,7 @@
     #define ENV (&(context->env))
     #define ENVQ (&(ENV)->head)
     #define ENVC (ENV->count)
+    #define PIPEFDS (context->pipefds)
     #define STATUS (context->status)
     #define EXIT (context->exit)
 
@@ -51,6 +52,7 @@ typedef struct mysh_s {
     TAILQ_HEAD(, pipeline_s) pipelines;
     pipeline_t *current_pipeline;
     parsing_context_t parsing;
+    int pipefds[2];
     uc_t status;
     bool exit;
 } mysh_t;
