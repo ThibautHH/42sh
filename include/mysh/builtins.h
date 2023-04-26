@@ -23,16 +23,16 @@ typedef enum {
 
 typedef struct mysh_s mysh_t;
 
-bool builtin_cd(mysh_t *context);
-bool builtin_exit(mysh_t *context);
-bool builtin_env(mysh_t *context);
-bool builtin_setenv(mysh_t *context);
-bool builtin_unsetenv(mysh_t *context);
+void builtin_cd(mysh_t *context);
+void builtin_exit(mysh_t *context);
+void builtin_env(mysh_t *context);
+void builtin_setenv(mysh_t *context);
+void builtin_unsetenv(mysh_t *context);
 
 static const struct {
     char *name;
     builtin_t id;
-    bool (*builtin)(mysh_t *);
+    void (*builtin)(mysh_t *);
 } BUILTINS[BUILTIN_COUNT] = {
     {"cd", BUILTIN_CD, builtin_cd},
     {"exit", BUILTIN_EXIT, builtin_exit},
