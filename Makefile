@@ -20,8 +20,6 @@ SRC			+=	$(addprefix $(DIR_SRC),\
 
 DIR			+=	$(addprefix $(DIR_SRC), ./miscellaneous/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				get_argument.c		\
-				display_error.c		\
 				prompt.c			\
 				)
 
@@ -37,7 +35,6 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 DIR			+=	$(addprefix $(DIR_SRC), ./env/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				environment_manipulation.c		\
-				display_env.c					\
 				)
 
 DIR			+= 	$(addprefix $(DIR_SRC), ./env/initialization/)
