@@ -50,9 +50,8 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 
 DIR			+=	$(addprefix $(DIR_SRC), ./execution/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				get_cmd_path.c	\
-				execute_binary.c	\
-				run_sequence.c		\
+				get_cmd_path.c		\
+				run_pipeline.c		\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./parser/)

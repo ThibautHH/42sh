@@ -17,13 +17,14 @@
 #include "mysh/builtins.h"
 #include "mysh/parsing.h"
 
-static void set_cmd_path(mysh_t *context, char *path)
+static _Bool set_cmd_path(mysh_t *context, char *path)
 {
     if (access(path, X_OK)) {
         ice_dprintf(STDERR_FILENO, "%s: Permission denied.\n", path);
-        die(context, 1);
+        return (STATUS = 1);
     }
     CMDPATH = path;
+    return 0;
 }
 
 static char *compose_path(mysh_t *context, char **p)
@@ -59,13 +60,13 @@ static char *get_bin_path(mysh_t *context)
     return NULL;
 }
 
-void get_cmd_path(mysh_t *context)
+_Bool get_cmd_path(mysh_t *context)
 {
     for (size_t i = 0; i < BUILTIN_COUNT; i++)
         if (!ice_strcmp(CMDCMD, BUILTINS[i].name)) {
             CMD->is_builtin = true;
             CMDCOMMAND.id = BUILTINS[i].id;
-            return;
+            return 0;
         }
     if (!CMDCMD[ice_strtil(CMDCMD, '/')]) {
         char *binary = get_bin_path(context);
@@ -74,5 +75,5 @@ void get_cmd_path(mysh_t *context)
     } else if (!access(CMDCMD, F_OK))
         return set_cmd_path(context, ice_strdup(CMDCMD));
     ice_dprintf(STDERR_FILENO, "%s: Command not found.\n", CMDCMD);
-    die(context, 1);
+    return (STATUS = 1);
 }

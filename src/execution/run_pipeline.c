@@ -89,7 +89,8 @@ static void wait_for_cmd(mysh_t *context, pid_t pid)
 void run_pipeline(mysh_t *context)
 {
     TAILQ_FOREACH(CMD, &PIPELINE->commands, entries)
-        get_cmd_path(context);
+        if (get_cmd_path(context))
+            return;
     pid_t *ppl_pids = malloc(sizeof(pid_t) * CMDC);
     size_t i = 0;
     TAILQ_FOREACH(CMD, &PIPELINE->commands, entries)
