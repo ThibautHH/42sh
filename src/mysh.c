@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 #include "mysh.h"
+#include "mysh/alias.h"
 #include "mysh/commands.h"
 
 static bool init(mysh_t *context, char **env)
@@ -26,7 +27,6 @@ static bool init(mysh_t *context, char **env)
 void cleanup(mysh_t *context)
 {
     destroy_env(context);
-    free_pipelines(context);
     destroy_alias(context);
     free(LINE);
 }
