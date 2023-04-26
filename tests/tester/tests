@@ -146,6 +146,38 @@ TESTS=
 setenv arg1 arg2 arg3
 [305-END]
 
+[400]
+NAME="Built-in alias with and without arg"
+SETUP=""
+CLEAN=""
+TESTS=
+    echo 'alias oui ls'
+    echo 'alias oui'
+    echo 'alias'
+[400-END]
+
+[4001]
+NAME="Built-in unalias simple"
+SETUP=""
+CLEAN=""
+TESTS=
+    echo 'alias oui ls'
+    echo 'unalias oui'
+    echo 'alias'
+[401-END]
+
+[402]
+NAME="Built-in unalias multiple"
+SETUP=""
+CLEAN=""
+TESTS=
+    echo 'alias oui ls'
+    echo 'alias non ls'
+    echo 'alias win ls'
+    echo 'unalias oui non win'
+    echo 'alias'
+[402-END]
+
 [501]
 NAME="Execve: path"
 SETUP=""
@@ -247,35 +279,3 @@ SETUP=""
 TESTS=
 ./tests/tester/bin/segf
 [909-END]
-
-[1000]
-NAME="basic alias with and without arg"
-SETUP=""
-CLEAN=""
-TESTS=
-    echo 'alias oui ls'
-    echo 'alias oui'
-    echo 'alias'
-[1000-END]
-
-[1001]
-NAME="unalias simple"
-SETUP=""
-CLEAN=""
-TESTS=
-    echo 'alias oui ls'
-    echo 'unalias oui'
-    echo 'alias'
-[1001-END]
-
-[1002]
-NAME="unalias multiple"
-SETUP=""
-CLEAN=""
-TESTS=
-    echo 'alias oui ls'
-    echo 'alias non ls'
-    echo 'alias win ls'
-    echo 'unalias oui non win'
-    echo 'alias'
-[1002-END]
