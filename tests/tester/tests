@@ -7,7 +7,7 @@ TESTS=
 [001-END]
 
 [101]
-NAME="Buitl-in exit"
+NAME="Built-in exit"
 SETUP=""
 CLEAN=""
 TESTS=
@@ -15,7 +15,7 @@ TESTS=
 [101-END]
 
 [102]
-NAME="Buitl-in env"
+NAME="Built-in env"
 SETUP="export TERM=xterm"
 CLEAN=""
 TESTS=
@@ -24,7 +24,7 @@ TESTS=
 [102-END]
 
 [201]
-NAME="Buitl-in cd"
+NAME="Built-in cd"
 SETUP=""
 CLEAN=""
 TESTS=
@@ -34,7 +34,7 @@ TESTS=
 [201-END]
 
 [202]
-NAME="Buitl-in cd .."
+NAME="Built-in cd .."
 SETUP=""
 CLEAN=""
 TESTS=
@@ -44,7 +44,7 @@ TESTS=
 [202-END]
 
 [203]
-NAME="Buitl-in cd -"
+NAME="Built-in cd -"
 SETUP=""
 CLEAN=""
 TESTS=
@@ -56,7 +56,7 @@ TESTS=
 [203-END]
 
 [204]
-NAME="Buitl-in cd $HOME"
+NAME="Built-in cd $HOME"
 SETUP=""
 CLEAN=""
 TESTS=
@@ -66,7 +66,7 @@ TESTS=
 [204-END]
 
 [205]
-NAME="Buitl-in cd ~"
+NAME="Built-in cd ~"
 SETUP=""
 CLEAN=""
 TESTS=
@@ -76,7 +76,7 @@ TESTS=
 [205-END]
 
 [206]
-NAME="Buitl-in cd /"
+NAME="Built-in cd /"
 SETUP=""
 CLEAN=""
 TESTS=
@@ -86,7 +86,7 @@ TESTS=
 [206-END]
 
 [207]
-NAME="Buitl-in cd nofolder"
+NAME="Built-in cd nofolder"
 SETUP=""
 CLEAN=""
 TESTS=
@@ -96,7 +96,7 @@ TESTS=
 [207-END]
 
 [208]
-NAME="Buitl-in cd file"
+NAME="Built-in cd file"
 SETUP=""
 CLEAN=""
 TESTS=
@@ -106,7 +106,7 @@ TESTS=
 [208-END]
 
 [209]
-NAME="Buitl-in cd to much args"
+NAME="Built-in cd to much args"
 SETUP=""
 CLEAN=""
 TESTS=
@@ -116,7 +116,7 @@ TESTS=
 [209-END]
 
 [301]
-NAME="Buitl-in setenv one arg"
+NAME="Built-in setenv one arg"
 SETUP="export TERM=xterm"
 CLEAN=""
 TESTS=
@@ -127,7 +127,7 @@ TESTS=
 [301-END]
 
 [302]
-NAME="Buitl-in setenv two arg"
+NAME="Built-in setenv two arg"
 SETUP="export TERM=xterm"
 CLEAN=""
 TESTS=
@@ -138,7 +138,7 @@ TESTS=
 [302-END]
 
 [303]
-NAME="Buitl-in setenv no arg"
+NAME="Built-in setenv no arg"
 SETUP="export TERM=xterm"
 CLEAN=""
 TESTS=
@@ -148,7 +148,7 @@ TESTS=
 [303-END]
 
 [304]
-NAME="Buitl-in setenv invalid name"
+NAME="Built-in setenv invalid name"
 SETUP=""
 CLEAN=""
 TESTS=
@@ -156,7 +156,7 @@ TESTS=
 [304-END]
 
 [305]
-NAME="Buitl-in setenv too many arguments"
+NAME="Built-in setenv too many arguments"
 SETUP=""
 CLEAN=""
 TESTS=
