@@ -12,13 +12,16 @@
 #include <unistd.h>
 
 #include "mysh.h"
+#include "list.h"
 #include "mysh/parser.h"
+#include "mysh/history.h"
 
 static bool init(mysh_t *context, char **env)
 {
     TAILQ_INIT(ENVQ);
     load_env(context, env);
-    return false;
+    context->history = list_create();
+    return context->history != NULL;
 }
 
 static void cleanup(mysh_t *context)
@@ -37,7 +40,7 @@ void mysh(mysh_t *context, char **env)
 {
     size_t size = 0;
 
-    if (init(context, env))
+    if (!init(context, env))
         exit(84);
     prompt(context), errno = 0;
     for (ssize_t len; GET_LINE != -1; prompt(context), errno = 0) {

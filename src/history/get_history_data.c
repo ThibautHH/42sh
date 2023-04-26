@@ -23,17 +23,18 @@ static char *get_date(char *date)
     return r_date;
 }
 
-void get_history_data(char *buffer, env_t *env, history_t *history)
+void get_history_data(char *buffer, mysh_t *context)
 {
     time_t curr_time;
     char *times;
+    history_t *tmp = malloc(sizeof(history_t));
 
     if (buffer[0] == '!')
         return;
     time(&curr_time);
     times = ice_strdup(asctime(localtime(&curr_time)));
-    history->date = get_date(times);
-    history->cmd = ice_strdup(buffer);
-    history->index = env->history->size + 1;
-    list_add(env->history, history);
+    tmp->date = get_date(times);
+    tmp->cmd = ice_strdup(buffer);
+    tmp->index = context->history->size + 1;
+    list_add(context->history, tmp);
 }

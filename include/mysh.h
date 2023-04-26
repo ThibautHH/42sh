@@ -23,6 +23,7 @@
     #include "list/struct.h"
     #include "ice/string.h"
 
+    #include "mysh/history.h"
     #include "mysh/env.h"
 
     #define IS_END(x) (((x) == '\0') || ((x) == '\n'))
@@ -41,6 +42,7 @@
     #define ENVC (ENV->count)
     #define STATUS (context->status)
     #define EXIT (context->exit)
+    #define HISTORY (context->history)
 
     #define DIE die(context, 84)
 
@@ -48,12 +50,6 @@
     #define DWRITE(fd, s, l) if (write(fd, s, _DWSLEN(s, l)) < 0)DIE
     #define WRITE(s, l) DWRITE(STDOUT_FILENO, s, l)
     #define TTY_WRITE(s, l) tty_write(context, s, l)
-
-typedef struct history_s {
-    char *cmd;
-    int index;
-    char *date;
-} history_t;
 
 typedef struct mysh_s {
     env_head_t env;
@@ -84,4 +80,4 @@ static inline void tty_write(mysh_t *context, const char *str, size_t len)
     WRITE(str, len);
 }
 
-#endif /* !MYSH_H */
+#endif

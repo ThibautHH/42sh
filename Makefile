@@ -35,7 +35,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				builtin_history.c				\
 				)
 
-DIR			+= $(addprefix $(DIR_SRC), ./builtin/history/)
+DIR			+= $(addprefix $(DIR_SRC), ./history/)
 SRC			+= $(addprefix $(lastword $(DIR)),\
 				event_history.c					\
 				get_history_data.c				\

@@ -9,6 +9,7 @@
     #define MINISHELL1_BUILTINS_H
 
     #include "mysh.h"
+    #include "mysh/history.h"
 
 //
 // Builtins
@@ -67,12 +68,23 @@ typedef struct builtin_s {
     bool (*func)(char **, mysh_t *);
 } builtin_t;
 
+typedef struct event_s {
+    char *name;
+    bool (*func)(char **, mysh_t *);
+} event_t;
+
 static const builtin_t builtins[] = {
     {"cd", builtin_cd},
     {"exit", builtin_exit},
     {"env", builtin_env},
     {"setenv", builtin_setenv},
     {"unsetenv", builtin_unsetenv},
+    {"history", builtin_history},
+    {NULL, NULL}
+};
+
+static const event_t event[] = {
+    {"!", event_history},
     {NULL, NULL}
 };
 
