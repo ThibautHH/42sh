@@ -95,7 +95,7 @@ load_test()
       then
         echo "Output $MYSHELL :"
         $CAT -e /tmp/.shell.$$
-        echo "" 
+        echo ""
         echo "Output $REFER :"
         $CAT -e /tmp/.refer.$$
         echo ""
@@ -106,7 +106,7 @@ load_test()
   else
     if [ $debug -ge 1 ]
     then
-      echo "Test $id ($NAME) : KO - Check output in /tmp/test.$$/$id/" 
+      echo "Test $id ($NAME) : KO - Check output in /tmp/test.$$/$id/"
       $MKDIR -p /tmp/test.$$/$id 2>/dev/null
       $CP /tmp/.shell.$$ /tmp/test.$$/$id/mysh.out
       $CP /tmp/.refer.$$ /tmp/test.$$/$id/tcsh.out
