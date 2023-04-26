@@ -5,6 +5,9 @@
 ** mysh.c
 */
 
+#include <stdio.h>
+#include <unistd.h>
+
 #include "mysh.h"
 
 int main(int ac, UNUSED char **av, char **env)

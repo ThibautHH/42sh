@@ -13,6 +13,7 @@
     #include <stdbool.h>
     #include <stdio.h>
     #include <unistd.h>
+    #include <stdio.h>
 
     #include "ice/macro.h"
     #include "ice/array.h"
@@ -45,6 +46,12 @@
     #define HISTORY (context->history)
 
     #define DIE die(context, 84)
+    #include "ice/array.h"
+    #include "ice/string.h"
+    #include "ice/output.h"
+    #include "ice/printf.h"
+    #include "list.h"
+    #include "list/struct.h"
 
     #define _DWSLEN(s, l) (l > 0 ? l : ice_strlen(s))
     #define DWRITE(fd, s, l) if (write(fd, s, _DWSLEN(s, l)) < 0)DIE
