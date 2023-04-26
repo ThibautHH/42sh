@@ -24,6 +24,7 @@
     #include "list/struct.h"
     #include "ice/string.h"
 
+    #include "mysh/history.h"
     #include "mysh/parsing.h"
     #include "mysh/env.h"
 
@@ -54,21 +55,12 @@
     #define STATUS (context->status)
     #define EXIT (context->exit)
 
-    #define ARGV (CMDARGS ? CMDARGS : (char *[]){CMDCMD, NULL})
-
-    #define QUIT(status) (cleanup(context), exit(status))
-    #define DIE QUIT(84)
+    #define DIE die(context, 84)
 
     #define DW_STRLEN(s, l) (l > 0 ? l : ice_strlen(s))
     #define DWRITE(fd, s, l) if (write(fd, s, DW_STRLEN(s, l)) < 0)DIE
     #define WRITE(s, l) DWRITE(STDOUT_FILENO, s, l)
     #define TTY_WRITE(s, l) tty_write(context, s, l)
-
-typedef struct history_s {
-    char *cmd;
-    int index;
-    char *date;
-} history_t;
 
 typedef struct mysh_s {
     env_head_t env;
@@ -106,4 +98,4 @@ static inline void tty_write(mysh_t *context, const char *str, size_t len)
     WRITE(str, len);
 }
 
-#endif /* !MYSH_H */
+#endif
