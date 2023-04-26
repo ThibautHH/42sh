@@ -58,6 +58,24 @@ bool builtin_setenv(char **av, mysh_t *context);
  */
 bool builtin_unsetenv(char **av, mysh_t *context);
 
+/**
+ * @brief Create an alias
+ *
+ * @param av The arguments
+ * @param context Main struct of mysh
+ * @return bool return false when an error happen
+ */
+bool builtin_alias(char **av, mysh_t *context);
+
+/**
+ * @brief Remove an alias
+ *
+ * @param av The arguments
+ * @param context Main struct of mysh
+ * @return bool always true
+ */
+bool builtin_unalias(char **av, mysh_t *context);
+
 //
 // Structs
 //
@@ -73,6 +91,8 @@ static const builtin_t builtins[] = {
     {"env", builtin_env},
     {"setenv", builtin_setenv},
     {"unsetenv", builtin_unsetenv},
+    {"alias", builtin_alias},
+    {"unalias", builtin_unalias},
     {NULL, NULL}
 };
 

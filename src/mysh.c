@@ -12,18 +12,21 @@
 #include <unistd.h>
 
 #include "mysh.h"
+#include "mysh/alias.h"
 #include "mysh/parser.h"
 
 static bool init(mysh_t *context, char **env)
 {
     TAILQ_INIT(ENVQ);
     load_env(context, env);
+    TAILQ_INIT(ALIASQ);
     return false;
 }
 
 static void cleanup(mysh_t *context)
 {
     destroy_env(context);
+    destroy_alias(context);
     free(LINE);
 }
 
