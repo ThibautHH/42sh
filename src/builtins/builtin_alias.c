@@ -66,7 +66,7 @@ bool builtin_alias(char **av, mysh_t *context)
         return print_alias(context, NULL);
     if (av[2] == NULL)
         return print_alias(context, av[1]);
-    if (is_forbiden(av[1]) == true)
+    if (is_alias_forbidden(av[1]) == true)
         return false;
     alias = search_for_alias(context, av[1]);
     if (alias != NULL)

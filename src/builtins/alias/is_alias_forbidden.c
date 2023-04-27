@@ -8,13 +8,13 @@
 #include "mysh.h"
 #include "ice/printf.h"
 
-bool is_forbiden(char *alias)
+bool is_alias_forbidden(char *alias)
 {
     char *name[2] = {"alias", "unalias"};
 
     if (ice_strcmp(alias, name[0]) == 0 ||
         ice_strcmp(alias, name[1]) == 0) {
-        ice_dprintf(2, FORBIDEN, alias);
+        ice_dprintf(2, FORBIDDEN, alias);
         return true;
     }
     return false;
