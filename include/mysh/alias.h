@@ -15,7 +15,7 @@
     #define ALIAS (&(context->alias))
     #define ALIASQ (&(ALIAS)->head)
 
-    #define FORBIDEN "%s: Too dangerous to alias that.\n"
+    #define FORBIDDEN "%s: Too dangerous to alias that.\n"
 
 typedef struct alias_s {
     char name_buffer[256];
@@ -40,9 +40,9 @@ void destroy_alias(mysh_t *context);
  * @brief Check if the alias name is OK
  *
  * @param alias The name of the wanted alias
- * @return bool true if a forbiden name is used
+ * @return bool true if a forbidden name is used
  */
-bool is_forbiden(char *alias);
+bool is_alias_forbidden(char *alias);
 
 /**
  * @brief Print the value of a given alias
