@@ -156,7 +156,7 @@ TESTS=
     echo 'alias'
 [400-END]
 
-[4001]
+[401]
 NAME="Built-in unalias simple"
 SETUP=""
 CLEAN=""

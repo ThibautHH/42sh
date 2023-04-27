@@ -37,7 +37,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 DIR			+=	$(addprefix $(DIR_SRC), ./builtins/alias/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				destroy_alias.c					\
-				alias_error_gestion.c			\
+				is_alias_forbidden.c			\
 				print_alias.c					\
 				)
 
