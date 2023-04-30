@@ -31,19 +31,23 @@ static void tokenize(mysh_t *context)
 
 static _Bool handle_pplsep(mysh_t *context, size_t *separator_count)
 {
-    if (((++(*separator_count) >= 2 && _PS(PPLSEP).sides & RS_LEFT)
-        || (((_PS(LAST_PPLSEP).sides & RS_RIGHT)
-            && (_PS(LAST_PPLSEP).sides & RS_NONE)
+    if (((++(*separator_count) >= 2 && PPLSEPS(PPLSEP).sides & RS_LEFT)
+        || (((PPLSEPS(LAST_PPLSEP).sides & RS_RIGHT)
+            && (PPLSEPS(LAST_PPLSEP).sides & RS_NONE)
             ? *separator_count == 2
             : *separator_count >= 2)))) {
         DWRITE(STDERR_FILENO, "Invalid null command.\n", 22);
         return (STATUS = 1);
     }
-    if (PPLSEP == PPLSEP_PIPE)
-        CMD->is_piped = 1;
-    else
+    switch (PPLSEP) {
+    case PPLSEP_PIPE:
+        CMD->pipe_mode = PIPE_OUT; break;
+    case PPLSEP_PIPE_ERROUT:
+        CMD->pipe_mode = PIPE_ERROUT; break;
+    default:
         new_pipeline(context, (COND_PPLSEP_SEQMODE : SEQ_NONE));
-    P += _PS(PPLSEP).len;
+    }
+    P += PPLSEPS(PPLSEP).len;
     return 0;
 }
 

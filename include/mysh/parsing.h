@@ -17,28 +17,27 @@
 
     #include "mysh/builtins.h"
 
-    #define PPLSEPC 6
+    #define PPLSEPC 7
 
     #define IS_SPC(c) ((c) == ' ' || (c) == '\t')
     #define IS_QUOTE(c) ((c) == '"' || (c) == '\'' || (c) == '`')
     #define IS_CHAR_ESCAPED (is_char_escaped(context))
     #define TO_NEXT_TOKEN (to_next_token(context))
     #define TO_TOKEN_END (to_token_end(context))
-    #define _IS_SEP (*P == '\n' && IS_CHAR_ESCAPED)
-    #define IS_SEPARATOR ((IS_SPC(*P) && !IS_CHAR_ESCAPED) || _IS_SEP)
+    #define IS_ESC_NL (*P == '\n' && IS_CHAR_ESCAPED)
+    #define IS_SEPARATOR ((IS_SPC(*P) && !IS_CHAR_ESCAPED) || IS_ESC_NL)
     #define IS_PPLSEP (get_ppl_separator(context), PPLSEP >= 0)
-    #define _PS(i) PPL_SEPARATORS[i]
-    #define _IS_PPLSEP_STR (!ice_strncmp2(P, _PS(i).sep, _PS(i).len))
+    #define PPLSEPS(i) PPL_SEPARATORS[i]
+    #define IS_PPLSEP_STR (!ice_strncmp2(P, PPLSEPS(i).sep, PPLSEPS(i).len))
 
-    #define _C_PS_SM (PPLSEP == PPLSEP_OR) ? SEQ_OR
-    #define COND_PPLSEP_SEQMODE (PPLSEP == PPLSEP_AND) ? SEQ_AND : _C_PS_SM
+    #define C_PS_SM2 (PPLSEP == PPLSEP_OR) ? SEQ_OR
+    #define COND_PPLSEP_SEQMODE (PPLSEP == PPLSEP_AND) ? SEQ_AND : C_PS_SM2
 
     #define PIPELINE (context->current_pipeline)
     #define CMDC (PIPELINE->command_count)
 
     #define CMD (PIPELINE->current_command)
     #define CMDPREV TAILQ_PREV(CMD, commands_s, entries)
-    #define ISCMDPIPED (CMD->is_piped)
     #define CMDARGS (CMD->args)
     #define CMDCMD CMDARGS[0]
     #define CMDCOMMAND (CMD->command)
@@ -65,6 +64,7 @@ typedef enum pipeline_separator_e {
     PPLSEP_AND,
     PPLSEP_AMPERSAND,
     PPLSEP_OR,
+    PPLSEP_PIPE_ERROUT,
     PPLSEP_PIPE,
     PPLSEP_END
 } pplsep_t;
@@ -75,6 +75,13 @@ typedef enum sequence_mode_e {
     SEQ_OR
 } sequence_mode_t;
 
+typedef enum pipe_type_e {
+    PIPE_NONE,
+    PIPE_OUT = 0b01u,
+    PIPE_ERR = 0b10u,
+    PIPE_ERROUT = 0b11u
+} pipe_type_t;
+
 typedef struct command_s {
     union {
         char *path;
@@ -83,7 +90,7 @@ typedef struct command_s {
     _Bool is_builtin;
     char **args;
     size_t argc;
-    _Bool is_piped;
+    pipe_type_t pipe_mode;
     int outlet;
     TAILQ_ENTRY(command_s) entries;
 } command_t;
@@ -110,6 +117,7 @@ static const struct {
     { "&&", 2, RS_NONE | RS_RIGHT },
     { "&", 1, RS_NONE },
     { "||", 2, RS_BOTH },
+    { "|&", 1, RS_BOTH },
     { "|", 1, RS_BOTH },
     { "\0", 1, RS_NONE }
 };

@@ -46,7 +46,7 @@ void new_command(mysh_t *context)
 {
     command_t *cmd = malloc(sizeof(command_t));
     if (!cmd) DIE;
-    cmd->is_piped = 0;
+    cmd->pipe_mode = PIPE_NONE;
     cmd->argc = 0;
     cmd->args = NULL;
     cmd->is_builtin = 0;

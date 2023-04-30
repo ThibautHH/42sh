@@ -21,11 +21,12 @@
 
     #define IS_END(x) (((x) == '\0') || ((x) == '\n'))
     #define IS_SPACE(x) (((x) == ' ') || ((x) == '\t'))
-    #define _SC ;
-    #define _TQFSIT_(v, f, t)  ((t) = TAILQ_NEXT(v, f), 1)_SC (v) = (t)
-    #define _TQFSIT(v, h, f, t) (v) && _TQFSIT_(v, f, t)
-    #define _TQFS(v, h, f, t) (v) = TAILQ_FIRST(h)_SC _TQFSIT(v, h, f, t)
-    #define	TAILQ_FOREACH_SAFE(v, h, f, t) for (_TQFS(v, h, f, t))
+    #define SMCLN ;
+    #define TQFSIT(v, f, t)   (v) = (t)
+    #define TQFSCND2(v, f, t) ((t) = TAILQ_NEXT(v, f), 1)
+    #define TQFSCND(v, h, f, t) (v) && TQFSCND2(v, f, t)SMCLN TQFSIT(v, f, t)
+    #define TQFS(v, h, f, t) (v) = TAILQ_FIRST(h)SMCLN TQFSCND(v, h, f, t)
+    #define	TAILQ_FOREACH_SAFE(v, h, f, t) for (TQFS(v, h, f, t))
 
     #define GET_LINE (len = getline(&LINE, &size, stdin))
 
@@ -41,8 +42,8 @@
 
     #define DIE die(context, 84)
 
-    #define _DWSLEN(s, l) (l > 0 ? l : ice_strlen(s))
-    #define DWRITE(fd, s, l) if (write(fd, s, _DWSLEN(s, l)) < 0)DIE
+    #define DW_STRLEN(s, l) (l > 0 ? l : ice_strlen(s))
+    #define DWRITE(fd, s, l) if (write(fd, s, DW_STRLEN(s, l)) < 0)DIE
     #define WRITE(s, l) DWRITE(STDOUT_FILENO, s, l)
     #define TTY_WRITE(s, l) tty_write(context, s, l)
 

@@ -26,7 +26,7 @@ static inline void get_ppl_separator(mysh_t *context)
     pplsep_t tmp = PPLSEP;
     PPLSEP = PPLSEP_NONE;
     for (uint8_t i = 0; i < PPLSEPC; i++)
-        if (_IS_PPLSEP_STR) {
+        if (IS_PPLSEP_STR) {
             PPLSEP = i;
             break;
         }

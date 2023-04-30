@@ -15,21 +15,24 @@
 
 static inline void setup_pipe_command(mysh_t *context)
 {
-    if (CMD->is_piped) {
-        MVFD_STD(PIPEFDS[1], OUT);
+    if (CMD->pipe_mode) {
+        if (CMD->pipe_mode & PIPE_OUT)
+            MVFD_STD(PIPEFDS[1], OUT);
+        if (CMD->pipe_mode & PIPE_ERR)
+            MVFD_STD(PIPEFDS[1], ERR);
         if (close(PIPEFDS[0])) DIE;
     }
-    if (CMDPREV && CMDPREV->is_piped)
+    if (CMDPREV && CMDPREV->pipe_mode)
         MVFD_STD(CMDPREV->outlet, IN);
 }
 
 static inline void setup_pipe_shell(mysh_t *context)
 {
-    if (CMD->is_piped) {
+    if (CMD->pipe_mode) {
         if (close(PIPEFDS[1])) DIE;
         CMD->outlet = PIPEFDS[0];
     }
-    if (CMDPREV && CMDPREV->is_piped && close(CMDPREV->outlet)) DIE;
+    if (CMDPREV && CMDPREV->pipe_mode && close(CMDPREV->outlet)) DIE;
 }
 
 #endif /* !PIPING_H_ */

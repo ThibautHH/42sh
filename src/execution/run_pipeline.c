@@ -42,12 +42,12 @@ static void execute_unforked_builtin(mysh_t *context)
     int stdio[2];
     if ((stdio[0] = dup(STDIN_FILENO)) == -1 ||
         (stdio[1] = dup(STDOUT_FILENO)) == -1) DIE;
-    if (CMDPREV && CMDPREV->is_piped)
+    if (CMDPREV && CMDPREV->pipe_mode)
         MVFD_STD(CMDPREV->outlet, IN);
     BUILTINS[CMDCOMMAND.id].builtin(context);
     MVFD_STD(stdio[0], IN);
     MVFD_STD(stdio[1], OUT);
-    if (CMDPREV && CMDPREV->is_piped && close(CMDPREV->outlet)) DIE;
+    if (CMDPREV && CMDPREV->pipe_mode && close(CMDPREV->outlet)) DIE;
 }
 
 static pid_t run(mysh_t *context)
@@ -55,7 +55,7 @@ static pid_t run(mysh_t *context)
     if (CMD->is_builtin
         && (CMD == TAILQ_LAST(&PIPELINE->commands, commands_s)))
         return (execute_unforked_builtin(context), 0);
-    if (CMD->is_piped && pipe(PIPEFDS) == -1) DIE;
+    if (CMD->pipe_mode && pipe(PIPEFDS) == -1) DIE;
     pid_t pid = fork();
     if (pid == -1) DIE;
     if (pid == 0) {
