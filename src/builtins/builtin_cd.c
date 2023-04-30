@@ -50,7 +50,7 @@ bool builtin_cd(char **av, mysh_t *context)
         : GET_ENV("HOME");
     if (chdir(path ? path : "") == -1)
         return (STATUS = handle_cd_errors(context, path));
-    getcwd(GET_ENV("PWD"), 4096);
+    getcwd(GET_ENV("PWD"), ENVVLEN);
     env_update(context, "OLDPWD", prev_pwd);
     free(prev_pwd);
     return (STATUS = 0);
