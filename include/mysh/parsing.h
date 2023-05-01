@@ -117,7 +117,7 @@ static const struct {
     { "&&", 2, RS_NONE | RS_RIGHT },
     { "&", 1, RS_NONE },
     { "||", 2, RS_BOTH },
-    { "|&", 1, RS_BOTH },
+    { "|&", 2, RS_BOTH },
     { "|", 1, RS_BOTH },
     { "\0", 1, RS_NONE }
 };
