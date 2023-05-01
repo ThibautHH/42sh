@@ -29,7 +29,7 @@ static void tokenize(mysh_t *context)
     CMDARGS[CMDARGC] = NULL;
 }
 
-static _Bool handle_pplsep(mysh_t *context, size_t *separator_count)
+static void handle_pplsep(mysh_t *context, size_t *separator_count)
 {
     if (((++(*separator_count) >= 2 && PPLSEPS(PPLSEP).sides & RS_LEFT)
         || (((PPLSEPS(LAST_PPLSEP).sides & RS_RIGHT)
@@ -37,35 +37,33 @@ static _Bool handle_pplsep(mysh_t *context, size_t *separator_count)
             ? *separator_count == 2
             : *separator_count >= 2)))) {
         DWRITE(STDERR_FILENO, "Invalid null command.\n", 22);
-        return (STATUS = 1);
+        PARSING_ERROR = (STATUS = 1);
+        return;
     }
     switch (PPLSEP) {
-    case PPLSEP_PIPE:
-        CMD->pipe_mode = PIPE_OUT; break;
-    case PPLSEP_PIPE_ERROUT:
-        CMD->pipe_mode = PIPE_ERROUT; break;
-    default:
-        new_pipeline(context, (COND_PPLSEP_SEQMODE : SEQ_NONE));
+    case PPLSEP_PIPE: CMD->pipe_mode = PIPE_OUT; break;
+    case PPLSEP_PIPE_ERROUT: CMD->pipe_mode = PIPE_ERROUT; break;
+    default: new_pipeline(context, (COND_PPLSEP_SEQMODE : SEQ_NONE));
     }
     P += PPLSEPS(PPLSEP).len;
-    return 0;
 }
 
 _Bool parse_command_line(mysh_t *context)
 {
     size_t separator_count = 1;
-    P = LINE, S = LINE;
+    P = LINE, S = LINE,
+    PARSING_ERROR = 0,
     PPLSEP = PPLSEP_NONE, LAST_PPLSEP = PPLSEP_END;
     TO_NEXT_TOKEN;
     if (!*P)
         return 1;
     new_pipeline(context, SEQ_NONE);
-    for (; *P; TO_NEXT_TOKEN)
+    for (; !PARSING_ERROR && *P; TO_NEXT_TOKEN)
         if (!IS_PPLSEP) {
             new_command(context);
             tokenize(context);
             separator_count = 0;
-        } else if (handle_pplsep(context, &separator_count))
-            return 1;
-    return 0;
+        } else
+            handle_pplsep(context, &separator_count);
+    return PARSING_ERROR;
 }

@@ -28,13 +28,12 @@ static void execute(mysh_t *context)
 {
     char **env = dup_env(context);
     execve(CMDPATH, ARGV, env);
-    if (errno == ENOEXEC
-        && ice_dprintf(STDERR_FILENO, EXECFMT_ERRFMT, CMDPATH) < 0)
-            die(context, 1);
+    if (errno == ENOEXEC)
+        ice_dprintf(STDERR_FILENO, EXECFMT_ERRFMT, CMDPATH);
     else
         perror(CMDPATH);
     free(env);
-    die(context, 1);
+    QUIT(1);
 }
 
 static void execute_unforked_builtin(mysh_t *context)
@@ -88,6 +87,7 @@ static void wait_for_cmd(mysh_t *context, pid_t pid)
 
 void run_pipeline(mysh_t *context)
 {
+    STATUS = 0;
     TAILQ_FOREACH(CMD, &PIPELINE->commands, entries)
         if (get_cmd_path(context))
             return;

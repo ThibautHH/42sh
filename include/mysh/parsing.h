@@ -50,6 +50,7 @@
     #define S (PARSING.s)
     #define PPLSEP (PARSING.pplsep)
     #define LAST_PPLSEP (PARSING.last_pplsep)
+    #define PARSING_ERROR (PARSING.error)
 
 typedef enum required_sides_e {
     RS_NONE = 0b001,
@@ -106,6 +107,7 @@ typedef struct pipeline_s {
 typedef struct parsing_context_s {
     pplsep_t pplsep, last_pplsep;
     char *p, *s;
+    _Bool error;
 } parsing_context_t;
 
 static const struct {
@@ -119,7 +121,7 @@ static const struct {
     { "||", 2, RS_BOTH },
     { "|&", 2, RS_BOTH },
     { "|", 1, RS_BOTH },
-    { "\0", 1, RS_NONE }
+    { "\n", 1, RS_NONE }
 };
 
 _Bool parse_command_line(mysh_t *context);

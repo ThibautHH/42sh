@@ -11,6 +11,7 @@
     #include <sys/queue.h>
 
     #include <stdbool.h>
+    #include <stdlib.h>
     #include <unistd.h>
 
     #include "ice/macro.h"
@@ -28,9 +29,15 @@
     #define TQFS(v, h, f, t) (v) = TAILQ_FIRST(h)SMCLN TQFSCND(v, h, f, t)
     #define	TAILQ_FOREACH_SAFE(v, h, f, t) for (TQFS(v, h, f, t))
 
-    #define GET_LINE (len = getline(&LINE, &size, stdin))
+    #define GET_LINE (LEN = getline(&LINE, &LINESZ, stdin))
+    #define LINE_ITERATION prompt(context), free_pipelines(context), errno = 0
+    #define PPLMIS(t) (PIPELINE->mode == SEQ_##t)
+    #define PPLCNDLMODES (PPLMIS(AND) && !STATUS) || (PPLMIS(OR) && STATUS)
+    #define PIPELINE_SHOULD_RUN PPLMIS(NONE) || PPLCNDLMODES
 
     #define LINE (context->line)
+    #define LINESZ (context->size)
+    #define LEN (context->len)
     #define ENV (&(context->env))
     #define ENVQ (&(ENV)->head)
     #define ENVC (ENV->count)
@@ -40,7 +47,8 @@
 
     #define ARGV (CMDARGS ? CMDARGS : (char *[]){CMDCMD, NULL})
 
-    #define DIE die(context, 84)
+    #define QUIT(status) (cleanup(context), exit(status))
+    #define DIE QUIT(84)
 
     #define DW_STRLEN(s, l) (l > 0 ? l : ice_strlen(s))
     #define DWRITE(fd, s, l) if (write(fd, s, DW_STRLEN(s, l)) < 0)DIE
@@ -50,6 +58,8 @@
 typedef struct mysh_s {
     env_head_t env;
     char *line;
+    size_t size;
+    ssize_t len;
     TAILQ_HEAD(, pipeline_s) pipelines;
     pipeline_t *current_pipeline;
     parsing_context_t parsing;
@@ -60,7 +70,7 @@ typedef struct mysh_s {
 
 void mysh(mysh_t *context, char **env);
 void prompt(mysh_t *context);
-void die(mysh_t *context, uc_t status);
+void cleanup(mysh_t *context);
 
 static inline bool is_stdin_tty(mysh_t *context)
 {
