@@ -4,115 +4,88 @@ MYSHELL="$PWD/42sh"
 REFER="/bin/tcsh -f"
 TRAPSIG=0
 
-CAT=`which cat`
-GREP=`which grep`
-SED=`which sed`
-RM=`which rm`
-TR=`which tr`
-HEAD=`which head`
-TAIL=`which tail`
-WC=`which wc`
-CHMOD=`which chmod`
-EXPR=`which expr`
-MKDIR=`which mkdir`
-CP=`which cp`
-
-for i in `env | grep BASH_FUNC_ | cut -d= -f1`; do
-    f=`echo $i | sed s/BASH_FUNC_//g | sed s/%%//g`
-    unset -f $f
-done
-
-disp_test()
+test_field()
 {
-  id=$1
-  $CAT ./tests/tester/tests | $GREP -A1000 "\[$id\]" | $GREP -B1000 "^\[$id-END\]" | $GREP -v "^\[.*\]"
+  local test_body=`tac ./tests/tester/tests | sed -n "/^\[$1\]$/q;p" | tac | sed -n "/^\[$1-END\]$/q;p"`
+  [ -z $2 ] && echo "$test_body" || echo "$test_body" | grep -oP '(?<='"$2"'=").*(?=")'
 }
 
-run_script()
+run_test()
 {
-  SC="$1"
-  echo "$SC" > /tmp/.tmp.$$
-  . /tmp/.tmp.$$
-  $RM -f /tmp/.tmp.$$
-}
+  local runner="/tmp/.runner.$$"
 
-prepare_test()
-{
-  local testfn="/tmp/.tester.$$"
-  local runnerfn="/tmp/.runner.$$"
-  local refoutfn="/tmp/.refer.$$"
-  local shoutfn="/tmp/.shell.$$"
-
-  WRAPPER="$runnerfn"
-
-  echo "#!/bin/bash" > $runnerfn
-  echo "$SETUP" >> $runnerfn
-  echo "/bin/bash -c '"$testfn" | "$MYSHELL" ; echo Shell exit with code \$?' > "$shoutfn" 2>&1" >> $runnerfn
-  echo "$CLEAN" >> $runnerfn
-  echo "$SETUP" >> $runnerfn
-  echo "$TCSHUPDATE" >> $runnerfn
-  echo "/bin/bash -c '"$testfn" | "$REFER" ; echo Shell exit with code \$?' > "$refoutfn" 2>&1" >> $runnerfn
-  echo "$CLEAN" >> $runnerfn
-
-  echo "#!/bin/bash" > $testfn
-  echo "$TESTS" | $TR "²" "\n" >> $testfn
-
-  chmod 755 $testfn
-  chmod 755 $runnerfn
+  touch $runner; chmod +x $runner
+  echo "#!$MYSHELL
+$SETUP
+$TESTS" > $runner
+  $runner >$mysh_out 2>&1
+  echo "
+Shell exit status: $?" >> $mysh_out
+  echo "#!$REFER
+$SETUP
+$TCSHUPDATE
+$TESTS" > $runner
+  $runner >$refsh_out 2>&1
+  echo "
+Shell exit status: $?" >> $refsh_out
+  rm -f $runner
 }
 
 load_test()
 {
   id=$1
   debug=$2
-  SETUP=`disp_test "$id" | $GREP "SETUP=" | $SED s/'SETUP='// | $SED s/'"'//g`
-  CLEAN=`disp_test "$id" | $GREP "CLEAN=" | $SED s/'CLEAN='// | $SED s/'"'//g`
-  NAME=`disp_test "$id" | $GREP "NAME=" | $SED s/'NAME='// | $SED s/'"'//g`
-  TCSHUPDATE=`disp_test "$id" | $GREP "TCSHUPDATE=" | $SED s/'TCSHUPDATE='// | $SED s/'"'//g`
-  TESTS=`disp_test "$id" | $GREP -v "SETUP=" | $GREP -v "CLEAN=" | $GREP -v "NAME=" | $GREP -v "TCSHUPDATE=" | $GREP -v "TESTS=" | $TR "\n" "²" | $SED s/"²$"//`
-  prepare_test
-  $WRAPPER
-  nb=`$CAT /tmp/.refer.$$ | $GREP -v '^_=' | $GREP -v '^\[1\]' | $WC -l`
-  i=1
-  ok=1
-  while [ $i -le $nb ]
-  do
-    l=`$CAT /tmp/.refer.$$ | $GREP -v '^_=' | $GREP -v '^\[1\]' | $HEAD -$i | $TAIL -1`
-    a=`$CAT /tmp/.shell.$$ | $GREP -v '^_=' | $GREP -v '^\[1\]' | $GREP -- "$l$" | $WC -l`
-    if [ $a -eq 0 ]
-    then
-      ok=0
-    fi
-    i=`$EXPR $i + 1`
-  done
+  SETUP=`test_field "$id" SETUP`
+  NAME=`test_field "$id" NAME`
+  TESTS=`test_field "$id" | tac | sed -n '/\s*TESTS\s*=\s*/q;p' | tac`
+  [ -z "$NAME" ] && NAME="Test $id"
+  [ -z "$SETUP" ] && SETUP="echo No setup"
+  [ -z "$TESTS" ] && TESTS="echo No tests"
+  refsh_out="/tmp/.refer.$$"
+  mysh_out="/tmp/.myshell.$$"
+  run_test
+  ko=0
+  diff -q $refsh_out $mysh_out >/dev/null 2>&1 || ko=1
 
-  if [ $ok -eq 1 ]
+  if [ $ko -eq 0 ]
   then
     if [ $debug -ge 1 ]
     then
-      echo "Test $id ($NAME) : OK"
+      echo "Test $id ($NAME): OK"
       if [ $debug -eq 2 ]
       then
-        echo "Output $MYSHELL :"
-        $CAT -e /tmp/.shell.$$
-        echo ""
-        echo "Output $REFER :"
-        $CAT -e /tmp/.refer.$$
-        echo ""
+        echo "'$MYSHELL' output:"
+        cat -e $mysh_out
+        echo
+        echo "'$REFER' output:"
+        cat -e $refsh_out
+        echo; echo
       fi
     else
-      echo "OK"
+      echo "Test $id: OK"
     fi
+    return 0
   else
-    if [ $debug -ge 1 ]
+    if [ $dbgerr -eq 1 ]
     then
-      echo "Test $id ($NAME) : KO - Check output in /tmp/test.$$/$id/"
-      $MKDIR -p /tmp/test.$$/$id 2>/dev/null
-      $CP /tmp/.shell.$$ /tmp/test.$$/$id/mysh.out
-      $CP /tmp/.refer.$$ /tmp/test.$$/$id/tcsh.out
-    else
-      echo "KO"
+      echo "Test $id ($NAME): KO"
+      echo "'$MYSHELL' output:"
+      cat -e $mysh_out
+      echo
+      echo "'$REFER' output:"
+      cat -e $refsh_out
+      echo; echo
     fi
+    if [ $debug -lt 1 ]
+    then
+      echo "Test $id: KO"
+      return 1
+    fi
+    echo "Test $id ($NAME): KO - Check output in /tmp/myshell-tests.$$/$id/"
+    mkdir -p /tmp/myshell-tests.$$/$id 2>/dev/null
+    cp $mysh_out /tmp/myshell-tests.$$/$id/myshell.out
+    cp $refsh_out /tmp/myshell-tests.$$/$id/refshell.out
+    return 1
   fi
 }
 
@@ -123,49 +96,46 @@ then
     echo "$sig" | grep "^SIG" >/dev/null 2>&1
     if [ $? -eq 0 ]
     then
-      trap "echo Received signal $sig !" $sig
+      trap "echo Received signal $sig!" $sig
     fi
   done
 fi
 
-if [ ! -f ./tests/tester/tests ]
-then
-  echo "No tests file. Please read README.ME" >&2
-  exit 1
-fi
+[ ! -f ./tests/tester/tests ] && echo "No tests file. Please read README.md" >&2 && exit 1
+first_word() {
+  echo "$1" | grep -oP '^\S*'
+}
+for shell_bin in `first_word $MYSHELL` `first_word $REFER`; do
+  [ ! -f $shell_bin ] && echo "$shell_bin: No such file or directory." >&2 && exit 1
+  [ ! -x $shell_bin ] && echo "$shell_bin: Permission denied." >&2 && exit 1
+done
 
-if [ ! -f $MYSHELL ]
-then
-  echo "$MYSHELL not found" >&2
-  exit 1
-fi
-
-if [ $# -eq 2 ]
-then
-  echo "Debug mode" >&2
-  echo "Shell : $MYSHELL" >&2
-  echo "Reference : $REFER" >&2
-  echo ""
-fi
-
-if [ $# -eq 0 ]
-then
-  for lst in `cat ./tests/tester/tests | grep "^\[.*\]$" | grep -vi end | sed s/'\['// | sed s/'\]'//`
-  do
-    path_backup=$PATH
-    load_test $lst 1
-    export PATH=$path_backup
-  done
-else
-  if [ $# -eq 1 ]
-  then
-    load_test $1 0
-  else
-    if [ "X$1" = "X-d" ]
-    then
-      load_test $2 2
-    else
-      load_test $1 2
-    fi
-  fi
-fi
+dbglvl=1
+dbgerr=0
+tests_list=""
+while shift; do
+  case "$1" in
+    -d)
+      dbglvl=2
+      ;;
+    -q)
+      dbglvl=0
+      ;;
+    --debug-errors)
+      dbgerr=1
+      ;;
+    *)
+      tests_list="$tests_list $1"
+      ;;
+  esac
+done
+[ $dbglvl -eq 2 ] && echo "Debug mode
+Shell: $MYSHELL
+Reference: $REFER" >&2
+[ -z "$tests_list" ] && tests_list=`cat ./tests/tester/tests | grep -oP "(?<=^\[)[0-9]+(?=\]$)"`
+path_backup=$PATH
+ret=0
+for test in $tests_list; do
+  load_test $test $dbglvl $dbgerr || ret=1
+done
+export PATH=$path_backup

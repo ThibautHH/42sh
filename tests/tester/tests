@@ -1,278 +1,249 @@
 [001]
 NAME="Parsing: space and tabs"
 SETUP=""
-CLEAN=""
 TESTS=
-  echo -e "\t\t    ls\t     \t-l    \t\t  \t -l ..   \t\t"
+		    ls	     	-l    		  	 -l ..
 [001-END]
 
 [101]
 NAME="Built-in exit"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'exit'
+exit
 [101-END]
 
 [102]
 NAME="Built-in env"
 SETUP="export TERM=xterm"
-CLEAN=""
 TESTS=
-    echo 'unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST'
-    echo 'env'
+unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST
+env
 [102-END]
 
 [201]
 NAME="Built-in cd"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'pwd'
-    echo 'cd src'
-    echo 'pwd'
+pwd
+cd src
+pwd
 [201-END]
 
 [202]
 NAME="Built-in cd .."
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'pwd'
-    echo 'cd ..'
-    echo 'pwd'
+pwd
+cd ..
+pwd
 [202-END]
 
 [203]
 NAME="Built-in cd -"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'pwd'
-    echo 'cd src'
-    echo 'pwd'
-    echo 'cd -'
-    echo 'pwd'
+pwd
+cd src
+pwd
+cd -
+pwd
 [203-END]
 
 [204]
 NAME="Built-in cd $HOME"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'pwd'
-    echo 'cd'
-    echo 'pwd'
+pwd
+cd
+pwd
 [204-END]
 
 [205]
 NAME="Built-in cd ~"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'pwd'
-    echo 'cd ~'
-    echo 'pwd'
+pwd
+cd ~
+pwd
 [205-END]
 
 [206]
 NAME="Built-in cd /"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'pwd'
-    echo 'cd /'
-    echo 'pwd'
+pwd
+cd /
+pwd
 [206-END]
 
 [207]
 NAME="Built-in cd nofolder"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'pwd'
-    echo 'cd nofolder'
-    echo 'pwd'
+pwd
+cd nofolder
+pwd
 [207-END]
 
 [208]
 NAME="Built-in cd file"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'pwd'
-    echo 'cd Makefile'
-    echo 'pwd'
+pwd
+cd Makefile
+pwd
 [208-END]
 
 [209]
 NAME="Built-in cd to much args"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'pwd'
-    echo 'cd src ..'
-    echo 'pwd'
+pwd
+cd src ..
+pwd
 [209-END]
 
 [301]
 NAME="Built-in setenv one arg"
 SETUP="export TERM=xterm"
-CLEAN=""
 TESTS=
-    echo 'unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST'
-    echo 'env'
-    echo 'setenv EGAL'
-    echo 'env'
+unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST
+env
+setenv EGAL
+env
 [301-END]
 
 [302]
 NAME="Built-in setenv two arg"
 SETUP="export TERM=xterm"
-CLEAN=""
 TESTS=
-    echo 'unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST'
-    echo 'env'
-    echo 'setenv EGAL 1'
-    echo 'env'
+unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST
+env
+setenv EGAL 1
+env
 [302-END]
 
 [303]
 NAME="Built-in setenv no arg"
 SETUP="export TERM=xterm"
-CLEAN=""
 TESTS=
-    echo 'unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST'
-    echo 'env'
-    echo 'setenv'
+unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST
+env
+setenv
 [303-END]
 
 [304]
 NAME="Built-in setenv invalid name"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'setenv EGAL=1'
+setenv EGAL=1
 [304-END]
 
 [305]
 NAME="Built-in setenv too many arguments"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'setenv arg1 arg2 arg3'
+setenv arg1 arg2 arg3
 [305-END]
 
 [501]
 NAME="Execve: path"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'ls -l'
+ls -l
 [501-END]
 
 [502]
 NAME="Execve: pwd"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo './usr/bin/ls -l'
+./usr/bin/ls -l
 [502-END]
 
 [503]
 NAME="Execve: /"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo '/usr/bin/ls -l'
+/usr/bin/ls -l
 [503-END]
 
 [601]
 NAME="Error: command not found"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'noexist'
+noexist
 [601-END]
 
 [602]
 NAME="Error: command wrong arguments"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'ls nofile'
+ls nofile
 [602-END]
 
 [701]
 NAME="Parsing: ;"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'ls -l ; pwd; cat .gitignore'
+ls -l ; pwd; cat .gitignore
 [701-END]
 
 [702]
 NAME="Parsing: ; with error"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'ls -l ; noexist; cat .gitignore'
+ls -l ; noexist; cat .gitignore
 [702-END]
 
 [801]
 NAME="Redirection: >"
 SETUP=""
-CLEAN="[ -f "out" ] && rm out"
 TESTS=
-    echo 'ls -l > out'
+ls -l > out
+cat out; rm out
 [801-END]
 
 [802]
 NAME="Redirection: >>"
 SETUP=""
-CLEAN="[ -f "out" ] && rm out"
 TESTS=
-    echo 'pwd > out'
-    echo 'ls -l >> out'
+pwd > out
+ls -l >> out
+cat out; rm out
 [802-END]
 
 [803]
 NAME="Redirection: <"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'cat < .gitignore'
+cat < .gitignore
 [803-END]
 
 [804]
 NAME="Redirection: | even number of pipes"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'ls -l | cat -e | grep Makefile'
+ls -l | cat -e | grep Makefile
 [804-END]
 
 [805]
 NAME="Redirection: | odd number of pipes"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo 'ls -l | cat -e | cat -e'
-    echo 'ls -l | cat -e | cat -e'
+ls -l | cat -e | cat -e | cat -e
+ls -l | cat -e | cat -e | cat -e
 [805-END]
 
 [806]
 NAME="Redirection: | with >"
 SETUP=""
-CLEAN="[ -f "out" ] && rm out"
 TESTS=
-    echo 'ls -l | cat -e > out'
+ls -l | cat -e > out; rm out
 [806-END]
 
 [909]
 NAME="Segfault program"
 SETUP=""
-CLEAN=""
 TESTS=
-    echo './tests/tester/.bin/segf'
+./tests/tester/bin/segf
 [909-END]
