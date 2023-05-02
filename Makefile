@@ -20,8 +20,6 @@ SRC			+=	$(addprefix $(DIR_SRC),\
 
 DIR			+=	$(addprefix $(DIR_SRC), ./miscellaneous/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				get_argument.c		\
-				display_error.c		\
 				prompt.c			\
 				)
 
@@ -37,43 +35,25 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 DIR			+=	$(addprefix $(DIR_SRC), ./env/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				environment_manipulation.c		\
-				display_env.c					\
 				)
 
 DIR			+= 	$(addprefix $(DIR_SRC), ./env/initialization/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				load_env.c		\
 				dup_env.c		\
-				fix_env.c		\
 				destroy_env.c	\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./execution/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				search_function.c	\
-				execute_binary.c	\
+				get_cmd_path.c		\
+				run_pipeline.c		\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./parser/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				handle_sequence.c	\
-				handle_pipe.c		\
-				)
-
-DIR			+=	$(addprefix $(DIR_SRC), ./parser/commands/)
-SRC			+=	$(addprefix $(lastword $(DIR)),\
 				parse_command_line.c	\
-				)
-
-DIR			+=	$(addprefix $(DIR_SRC), ./parser/redirection/)
-SRC			+=	$(addprefix $(lastword $(DIR)),\
-				extract.c					\
-				set_redirection.c			\
-				set_redirection_input.c		\
-				set_redirection_output.c	\
-				unset_redirection.c			\
-				unset_redirection_input.c	\
-				unset_redirection_output.c	\
+				commands.c				\
 				)
 
 DIR_TEST	:=	./tests/
