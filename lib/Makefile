@@ -7,18 +7,18 @@
 
 NAME		:=	libice.a
 
-DIR			:=	./
+DIR			:=
 SRC			:=
 
-DIR_ICE		:=	./ice/
+DIR_ICE		:=	ice/
 
-DIR			+=	$(addprefix $(DIR_ICE), ./array/)
+DIR			+=	$(addprefix $(DIR_ICE), array/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				ice_array_len.c	\
 				ice_free_array.c\
 				)
 
-DIR			+=	$(addprefix $(DIR_ICE), ./int/)
+DIR			+=	$(addprefix $(DIR_ICE), int/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				ice_atoi.c		\
 				ice_itoa.c		\
@@ -29,7 +29,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				ice_intlen.c	\
 				)
 
-DIR			+=	$(addprefix $(DIR_ICE), ./memory/)
+DIR			+=	$(addprefix $(DIR_ICE), memory/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				ice_realloc.c	\
 				ice_realloc2.c	\
@@ -40,13 +40,13 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				ice_memset.c	\
 				)
 
-DIR			+=	$(addprefix $(DIR_ICE), ./output/)
+DIR			+=	$(addprefix $(DIR_ICE), output/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				ice_puts.c		\
 				ice_dputs.c		\
 				)
 
-DIR			+=	$(addprefix $(DIR_ICE), ./printf/)
+DIR			+=	$(addprefix $(DIR_ICE), printf/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				ice_printf.c	\
 				ice_dprintf.c	\
@@ -55,7 +55,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				ice_asprintf.c	\
 				)
 
-DIR			+=	$(addprefix $(lastword $(DIR)), ./private/)
+DIR			+=	$(addprefix $(lastword $(DIR)), private/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				handle_format.c			\
 				get_argument.c			\
@@ -75,7 +75,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				ice_printf_float.c		\
 				)
 
-DIR			+=	$(addprefix $(DIR_ICE), ./string/)
+DIR			+=	$(addprefix $(DIR_ICE), string/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				ice_strcat.c	\
 				ice_strcmp.c	\
@@ -98,7 +98,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				ice_strtrim.c	\
 				)
 
-DIR			+=	./list/
+DIR			+=	list/
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				list_add_node.c		\
 				list_add.c			\
@@ -126,7 +126,7 @@ SRC_TEST	:=	$(addprefix $(DIR_TEST),\
 
 DIR_BUILD	:=	../build/
 
-ROOT_OBJ	:=	$(addprefix $(DIR_BUILD), ./obj/)
+ROOT_OBJ	:=	$(addprefix $(DIR_BUILD), obj/)
 DIR_OBJ		:=	$(addprefix $(ROOT_OBJ), $(DIR))
 OBJ			:=	$(patsubst %.c, $(ROOT_OBJ)%.o, $(SRC))
 
