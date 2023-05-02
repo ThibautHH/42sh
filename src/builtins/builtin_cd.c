@@ -47,7 +47,7 @@ void builtin_cd(mysh_t *context)
             ? CMDARGS[1] : GET_ENV("OLDPWD"))
         : GET_ENV("HOME");
     if (chdir(path ? path : "") == -1) {
-        STATUS = 1;
+        STATUS = 1; free(prev_pwd);
         return handle_cd_errors(context, path);
     }
     getcwd(GET_ENV("PWD"), ENVVLEN);

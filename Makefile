@@ -7,23 +7,23 @@
 
 NAME		:=	42sh
 
-DIR			:=	./
+DIR			:=
 SRC			:=
 LIB			:=	./lib/
 
-DIR_SRC		+=	./src/
+DIR_SRC		+=	src/
 
 SRC			+=	$(addprefix $(DIR_SRC),\
 				main.c				\
 				mysh.c				\
 				)
 
-DIR			+=	$(addprefix $(DIR_SRC), ./miscellaneous/)
+DIR			+=	$(addprefix $(DIR_SRC), miscellaneous/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				prompt.c			\
 				)
 
-DIR			+=	$(addprefix $(DIR_SRC), ./builtins/)
+DIR			+=	$(addprefix $(DIR_SRC), builtins/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				builtin_cd.c					\
 				builtin_exit.c					\
@@ -32,25 +32,25 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				builtin_unsetenv.c				\
 				)
 
-DIR			+=	$(addprefix $(DIR_SRC), ./env/)
+DIR			+=	$(addprefix $(DIR_SRC), env/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				environment_manipulation.c		\
 				)
 
-DIR			+= 	$(addprefix $(DIR_SRC), ./env/initialization/)
+DIR			+= 	$(addprefix $(DIR_SRC), env/initialization/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				load_env.c		\
 				dup_env.c		\
 				destroy_env.c	\
 				)
 
-DIR			+=	$(addprefix $(DIR_SRC), ./execution/)
+DIR			+=	$(addprefix $(DIR_SRC), execution/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				get_cmd_path.c		\
 				run_pipeline.c		\
 				)
 
-DIR			+=	$(addprefix $(DIR_SRC), ./parser/)
+DIR			+=	$(addprefix $(DIR_SRC), parser/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				parse_command_line.c	\
 				commands.c				\
@@ -62,7 +62,7 @@ SRC_TEST	:=	$(addprefix $(DIR_TEST),\
 
 DIR_BUILD	:=	./build/
 
-ROOT_OBJ	:=	$(addprefix $(DIR_BUILD), ./obj/)
+ROOT_OBJ	:=	$(addprefix $(DIR_BUILD), obj/)
 DIR_OBJ		:=	$(addprefix $(ROOT_OBJ), $(DIR))
 OBJ			:=	$(patsubst %.c, $(ROOT_OBJ)%.o, $(SRC))
 
