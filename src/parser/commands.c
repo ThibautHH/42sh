@@ -12,21 +12,25 @@
 #include "mysh.h"
 #include "mysh/parsing.h"
 
+static void free_command(mysh_t *context)
+{
+    TAILQ_REMOVE(&PIPELINE->commands, CMD, entries);
+    for (size_t i = 0; i < CMDARGC; i++)
+        free(CMDARGS[i]);
+    free(CMDARGS);
+    if (!(CMD->is_builtin))
+        free(CMDPATH);
+    free(CMD);
+}
+
 void free_pipelines(mysh_t *context)
 {
     pipeline_t *ppl_tmp;
     TAILQ_FOREACH_SAFE(PIPELINE, &context->pipelines, entries, ppl_tmp) {
         command_t *cmd_tmp;
         TAILQ_REMOVE(&context->pipelines, PIPELINE, entries);
-        TAILQ_FOREACH_SAFE(CMD, &PIPELINE->commands, entries, cmd_tmp) {
-            TAILQ_REMOVE(&PIPELINE->commands, CMD, entries);
-            for (size_t i = 0; i < CMDARGC; i++)
-                free(CMDARGS[i]);
-            free(CMDARGS);
-            if (!(CMD->is_builtin))
-                free(CMDPATH);
-            free(CMD);
-        }
+        TAILQ_FOREACH_SAFE(CMD, &PIPELINE->commands, entries, cmd_tmp)
+            free_command(context);
         free(PIPELINE);
     }
 }

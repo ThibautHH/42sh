@@ -37,9 +37,9 @@ void mysh(mysh_t *context, char **env)
     for (; !EXIT && GET_LINE != -1; LINE_ITERATION)
         if (LEN > 1 && !parse_command_line(context))
             TAILQ_FOREACH(PIPELINE, &context->pipelines, entries)
-                if (PIPELINE_SHOULD_RUN)
-                    run_pipeline(context);
-    if (errno) DIE;
+                run_pipeline(context);
+    if (errno)
+        DIE;
     TTY_WRITE("exit\n", 5);
     cleanup(context);
 }

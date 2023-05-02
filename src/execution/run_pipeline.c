@@ -87,6 +87,8 @@ static void wait_for_cmd(mysh_t *context, pid_t pid)
 
 void run_pipeline(mysh_t *context)
 {
+    if (!PIPELINE_SHOULD_RUN)
+        return;
     STATUS = 0;
     TAILQ_FOREACH(CMD, &PIPELINE->commands, entries)
         if (get_cmd_path(context))

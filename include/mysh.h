@@ -30,10 +30,10 @@
     #define	TAILQ_FOREACH_SAFE(v, h, f, t) for (TQFS(v, h, f, t))
 
     #define GET_LINE (LEN = getline(&LINE, &LINESZ, stdin))
-    #define LINE_ITERATION prompt(context), free_pipelines(context), errno = 0
+    #define LINE_ITERATION (prompt(context), free_pipelines(context), errno = 0)
     #define PPLMIS(t) (PIPELINE->mode == SEQ_##t)
     #define PPLCNDLMODES (PPLMIS(AND) && !STATUS) || (PPLMIS(OR) && STATUS)
-    #define PIPELINE_SHOULD_RUN PPLMIS(NONE) || PPLCNDLMODES
+    #define PIPELINE_SHOULD_RUN (PPLMIS(NONE) || PPLCNDLMODES)
 
     #define LINE (context->line)
     #define LINESZ (context->size)
@@ -71,6 +71,7 @@ typedef struct mysh_s {
 void mysh(mysh_t *context, char **env);
 void prompt(mysh_t *context);
 void cleanup(mysh_t *context);
+void run_pipeline(mysh_t *context);
 
 static inline bool is_stdin_tty(mysh_t *context)
 {
@@ -87,7 +88,5 @@ static inline void tty_write(mysh_t *context, const char *str, size_t len)
         return;
     WRITE(str, len);
 }
-
-void run_pipeline(mysh_t *context);
 
 #endif /* !MYSH_H */
