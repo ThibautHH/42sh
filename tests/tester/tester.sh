@@ -66,6 +66,7 @@ load_test()
     fi
     return 0
   else
+    [ $always_successful -eq 1 ] || ret=1
     if [ $dbgerr -eq 1 ]
     then
       echo "Test $id ($NAME): KO"
@@ -112,6 +113,7 @@ done
 
 dbglvl=1
 dbgerr=0
+always_successful=0
 tests_list=""
 while shift; do
   case "$1" in
@@ -123,6 +125,9 @@ while shift; do
       ;;
     --debug-errors)
       dbgerr=1
+      ;;
+    --always-successful)
+      always_successful=1
       ;;
     *)
       tests_list="$tests_list $1"
@@ -139,3 +144,4 @@ for test in $tests_list; do
   load_test $test $dbglvl $dbgerr || ret=1
 done
 export PATH=$path_backup
+exit $ret
