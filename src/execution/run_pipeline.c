@@ -81,7 +81,7 @@ static pid_t run(mysh_t *context, pid_t *ppl_pids)
         if (!CMD->is_builtin)
             execute(context);
         BUILTINS[CMDCOMMAND.id].builtin(context);
-        exit(STATUS);
+        free(ppl_pids); QUIT(STATUS);
     }
     feed_redirections(context);
     setup_pipe_shell(context);

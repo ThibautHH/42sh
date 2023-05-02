@@ -16,10 +16,9 @@
 
 static _Bool is_shebang_invoked(char *arg, char *av0)
 {
-    FILE *file;
-    char *line = NULL;
+    FILE *file; char *line = NULL;
     size_t size = 0, av0_len = strlen(av0);
-    ssize_t readln;
+    ssize_t readln; _Bool ret;
 
     if (access(arg, F_OK) == -1 || access(arg, X_OK) == -1)
         return 0;
@@ -33,8 +32,10 @@ static _Bool is_shebang_invoked(char *arg, char *av0)
             return 0;
     }
     fclose(file);
-    return !(strncmp(line, "#!", 2) || strncmp(line + 2, av0, av0_len))
+    ret = !(strncmp(line, "#!", 2) || strncmp(line + 2, av0, av0_len))
         && IS_WHITESPACE(line[2 + av0_len]);
+    free(line);
+    return ret;
 }
 
 static void handle_shebang_invocation(char **argv)
