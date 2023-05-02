@@ -18,8 +18,8 @@
     #define FORBIDDEN "%s: Too dangerous to alias that.\n"
 
 typedef struct alias_s {
-    char name_buffer[256];
-    char value[256][4096];
+    char name[256];
+    char value[4096];
     TAILQ_ENTRY(alias_s) entries;
 } alias_t;
 

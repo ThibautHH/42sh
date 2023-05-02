@@ -15,22 +15,21 @@
 static void wipe_alias(alias_t *alias)
 {
     for (int i = 0; i < 256; i ++)
-        alias->name_buffer[i] = 0;
-    for (int i = 0; i < 256; i ++)
-        for (short unsigned int j = 0; j < 4096; j ++)
-            alias->value[i][j] = 0;
+        alias->name[i] = 0;
+    for (int i = 0; i < 4096; i ++)
+        alias->value[i] = 0;
 }
 
 static alias_t *fill_alias(char **av)
 {
     alias_t *alias = malloc(sizeof(alias_t));
-    int i = 0;
 
     wipe_alias(alias);
-    ice_strcpy(alias->name_buffer, av[1]);
+    ice_strcpy(alias->name, av[1]);
     for (av += 2; *av; av ++) {
-        ice_strcpy(alias->value[i], *av);
-        i ++;
+        ice_strcat(alias->value, *av);
+        if (av[1] != NULL)
+            ice_strcat(alias->value, " ");
     }
     return alias;
 }
@@ -40,20 +39,19 @@ alias_t *search_for_alias(mysh_t *context, char *name)
     alias_t *alias;
 
     TAILQ_FOREACH(alias, ALIASQ, entries)
-        if (ice_strcmp(alias->name_buffer, name) == 0)
+        if (ice_strcmp(alias->name, name) == 0)
             return alias;
     return NULL;
 }
 
 static bool rewrite_alias(alias_t *alias, char **av)
 {
-    int i = 0;
-
     wipe_alias(alias);
-    ice_strcpy(alias->name_buffer, av[1]);
+    ice_strcpy(alias->name, av[1]);
     for (av += 2; *av; av ++) {
-        ice_strcpy(alias->value[i], *av);
-        i ++;
+        ice_strcat(alias->value, *av);
+        if (av[1] != NULL)
+            ice_strcat(alias->value, " ");
     }
     return true;
 }
