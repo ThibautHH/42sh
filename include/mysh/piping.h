@@ -32,8 +32,11 @@ static inline void feed_redirections(mysh_t *context)
             strlen(CMDREDSTR(STDIN_FILENO)));
     if (CMDRED(STDIN_FILENO).type == REDIR_TIL_LINE)
         while (((len = getline(&line, &size, stdin)) != -1)
-            && strcmp(line, CMDREDSTR(STDIN_FILENO)))
+            && !(line[len - 1] = '\0')
+            && strcmp(line, CMDREDSTR(STDIN_FILENO))) {
+            line[len - 1] = '\n';
             write(PIPEFDS[1], line, len);
+        }
     if (close(PIPEFDS[1]) || close(PIPEFDS[0]))
         DIE;
 }
