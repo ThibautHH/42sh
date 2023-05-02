@@ -31,7 +31,7 @@ static void execute(mysh_t *context)
     if (errno == ENOEXEC)
         ice_dprintf(STDERR_FILENO, EXECFMT_ERRFMT, CMDPATH);
     else
-        perror(CMDPATH);
+        ice_dprintf(STDERR_FILENO, "%s: Permission denied.\n", CMDPATH);
     free(env);
     QUIT(1);
 }
