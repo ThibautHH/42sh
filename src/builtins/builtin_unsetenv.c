@@ -5,10 +5,7 @@
 ** builtin_unsetenv.c
 */
 
-#include "ice/array.h"
-
-#include "mysh/parsing.h"
-#include "mysh/miscellaneous.h"
+#include "mysh.h"
 
 void builtin_unsetenv(mysh_t *context)
 {

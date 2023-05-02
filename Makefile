@@ -41,7 +41,6 @@ DIR			+= 	$(addprefix $(DIR_SRC), ./env/initialization/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				load_env.c		\
 				dup_env.c		\
-				fix_env.c		\
 				destroy_env.c	\
 				)
 
@@ -55,17 +54,6 @@ DIR			+=	$(addprefix $(DIR_SRC), ./parser/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				parse_command_line.c	\
 				commands.c				\
-				)
-
-DIR			+=	$(addprefix $(DIR_SRC), ./parser/redirection/)
-SRC			+=	$(addprefix $(lastword $(DIR)),\
-				extract.c					\
-				set_redirection.c			\
-				set_redirection_input.c		\
-				set_redirection_output.c	\
-				unset_redirection.c			\
-				unset_redirection_input.c	\
-				unset_redirection_output.c	\
 				)
 
 DIR_TEST	:=	./tests/

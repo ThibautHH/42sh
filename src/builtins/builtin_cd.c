@@ -12,8 +12,7 @@
 #include "ice/array.h"
 #include "ice/string.h"
 #include "ice/printf.h"
-#include "mysh/miscellaneous.h"
-#include "mysh/parsing.h"
+#include "mysh.h"
 
 static void handle_cd_errors(mysh_t *context, char *path)
 {

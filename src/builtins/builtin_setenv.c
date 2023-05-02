@@ -6,8 +6,6 @@
 */
 
 #include "mysh.h"
-#include "ice/array.h"
-#include "mysh/miscellaneous.h"
 #include "mysh/builtins.h"
 #include "mysh/parsing.h"
 
