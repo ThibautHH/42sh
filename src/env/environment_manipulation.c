@@ -68,7 +68,7 @@ void env_remove(mysh_t *context, char *name)
         if (is_env_named(env, name)) {
             TAILQ_REMOVE(ENVQ, env, entries);
             free(env);
+            ENVC--;
             return;
         }
-    ENVC--;
 }
