@@ -35,13 +35,13 @@
     #define COND_PPLSEP_SEQMODE (PPLSEP == PPLSEP_AND) ? SEQ_AND : C_PS_SM2
 
     #define PIPELINE (context->current_pipeline)
-    #define CMDC (PIPELINE->command_count)
 
     #define CMD (PIPELINE->current_command)
     #define CMDPREV TAILQ_PREV(CMD, commands_s, entries)
     #define CMDARGS (CMD->args)
     #define CMDCMD CMDARGS[0]
     #define CMDCOMMAND (CMD->command)
+    #define CMDPID (CMD->pid)
     #define CMDRED(i) (CMD->redirections[i])
     #define CMDREDFILE(i) (CMDRED(i).target.file)
     #define CMDREDSTR(i) (CMDRED(i).target.string)
@@ -117,6 +117,7 @@ typedef struct command_s {
         char *path;
         builtin_t id;
     } command;
+    pid_t pid;
     _Bool is_builtin;
     char **args;
     size_t argc;
@@ -130,7 +131,6 @@ typedef struct pipeline_s {
     sequence_mode_t mode;
     TAILQ_HEAD(commands_s, command_s) commands;
     command_t *current_command;
-    size_t command_count;
     TAILQ_ENTRY(pipeline_s) entries;
 } pipeline_t;
 
