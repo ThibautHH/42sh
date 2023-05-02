@@ -22,6 +22,8 @@
 
     #define IS_END(x) (((x) == '\0') || ((x) == '\n'))
     #define IS_SPACE(x) (((x) == ' ') || ((x) == '\t'))
+    #define ISWS(x) (x) == '\v' || (x) == '\f' || (x) == '\r' || (x) == '\n'
+    #define IS_WHITESPACE(x) ((x) == ' ' || (x) == '\t' || ISWS(x))
     #define SMCLN ;
     #define TQFSIT(v, f, t)   (v) = (t)
     #define TQFSCND2(v, f, t) ((t) = TAILQ_NEXT(v, f), 1)
