@@ -17,6 +17,10 @@ static void free_command(mysh_t *context)
     TAILQ_REMOVE(&PIPELINE->commands, CMD, entries);
     for (size_t i = 0; i < CMDARGC; i++)
         free(CMDARGS[i]);
+    for (uc_t i = 0; i < 3; i++)
+        if (CMDRED(i).type)
+            free((CMDRED(i).type == REDIR_FILE) ? CMDREDFILE(i).name
+                : CMDRED(i).target.string);
     free(CMDARGS);
     if (!(CMD->is_builtin))
         free(CMDPATH);
@@ -55,6 +59,8 @@ void new_command(mysh_t *context)
     cmd->args = NULL;
     cmd->is_builtin = 0;
     cmd->command.path = NULL;
+    for (uc_t i = 0; i < 3; i++)
+        cmd->redirections[i].type = REDIR_NONE;
     TAILQ_INSERT_TAIL(&PIPELINE->commands, cmd, entries);
     CMD = cmd;
     CMDC++;

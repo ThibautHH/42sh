@@ -21,6 +21,7 @@
 
     #define IS_SPC(c) ((c) == ' ' || (c) == '\t')
     #define IS_QUOTE(c) ((c) == '"' || (c) == '\'' || (c) == '`')
+    #define IS_REDIR(c) ((c) == '<' || (c) == '>')
     #define IS_CHAR_ESCAPED (is_char_escaped(context))
     #define TO_NEXT_TOKEN (to_next_token(context))
     #define TO_TOKEN_END (to_token_end(context))
@@ -41,9 +42,19 @@
     #define CMDARGS (CMD->args)
     #define CMDCMD CMDARGS[0]
     #define CMDCOMMAND (CMD->command)
+    #define CMDRED(i) (CMD->redirections[i])
+    #define CMDREDFILE(i) (CMDRED(i).target.file)
+    #define CMDREDSTR(i) (CMDRED(i).target.string)
     #define CMDPATH (CMDCOMMAND.path)
     #define CMDARGC (CMD->argc)
     #define CMDARGSZ (CMDARGC * sizeof(char *))
+
+    #define PARSE_RED(d) (parse_##d##put_redirection(context), 1)
+    #define SET_PARSE_ERR PARSING_ERROR = (STATUS = 1)
+    #define PARSE_ERR(s, l) ({DWRITE(2, s, l); SET_PARSE_ERR; return;})
+
+    #define PREP_DUP_ARG ({char t, *b; b = P; TO_TOKEN_END; t = *P; *P = '\0'
+    #define DUP_ARG(d) PREP_DUP_ARG; d = strdup(b); if (!d) DIE; *P = t;})
 
     #define PARSING (context->parsing)
     #define P (PARSING.p)
@@ -78,10 +89,28 @@ typedef enum sequence_mode_e {
 
 typedef enum pipe_type_e {
     PIPE_NONE,
-    PIPE_OUT = 0b01u,
-    PIPE_ERR = 0b10u,
-    PIPE_ERROUT = 0b11u
+    PIPE_OUT,
+    PIPE_ERR,
+    PIPE_ERROUT
 } pipe_type_t;
+
+typedef enum redirection_type_e {
+    REDIR_NONE,
+    REDIR_FILE,
+    REDIR_TIL_LINE,
+    REDIR_STRING
+} red_type_t;
+
+typedef struct redirection_s {
+    union {
+        struct {
+            char *name;
+            char mode[3];
+        } file;
+        char *string;
+    } target;
+    red_type_t type;
+} redirection_t;
 
 typedef struct command_s {
     union {
@@ -93,6 +122,7 @@ typedef struct command_s {
     size_t argc;
     pipe_type_t pipe_mode;
     int outlet;
+    redirection_t redirections[3];
     TAILQ_ENTRY(command_s) entries;
 } command_t;
 

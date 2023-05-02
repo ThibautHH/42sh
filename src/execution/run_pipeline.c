@@ -54,16 +54,21 @@ static pid_t run(mysh_t *context)
     if (CMD->is_builtin
         && (CMD == TAILQ_LAST(&PIPELINE->commands, commands_s)))
         return (execute_unforked_builtin(context), 0);
-    if (CMD->pipe_mode && pipe(PIPEFDS) == -1) DIE;
+    if ((CMD->pipe_mode || CMDRED(STDIN_FILENO).type == REDIR_STRING
+        || CMDRED(STDIN_FILENO).type == REDIR_TIL_LINE)
+        && pipe(PIPEFDS) == -1)
+        DIE;
     pid_t pid = fork();
     if (pid == -1) DIE;
     if (pid == 0) {
         setup_pipe_command(context);
+        setup_redirections(context);
         if (!CMD->is_builtin)
             execute(context);
         BUILTINS[CMDCOMMAND.id].builtin(context);
         exit(STATUS);
     }
+    feed_redirections(context);
     setup_pipe_shell(context);
     return pid;
 }
