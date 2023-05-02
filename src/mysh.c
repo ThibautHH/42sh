@@ -16,7 +16,8 @@
 
 static bool init(mysh_t *context, char **env)
 {
-    TAILQ_INIT(ENVQ);
+    for (var_type_t type = VAR_ENV; type <= VAR_SHELL; type++)
+        TAILQ_INIT(VARQ);
     TAILQ_INIT(&context->pipelines);
     load_env(context, env);
     return false;
@@ -24,7 +25,8 @@ static bool init(mysh_t *context, char **env)
 
 void cleanup(mysh_t *context)
 {
-    destroy_env(context);
+    for (var_type_t type = VAR_ENV; type <= VAR_SHELL; type++)
+        destroy_vars(context, type);
     free_pipelines(context);
     free(LINE);
 }

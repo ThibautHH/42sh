@@ -25,23 +25,26 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 
 DIR			+=	$(addprefix $(DIR_SRC), builtins/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
+				builtin_at.c					\
 				builtin_cd.c					\
 				builtin_exit.c					\
 				builtin_env.c					\
+				builtin_set.c					\
 				builtin_setenv.c				\
+				builtin_unset.c					\
 				builtin_unsetenv.c				\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), env/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				environment_manipulation.c		\
-				)
-
-DIR			+= 	$(addprefix $(DIR_SRC), env/initialization/)
-SRC			+=	$(addprefix $(lastword $(DIR)),\
 				load_env.c		\
 				dup_env.c		\
-				destroy_env.c	\
+				)
+
+DIR			+= 	$(addprefix $(DIR_SRC), var/)
+SRC			+=	$(addprefix $(lastword $(DIR)),\
+				destroy_vars.c	\
+				variable_manipulation.c	\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), execution/)
