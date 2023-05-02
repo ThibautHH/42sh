@@ -13,7 +13,7 @@
 
     #include "mysh.h"
 
-    #define INRDT CMDRED(STDIN_FILENO).type
+    #define INRDT (CMDRED(STDIN_FILENO).type)
     #define IS_REDIR_PIPED (INRDT == REDIR_STRING || INRDT == REDIR_TIL_LINE)
 
     #define MVFD(src, dest) if (dup2(src, dest) == -1 || close(src)) DIE
