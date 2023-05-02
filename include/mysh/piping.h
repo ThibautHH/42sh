@@ -11,6 +11,11 @@
     #include <unistd.h>
     #include <stdio.h>
 
+    #include "mysh.h"
+
+    #define INRDT CMDRED(STDIN_FILENO).type
+    #define IS_REDIR_PIPED (INRDT == REDIR_STRING || INRDT == REDIR_TIL_LINE)
+
     #define MVFD(src, dest) if (dup2(src, dest) == -1 || close(src)) DIE
     #define MVFD_STD(src, id) MVFD(src, STD##id##_FILENO)
 
@@ -20,8 +25,7 @@ static inline void feed_redirections(mysh_t *context)
     size_t size = 0;
     ssize_t len = 0;
 
-    if (CMDRED(STDIN_FILENO).type != REDIR_STRING
-        && CMDRED(STDIN_FILENO).type != REDIR_TIL_LINE)
+    if (!IS_REDIR_PIPED)
         return;
     if (CMDRED(STDIN_FILENO).type == REDIR_STRING)
         write(PIPEFDS[1], CMDREDSTR(STDIN_FILENO),
@@ -38,17 +42,16 @@ static inline void setup_redirections(mysh_t *context)
 {
     const FILE *STD[3] = {stdin, stdout, stderr};
 
-    for (uc_t i = 0, closed = 0; i < 3; i++) {
-        if (CMDRED(i).type && !(closed++) && close(PIPEFDS[1]))
-            DIE;
+    for (uc_t i = 0; i < 3; i++)
         if (CMDRED(i).type == REDIR_FILE
             && !freopen(CMDREDFILE(i).name, CMDREDFILE(i).mode,
                 (FILE *)STD[i]))
             perror(CMDREDFILE(i).name), DIE;
-    }
-    if (CMDRED(STDIN_FILENO).type == REDIR_STRING
-        || CMDRED(STDIN_FILENO).type == REDIR_TIL_LINE)
+    if (IS_REDIR_PIPED) {
+        if (close(PIPEFDS[1]))
+            DIE;
         MVFD_STD(PIPEFDS[0], IN);
+    }
 }
 
 static inline void setup_pipe_command(mysh_t *context)

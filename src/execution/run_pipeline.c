@@ -54,8 +54,7 @@ static pid_t run(mysh_t *context)
     if (CMD->is_builtin
         && (CMD == TAILQ_LAST(&PIPELINE->commands, commands_s)))
         return (execute_unforked_builtin(context), 0);
-    if ((CMD->pipe_mode || CMDRED(STDIN_FILENO).type == REDIR_STRING
-        || CMDRED(STDIN_FILENO).type == REDIR_TIL_LINE)
+    if ((CMD->pipe_mode || IS_REDIR_PIPED)
         && pipe(PIPEFDS) == -1)
         DIE;
     pid_t pid = fork();
