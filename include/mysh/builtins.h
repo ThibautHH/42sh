@@ -5,58 +5,74 @@
 ** builtins.h
 */
 
-#ifndef BUILTINS_H
-    #define BUILTINS_H
+#ifndef MINISHELL1_BUILTINS_H
+    #define MINISHELL1_BUILTINS_H
 
-<<<<<<< HEAD
-    #define BUILTIN_COUNT 5
-=======
     #include "mysh.h"
->>>>>>> 2a9a87aa03d9e790fb6d4a4bf5c7f65c866d15a5
     #include "mysh/history.h"
 
-    #include <stdbool.h>
+//
+// Builtins
+//
 
-typedef enum {
-    BUILDIN_NONE = -1,
-    BUILTIN_CD,
-    BUILTIN_EXIT,
-    BUILTIN_ENV,
-    BUILTIN_SETENV,
-    BUILTIN_UNSETENV
-} builtin_t;
+/**
+ * @brief Change the current working directory
+ *
+ * @param path The path to change to
+ * @param env The environment
+ * @return env The new environment
+ */
+bool builtin_cd(char **av, mysh_t *context);
 
-typedef struct event_s {
+/**
+ * @brief Exit the shell
+ *
+ * @param av The arguments
+ * @param env The environment
+ * @return env The new environment
+ */
+bool builtin_exit(UNUSED char **av, mysh_t *context);
+
+/**
+ * @brief Display the environment
+ *
+ * @param env The environment
+ * @return env The new environment
+ */
+bool builtin_env(UNUSED char **av, mysh_t *context);
+
+/**
+ * @brief Set an environment variable
+ *
+ * @param av The arguments
+ * @param env The environment
+ * @return env The new environment
+ */
+bool builtin_setenv(char **av, mysh_t *context);
+
+/**
+ * @brief Unset an environment variable
+ *
+ * @param av The arguments
+ * @param env The environment
+ * @return env The new environment
+ */
+bool builtin_unsetenv(char **av, mysh_t *context);
+
+//
+// Structs
+//
+
+typedef struct builtin_s {
     char *name;
     bool (*func)(char **, mysh_t *);
 } builtin_t;
 
-<<<<<<< HEAD
-typedef struct mysh_s mysh_t;
-
-void builtin_cd(mysh_t *context);
-void builtin_exit(mysh_t *context);
-void builtin_env(mysh_t *context);
-void builtin_setenv(mysh_t *context);
-void builtin_unsetenv(mysh_t *context);
-
-static const struct {
-    char *name;
-    builtin_t id;
-    void (*builtin)(mysh_t *);
-} BUILTINS[BUILTIN_COUNT] = {
-    {"cd", BUILTIN_CD, builtin_cd},
-    {"exit", BUILTIN_EXIT, builtin_exit},
-    {"env", BUILTIN_ENV, builtin_env},
-    {"setenv", BUILTIN_SETENV, builtin_setenv},
-    {"unsetenv", BUILTIN_UNSETENV, builtin_unsetenv}
-=======
 typedef struct event_s {
     char *name;
     bool (*func)(char **, mysh_t *);
 } event_t;
 
->>>>>>> 2a9a87aa03d9e790fb6d4a4bf5c7f65c866d15a5
 static const builtin_t builtins[] = {
     {"cd", builtin_cd},
     {"exit", builtin_exit},
@@ -64,14 +80,6 @@ static const builtin_t builtins[] = {
     {"setenv", builtin_setenv},
     {"unsetenv", builtin_unsetenv},
     {"history", builtin_history},
-<<<<<<< HEAD
-=======
-    {NULL, NULL}
-};
-
-static const event_t event[] = {
-    {"!", event_history},
->>>>>>> 2a9a87aa03d9e790fb6d4a4bf5c7f65c866d15a5
     {NULL, NULL}
 };
 
@@ -80,4 +88,4 @@ static const event_t event[] = {
     {NULL, NULL}
 };
 
-#endif /* !BUILTINS_H */
+#endif /* !MINISHELL1_BUILTINS_H */

@@ -12,16 +12,15 @@
 
     #include <sys/queue.h>
 
-    #define ENVNLEN 256
-    #define ENVVLEN 4096
     #define ENVN(env) ((env) ? (env)->name : NULL)
-    #define ENVV(env) ((env) ? ((env)->buffer + ENVNLEN) : NULL)
+    #define ENVV(env) ((env) ? (env)->value : NULL)
 
     #define GET_ENV(n) ({env_t *v = env_get(context, n);ENVV(v);})
 
 typedef struct env_s {
     char *name;
-    char buffer[ENVNLEN + ENVVLEN];
+    char name_buffer[256];
+    char value[4096];
     TAILQ_ENTRY(env_s) entries;
 } env_t;
 
