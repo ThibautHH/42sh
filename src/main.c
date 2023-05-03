@@ -48,7 +48,7 @@ static void handle_shebang_invocation(char **argv)
         return;
     for (char **av = argv; *(++av);)
         if (!strcmp(prog_path, *av) && is_shebang_invoked(*av, *argv)
-            && (freopen(prog_path, "r", stdin) == NULL))
+            && (!freopen(prog_path, "r", stdin)))
                 perror(prog_path), exit(84);
 }
 

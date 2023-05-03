@@ -47,6 +47,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 DIR			+=	$(addprefix $(DIR_SRC), execution/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				get_cmd_path.c		\
+				piping.c			\
 				run_pipeline.c		\
 				)
 
