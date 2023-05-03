@@ -8,14 +8,17 @@
 #ifndef MINISHELL1_BUILTINS_H
     #define MINISHELL1_BUILTINS_H
 
+    #include "mysh.h"
+    #include "mysh/history.h"
+
 typedef struct builtin_s {
     char *name;
-    env_t *(*func)(char **, env_t *);
+    bool (*func)(char **, mysh_t *);
 } builtin_t;
 
 typedef struct event_s {
     char *name;
-    env_t *(*func)(char **, env_t *);
+    bool (*func)(char **, mysh_t *);
 } event_t;
 
 const builtin_t builtins[] = {
