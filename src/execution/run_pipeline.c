@@ -72,7 +72,7 @@ static void run(mysh_t *context)
 {
     if (CMD->is_builtin
         && (CMD == TAILQ_LAST(&PIPELINE->commands, commands_s))) {
-            command_t *cmd; CMDPID = 0;
+            command_t *cmd; CMDPID = -1;
             TAILQ_FOREACH(cmd, &PIPELINE->commands, entries)
                 wait_for_cmd(context);
             execute_unforked_builtin(context);
@@ -102,7 +102,7 @@ void run_pipeline(mysh_t *context)
             return;
     TAILQ_FOREACH(CMD, &PIPELINE->commands, entries)
         run(context);
-    if (TAILQ_LAST(&PIPELINE->commands, commands_s)->pid)
+    if (TAILQ_LAST(&PIPELINE->commands, commands_s)->pid != -1)
         TAILQ_FOREACH(CMD, &PIPELINE->commands, entries)
             wait_for_cmd(context);
 }
