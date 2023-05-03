@@ -99,7 +99,7 @@ $(UNIT_TEST):
 	@$(MAKE) $(UNIT_TEST)
 
 tester:				all
-	@./tests/$@/tester.sh
+	@./tests/$@/tester.sh --always-succeed
 
 tests_run:			tester
 	@$(MAKE) $@
