@@ -12,11 +12,7 @@
 
     #include <stdbool.h>
     #include <stdio.h>
-<<<<<<< HEAD
-    #include <stdlib.h>
     #include <unistd.h>
-=======
->>>>>>> c16914e (FEAT(<history>): add history builtin)
 
     #include "ice/macro.h"
     #include "ice/array.h"
@@ -27,8 +23,6 @@
     #include "list/struct.h"
     #include "ice/string.h"
 
-    #include "mysh/history.h"
-    #include "mysh/parsing.h"
     #include "mysh/env.h"
 
     #define IS_END(x) (((x) == '\0') || ((x) == '\n'))
@@ -70,8 +64,15 @@ typedef struct env_s {
     #define PIPEFDS (context->pipefds)
     #define STATUS (context->status)
     #define EXIT (context->exit)
+    #define HISTORY (context->history)
 
     #define DIE die(context, 84)
+    #include "ice/array.h"
+    #include "ice/string.h"
+    #include "ice/output.h"
+    #include "ice/printf.h"
+    #include "list.h"
+    #include "list/struct.h"
 
     #define DW_STRLEN(s, l) (l > 0 ? l : ice_strlen(s))
     #define DWRITE(fd, s, l) if (write(fd, s, DW_STRLEN(s, l)) < 0)DIE
@@ -213,4 +214,4 @@ void get_history_data(char *buffer, env_t *env, history_t *history);
 
 env_t *event_history(char **av, env_t *env);
 
-#endif /* !MYSH_H */
+#endif
