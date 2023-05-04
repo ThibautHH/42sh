@@ -18,8 +18,8 @@
     #define FORBIDDEN "%s: Too dangerous to alias that.\n"
 
 typedef struct alias_s {
-    char name[256];
-    char value[4096];
+    char name[4096];
+    char value[32768];
     TAILQ_ENTRY(alias_s) entries;
 } alias_t;
 
@@ -52,6 +52,14 @@ bool is_alias_forbidden(char *alias);
  * @return bool return true everytime
  */
 bool print_alias(mysh_t *context, char *name);
+
+/**
+ * @brief replace commands in the input line by their alias values
+ *
+ * @param context Main structure of mysh
+ * @return bool return true everytime
+ */
+_Bool substitute_alias(mysh_t *context);
 
 alias_t *search_for_alias(mysh_t *context, char *name);
 

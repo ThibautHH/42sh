@@ -9,6 +9,7 @@
 
 #include "ice/memory.h"
 #include "ice/string.h"
+#include "ice/printf.h"
 
 #include "mysh.h"
 #include "mysh/commands.h"

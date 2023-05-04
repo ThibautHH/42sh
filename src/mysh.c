@@ -13,7 +13,6 @@
 
 #include "mysh.h"
 #include "mysh/commands.h"
-#include "mysh/alias.h"
 
 static bool init(mysh_t *context, char **env)
 {
@@ -38,7 +37,8 @@ void mysh(mysh_t *context, char **env)
         exit(84);
     prompt(context), errno = 0;
     for (; !EXIT && GET_LINE != -1; LINE_ITERATION)
-        if (LEN > 1 && *LINE != '#' && !parse_command_line(context))
+        if (LEN > 1 && *LINE != '#' &&
+        substitute_alias(context) && !parse_command_line(context))
             TAILQ_FOREACH(PIPELINE, &context->pipelines, entries)
                 run_pipeline(context);
     if (errno)
