@@ -199,6 +199,38 @@ oui ; alias oui cat -e ; ls | oui
 ls | oui
 [404-END]
 
+[400]
+NAME="Built-in alias with and without arg"
+SETUP=""
+CLEAN=""
+TESTS=
+    echo 'alias oui ls'
+    echo 'alias oui'
+    echo 'alias'
+[400-END]
+
+[401]
+NAME="Built-in unalias simple"
+SETUP=""
+CLEAN=""
+TESTS=
+    echo 'alias oui ls'
+    echo 'unalias oui'
+    echo 'alias'
+[401-END]
+
+[402]
+NAME="Built-in unalias multiple"
+SETUP=""
+CLEAN=""
+TESTS=
+    echo 'alias oui ls'
+    echo 'alias non ls'
+    echo 'alias win ls'
+    echo 'unalias oui non win'
+    echo 'alias'
+[402-END]
+
 [501]
 NAME="Execve: path"
 SETUP=""
