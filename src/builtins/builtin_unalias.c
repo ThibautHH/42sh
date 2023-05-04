@@ -9,16 +9,15 @@
 
 #include <stdlib.h>
 
-bool builtin_unalias(char **av, mysh_t *context)
+void builtin_unalias(struct mysh_s *context)
 {
     alias_t *alias;
 
-    for (int i = 1; av[i] != NULL; i ++) {
-        alias = search_for_alias(context, av[i]);
+    for (int i = 1; CMDARGS[i] != NULL; i ++) {
+        alias = search_for_alias(context, CMDARGS[i]);
         if (alias != NULL) {
             TAILQ_REMOVE(ALIASQ, alias, entries);
             free(alias);
         }
     }
-    return true;
 }

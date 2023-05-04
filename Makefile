@@ -39,6 +39,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				destroy_alias.c					\
 				is_alias_forbidden.c			\
 				print_alias.c					\
+				alias_substitution.c			\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./env/)
