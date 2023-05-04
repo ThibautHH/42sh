@@ -14,9 +14,9 @@
 
 static void wipe_alias(alias_t *alias)
 {
-    for (int i = 0; i < 256; i ++)
-        alias->name[i] = 0;
     for (int i = 0; i < 4096; i ++)
+        alias->name[i] = 0;
+    for (int i = 0; i < 32768; i ++)
         alias->value[i] = 0;
 }
 
@@ -44,7 +44,7 @@ alias_t *search_for_alias(mysh_t *context, char *name)
     return NULL;
 }
 
-static bool rewrite_alias(alias_t *alias, char **av)
+static void rewrite_alias(alias_t *alias, char **av)
 {
     wipe_alias(alias);
     ice_strcpy(alias->name, av[1]);
@@ -53,23 +53,28 @@ static bool rewrite_alias(alias_t *alias, char **av)
         if (av[1] != NULL)
             ice_strcat(alias->value, " ");
     }
-    return true;
 }
 
-bool builtin_alias(char **av, mysh_t *context)
+void builtin_alias(mysh_t *context)
 {
     alias_t *alias;
 
-    if (av[1] == NULL)
-        return print_alias(context, NULL);
-    if (av[2] == NULL)
-        return print_alias(context, av[1]);
-    if (is_alias_forbidden(av[1]) == true)
-        return false;
-    alias = search_for_alias(context, av[1]);
-    if (alias != NULL)
-        return rewrite_alias(alias, av);
-    alias = fill_alias(av);
+    if (CMDARGS[1] == NULL) {
+        print_alias(context, NULL);
+        return;
+    } else if (CMDARGS[2] == NULL) {
+        print_alias(context, CMDARGS[1]);
+        return;
+    }
+    if (is_alias_forbidden(CMDARGS[1]) == true) {
+        STATUS = 1;
+        return;
+    }
+    alias = search_for_alias(context, CMDARGS[1]);
+    if (alias != NULL) {
+        rewrite_alias(alias, CMDARGS);
+        return;
+    }
+    alias = fill_alias(CMDARGS);
     TAILQ_INSERT_TAIL(ALIASQ, alias, entries);
-    return true;
 }

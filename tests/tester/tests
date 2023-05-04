@@ -151,9 +151,9 @@ NAME="Built-in alias with and without arg"
 SETUP=""
 CLEAN=""
 TESTS=
-    echo 'alias oui ls'
-    echo 'alias oui'
-    echo 'alias'
+alias oui ls
+alias oui
+alias
 [400-END]
 
 [401]
@@ -161,9 +161,9 @@ NAME="Built-in unalias simple"
 SETUP=""
 CLEAN=""
 TESTS=
-    echo 'alias oui ls'
-    echo 'unalias oui'
-    echo 'alias'
+alias oui ls
+unalias oui
+alias
 [401-END]
 
 [402]
@@ -171,12 +171,33 @@ NAME="Built-in unalias multiple"
 SETUP=""
 CLEAN=""
 TESTS=
-    echo 'alias oui ls'
-    echo 'alias non ls'
-    echo 'alias win ls'
-    echo 'unalias oui non win'
-    echo 'alias'
+alias oui ls
+alias non ls
+alias win ls
+unalias oui non win
+alias
 [402-END]
+
+[403]
+NAME="Built-in alias substitution"
+SETUP=""
+CLEAN=""
+TESTS=
+alias oui ls
+oui
+unalias oui
+oui
+[403-END]
+
+[404]
+NAME="Built-in alias complex substitution"
+SETUP=""
+CLEAN=""
+TESTS=
+alias oui ls -a
+oui ; alias oui cat -e ; ls | oui
+ls | oui
+[404-END]
 
 [501]
 NAME="Execve: path"
