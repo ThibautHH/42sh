@@ -15,11 +15,14 @@
     #define ALIAS (&(context->alias))
     #define ALIASQ (&(ALIAS)->head)
 
+    #define ALIAS_NAME_SIZE 4096
+    #define ALIAS_VALUE_SIZE 32768
+
     #define FORBIDDEN "%s: Too dangerous to alias that.\n"
 
 typedef struct alias_s {
-    char name[4096];
-    char value[32768];
+    char name[ALIAS_NAME_SIZE];
+    char value[ALIAS_VALUE_SIZE];
     TAILQ_ENTRY(alias_s) entries;
 } alias_t;
 

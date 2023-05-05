@@ -14,9 +14,9 @@
 
 static void wipe_alias(alias_t *alias)
 {
-    for (int i = 0; i < 4096; i ++)
+    for (int i = 0; i < ALIAS_NAME_SIZE; i++)
         alias->name[i] = 0;
-    for (int i = 0; i < 32768; i ++)
+    for (int i = 0; i < ALIAS_VALUE_SIZE; i++)
         alias->value[i] = 0;
 }
 
