@@ -13,23 +13,23 @@
 #include "mysh/parser.h"
 #include "ice/int.h"
 
-static void exec_cmd(int ind, mysh_t *context)
+static void exec_cmd(int idx_history, mysh_t *context)
 {
     history_t *tmp;
 
     for (list_node_t *node = context->history->tail; node; node = node->prev) {
         tmp = node->value;
-        if (tmp->index == ind)
+        if (tmp->index == idx_history)
             handle_pipe(tmp->cmd, context);
     }
 }
 
 static bool history_flag(char **av, mysh_t *context)
 {
-    int ind = 0;
+    int idx_history = 0;
 
     if (av[1] != NULL && ice_strcmp("-c", av[1]) == 0) {
-        flag_c(context);
+        handle_c_flag(context);
         return false;
     }
     if (av[1] != NULL) {
@@ -37,9 +37,9 @@ static bool history_flag(char **av, mysh_t *context)
             ice_printf("history: Badly formed number.\n");
             return false;
         }
-        ind = ice_atoi(av[1]);
-        if (ind > 0) {
-            exec_cmd(ind, context);
+        idx_history = ice_atoi(av[1]);
+        if (idx_history > 0) {
+            exec_cmd(idx_history, context);
             return false;
         }
     }
@@ -63,6 +63,5 @@ bool builtin_history(char **av, mysh_t *context)
         if (tmp->index >= 1000 && tmp->index < 10000)
             ice_printf(" %d  %s  %s\n", tmp->index, tmp->date, tmp->cmd);
     }
-
     return (STATUS = 0);
 }

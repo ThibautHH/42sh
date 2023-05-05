@@ -18,8 +18,8 @@ static int handle_precise_event(char **av, mysh_t *context)
     int j = 0;
     char *str = malloc(sizeof(char) * (cmd_size + 2));
     history_t *tmp;
-    if (av[0][1] != '?')
-        return 1;
+
+    if (av[0][1] != '?' || str == NULL) return 1;
     for (int i = 2; av[0][i] != '\0' && av[0][i] != '?'; i++, j++)
         str[j] = av[0][i];
     str[j] = '\0';
@@ -32,21 +32,15 @@ static int handle_precise_event(char **av, mysh_t *context)
             return 0;
         }
     }
-    handle_error_msg(str);
+    ice_printf("%s: Event not found.\n", str);
     return 0;
 }
 
 static int handle_search_event(char **av, mysh_t *context)
 {
-    size_t cmd_size = ice_strlen(av[0]) - 1;
-    char *str1 = malloc(sizeof(char) * (cmd_size + 1));
-    int nb_event = 0, j = 0;
+    int nb_event = ice_atoi(av[0] + 1);
     history_t *tmp;
 
-    for (int i = 1; av[0][i] != '\0'; i++, j++)
-        str1[j] = av[0][i];
-    str1[j] = '\0';
-    nb_event = ice_atoi(str1);
     for (list_node_t *node = context->history->tail; node != NULL;
     node = node->prev) {
         tmp = node->value;
@@ -56,7 +50,7 @@ static int handle_search_event(char **av, mysh_t *context)
             return 0;
         }
     }
-    handle_error_msg(str1);
+    ice_printf("%s: Event not found.\n", av[0] + 1);
     return 1;
 }
 
@@ -94,7 +88,7 @@ ull_t count)
         return 1;
     }
     if (count == context->history->size)
-        handle_error_msg(str1);
+        ice_printf("%s: Event not found.\n", str1);
     return 0;
 }
 
