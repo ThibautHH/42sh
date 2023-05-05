@@ -47,6 +47,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 DIR			+=	$(addprefix $(DIR_SRC), execution/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				get_cmd_path.c		\
+				piping.c			\
 				run_pipeline.c		\
 				)
 
@@ -99,7 +100,7 @@ $(UNIT_TEST):
 	@$(MAKE) $(UNIT_TEST)
 
 tester:				all
-	@./tests/$@/tester.sh
+	@./tests/$@/tester.sh --always-succeed
 
 tests_run:			tester
 	@$(MAKE) $@

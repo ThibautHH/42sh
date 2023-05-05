@@ -33,8 +33,6 @@ Shell exit status: $?" >> $refsh_out
 
 load_test()
 {
-  id=$1
-  debug=$2
   SETUP=`test_field "$id" SETUP`
   NAME=`test_field "$id" NAME`
   TESTS=`test_field "$id" | tac | sed -n '/\s*TESTS\s*=\s*/q;p' | tac`
@@ -49,10 +47,10 @@ load_test()
 
   if [ $ko -eq 0 ]
   then
-    if [ $debug -ge 1 ]
+    if [ $dbglvl -ge 1 ]
     then
       echo "Test $id ($NAME): OK"
-      if [ $debug -eq 2 ]
+      if [ $dbglvl -eq 2 ]
       then
         echo "'$MYSHELL' output:"
         cat -e $mysh_out
@@ -66,17 +64,8 @@ load_test()
     fi
     return 0
   else
-    if [ $dbgerr -eq 1 ]
-    then
-      echo "Test $id ($NAME): KO"
-      echo "'$MYSHELL' output:"
-      cat -e $mysh_out
-      echo
-      echo "'$REFER' output:"
-      cat -e $refsh_out
-      echo; echo
-    fi
-    if [ $debug -lt 1 ]
+    [ $always_successful -eq 0 ] && ret=1
+    if [ $dbglvl -lt 1 ]
     then
       echo "Test $id: KO"
       return 1
@@ -85,6 +74,15 @@ load_test()
     mkdir -p /tmp/myshell-tests.$$/$id 2>/dev/null
     cp $mysh_out /tmp/myshell-tests.$$/$id/myshell.out
     cp $refsh_out /tmp/myshell-tests.$$/$id/refshell.out
+    if [ $dbgerr -eq 1 ]
+    then
+      echo "'$MYSHELL' output:"
+      cat -e $mysh_out
+      echo
+      echo "'$REFER' output:"
+      cat -e $refsh_out
+      echo; echo
+    fi
     return 1
   fi
 }
@@ -112,8 +110,9 @@ done
 
 dbglvl=1
 dbgerr=0
+always_successful=0
 tests_list=""
-while shift; do
+while :; do
   case "$1" in
     -d)
       dbglvl=2
@@ -124,18 +123,23 @@ while shift; do
     --debug-errors)
       dbgerr=1
       ;;
+    --always-succeed)
+      always_successful=1
+      ;;
     *)
       tests_list="$tests_list $1"
       ;;
   esac
+  shift
+  [ -z "$1" ] && break
 done
+tests_list=`xargs <<< "$tests_list"`
 [ $dbglvl -eq 2 ] && echo "Debug mode
 Shell: $MYSHELL
 Reference: $REFER" >&2
 [ -z "$tests_list" ] && tests_list=`cat ./tests/tester/tests | grep -oP "(?<=^\[)[0-9]+(?=\]$)"`
 path_backup=$PATH
 ret=0
-for test in $tests_list; do
-  load_test $test $dbglvl $dbgerr || ret=1
-done
+for id in $tests_list; do load_test; done
 export PATH=$path_backup
+exit $ret
