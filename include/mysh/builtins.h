@@ -8,25 +8,31 @@
 #ifndef BUILTINS_H
     #define BUILTINS_H
 
-    #define BUILTIN_COUNT 5
+    #define BUILTIN_COUNT 8
 
     #include <stdbool.h>
 
 typedef enum {
     BUILDIN_NONE = -1,
+    BUILTIN_AT,
     BUILTIN_CD,
     BUILTIN_EXIT,
     BUILTIN_ENV,
     BUILTIN_SETENV,
-    BUILTIN_UNSETENV
+    BUILTIN_SET,
+    BUILTIN_UNSETENV,
+    BUILTIN_UNSET
 } builtin_t;
 
 typedef struct mysh_s mysh_t;
 
+void builtin_at(mysh_t *context);
 void builtin_cd(mysh_t *context);
 void builtin_exit(mysh_t *context);
 void builtin_env(mysh_t *context);
+void builtin_set(mysh_t *context);
 void builtin_setenv(mysh_t *context);
+void builtin_unset(mysh_t *context);
 void builtin_unsetenv(mysh_t *context);
 
 static const struct {
@@ -34,11 +40,14 @@ static const struct {
     builtin_t id;
     void (*builtin)(mysh_t *);
 } BUILTINS[BUILTIN_COUNT] = {
+    {"@", BUILTIN_AT, builtin_at},
     {"cd", BUILTIN_CD, builtin_cd},
     {"exit", BUILTIN_EXIT, builtin_exit},
     {"env", BUILTIN_ENV, builtin_env},
     {"setenv", BUILTIN_SETENV, builtin_setenv},
-    {"unsetenv", BUILTIN_UNSETENV, builtin_unsetenv}
+    {"set", BUILTIN_SET, builtin_set},
+    {"unsetenv", BUILTIN_UNSETENV, builtin_unsetenv},
+    {"unset", BUILTIN_UNSET, builtin_unset}
 };
 
 #endif /* !BUILTINS_H */
