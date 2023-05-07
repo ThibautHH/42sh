@@ -41,18 +41,17 @@ void builtin_cd(mysh_t *context)
         STATUS = 1;
         return;
     }
-    const var_type_t type = VAR_ENV;
-    char *prev_pwd = ice_strdup(GET_VAR("PWD"));
+    char *prev_pwd = ice_strdup(GET_VAR("PWD", ENV));
     char *path = CMDARGC == 2
         ? (ice_strcmp(CMDARGS[1], "-")
-            ? CMDARGS[1] : GET_VAR("OLDPWD"))
-        : GET_VAR("HOME");
+            ? CMDARGS[1] : GET_VAR("OLDPWD", ENV))
+        : GET_VAR("HOME", ENV);
     if (chdir(path ? path : "") == -1) {
         STATUS = 1; free(prev_pwd);
         return handle_cd_errors(context, path);
     }
-    getcwd(GET_VAR("PWD"), VARVLEN);
-    var_update(context, "OLDPWD", prev_pwd, type);
+    getcwd(GET_VAR("PWD", ENV), VARVLEN);
+    var_update(context, "OLDPWD", prev_pwd, VAR_ENV);
     free(prev_pwd);
     STATUS = 0;
 }

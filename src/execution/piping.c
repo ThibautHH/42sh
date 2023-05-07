@@ -5,6 +5,7 @@
 ** Piping functions
 */
 
+#include <string.h>
 #include "mysh/piping.h"
 
 void feed_redirections(mysh_t *context)
