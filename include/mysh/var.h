@@ -17,7 +17,7 @@
     #define VARN(env) ((env) ? (env)->name : NULL)
     #define VARV(env) ((env) ? ((env)->buffer + VARNLEN) : NULL)
 
-    #define GET_VAR(n) ({var_t *v = var_get(context, n, type);VARV(v);})
+    #define GET_VAR(n, t) ({var_t *v = var_get(context, n, VAR_##t);VARV(v);})
 
 typedef enum {
     VAR_ENV,
