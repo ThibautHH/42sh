@@ -53,7 +53,7 @@ static void wait_for_cmd(mysh_t *context)
 {
     int status;
 
-    if (!CMDPID)
+    if (CMDPID == -1)
         return;
     if (waitpid(CMDPID, &status, 0) != CMDPID)
         DIE;
