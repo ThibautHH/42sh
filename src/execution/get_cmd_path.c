@@ -29,15 +29,15 @@ static _Bool set_cmd_path(mysh_t *context, char *path)
 
 static char *compose_path(mysh_t *context, char **p)
 {
+    static char *binpath = NULL;
+    if (!p && (free(binpath), 1))
+        return (binpath = NULL);
     size_t dirlen = ice_strtil(*p, ':');
     if (!dirlen)
         return NULL;
-    static char *binpath = NULL;
-    static size_t old_pathsize = 0;
     size_t pathsize = dirlen + ice_strlen(CMDCMD) + 2;
-    binpath = ice_realloc2(binpath, old_pathsize, pathsize);
+    binpath = realloc(binpath, pathsize);
     if (!binpath) DIE;
-    old_pathsize = pathsize;
     ice_strncpy2(binpath, *p, dirlen);
     _Bool slash = binpath[dirlen - 1] == '/';
     if (!slash)
@@ -56,10 +56,10 @@ static char *get_bin_path(mysh_t *context)
     char *path = GET_VAR("PATH", ENV), *binpath = NULL;
     if (!path)
         return NULL;
-    for (char *p = path; *p && (p == path || p[-1] == ':');)
+    for (char *p = path; p == path || p[-1] == ':';)
         if ((binpath = compose_path(context, &p)))
             return binpath;
-    return NULL;
+    return compose_path(context, NULL);
 }
 
 _Bool get_cmd_path(mysh_t *context)
