@@ -56,7 +56,7 @@ static char *get_bin_path(mysh_t *context)
     char *path = GET_VAR("PATH", ENV), *binpath = NULL;
     if (!path)
         return NULL;
-    for (char *p = path; *p && (p == path || p[-1] == ':');)
+    for (char *p = path; p[-1] && (p == path || p[-1] == ':');)
         if ((binpath = compose_path(context, &p)))
             return binpath;
     return NULL;
