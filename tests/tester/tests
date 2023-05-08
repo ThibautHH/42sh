@@ -144,6 +144,86 @@ TESTS=
 setenv arg1 arg2 arg3
 [305-END]
 
+[401]
+NAME="Built-in unsetenv"
+SETUP="export TERM=xterm"
+TESTS=
+unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST
+env
+setenv EGAL 1
+env
+unsetenv EGAL
+env
+[401-END]
+
+[402]
+NAME="Built-in unsetenv no arg"
+SETUP="export TERM=xterm"
+TESTS=
+unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST
+env
+setenv EGAL 1
+env
+unsetenv
+env
+[402-END]
+
+[403]
+NAME="Built-in unsetenv invalid name"
+SETUP=""
+TESTS=
+unsetenv EGAL=1
+[403-END]
+
+[421]
+NAME="Built-in which"
+SETUP=""
+TESTS=
+which ls
+which pwd
+which cd
+which setenv
+which unsetenv
+which which
+which noexist
+[421-END]
+
+[422]
+NAME="Built-in which no arg"
+SETUP=""
+TESTS=
+which
+[422-END]
+
+[423]
+NAME="Built-in where"
+SETUP=""
+TESTS=
+where ls
+where pwd
+where cd
+where setenv
+where unsetenv
+where which
+where noexist
+[423-END]
+
+[424]
+NAME="Built-in where no arg"
+SETUP=""
+TESTS=
+where
+[424-END]
+
+[441]
+NAME="Built-in echo"
+SETUP=""
+TESTS=
+echo
+echo Yes I am
+echo To    many         space   .
+[441-END]
+
 [501]
 NAME="Execve: $PATH"
 SETUP=""
