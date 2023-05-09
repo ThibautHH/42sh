@@ -197,6 +197,34 @@ oui ; alias oui cat -e ; ls | oui
 ls | oui
 [404-END]
 
+[405]
+NAME="Built-in simple alias loop"
+SETUP=""
+CLEAN=""
+TESTS=
+alias a b
+alias b a
+a
+[405-END]
+
+[406]
+NAME="Built-in complex alias loop"
+SETUP=""
+CLEAN=""
+TESTS=
+alias a b ; alias b c ; alias c d ; alias d a
+a
+[406-END]
+
+[407]
+NAME="Built-in alias false loop"
+SETUP=""
+CLEAN=""
+TESTS=
+alias ls ls -a
+ls
+[407-END]
+
 [501]
 NAME="Execve: $PATH"
 SETUP=""
