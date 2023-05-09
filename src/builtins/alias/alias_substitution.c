@@ -46,7 +46,7 @@ _Bool substitute_alias(mysh_t *context)
     for (int i = 0; LINE[i] != '\0'; i++) {
         if (i != 0 && (LINE[i - 1] == '|' || LINE[i - 1] == ';'))
             separator = true;
-        if ((i == 0 || separator) && is_alias(context, i) == true)
+        if ((i == 0 || separator) && is_alias(context, i))
             continue;
         if (LINE[i] != ' ')
             separator = false;
