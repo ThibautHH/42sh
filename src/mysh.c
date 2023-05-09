@@ -37,7 +37,7 @@ void mysh(mysh_t *context, char **env)
         exit(84);
     prompt(context), errno = 0;
     for (; !EXIT && GET_LINE != -1; LINE_ITERATION) {
-        LINE = input_edition(context);
+        // LINE = input_edition(context);
         if (LEN > 1 && *LINE != '#' && !parse_command_line(context))
             TAILQ_FOREACH(PIPELINE, &context->pipelines, entries)
                 run_pipeline(context);
