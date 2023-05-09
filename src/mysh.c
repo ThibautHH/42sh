@@ -29,6 +29,7 @@ void cleanup(mysh_t *context)
 {
     for (var_type_t type = VAR_ENV; type <= VAR_SHELL; type++)
         destroy_vars(context, type);
+    free_pipelines(context);
     destroy_alias(context);
     free(LINE);
 }
