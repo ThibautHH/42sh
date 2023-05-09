@@ -29,7 +29,7 @@ static bool history_flag(char **av, mysh_t *context)
     int idx_history = 0;
 
     if (av[1] != NULL && ice_strcmp("-c", av[1]) == 0) {
-        handle_c_flag(context);
+        flag_c(context);
         return false;
     }
     if (av[1] != NULL) {

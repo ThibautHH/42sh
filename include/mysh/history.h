@@ -28,6 +28,6 @@ bool event_history(char **av, mysh_t *context);
  */
 bool builtin_history(char **av, mysh_t *context);
 void get_history_data(char *buffer, mysh_t *context);
-void handle_c_flag(mysh_t *context);
+void flag_c(mysh_t *context);
 
 #endif

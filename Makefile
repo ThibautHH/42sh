@@ -39,7 +39,7 @@ DIR			+= $(addprefix $(DIR_SRC), ./history/)
 SRC			+= $(addprefix $(lastword $(DIR)),\
 				event_history.c					\
 				get_history_data.c				\
-				handle_c_flag.c					\
+				flag_c.c					\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), ./env/)

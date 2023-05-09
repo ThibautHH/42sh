@@ -40,6 +40,8 @@ static int handle_search_event(char **av, mysh_t *context)
 {
     int nb_event = ice_atoi(av[0] + 1);
     history_t *tmp;
+    if (nb_event <= 0)
+        return 1;
 
     for (list_node_t *node = context->history->tail; node != NULL;
     node = node->prev) {
@@ -87,7 +89,7 @@ ull_t count)
         handle_pipe(cmd, context);
         return 1;
     }
-    if (count == context->history->size)
+    if (count > context->history->size)
         ice_printf("%s: Event not found.\n", str1);
     return 0;
 }
