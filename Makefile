@@ -67,6 +67,11 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				commands.c				\
 				)
 
+DIR			+= $(addprefix $(DIR_SRC), line_edition/)
+SRC			+= $(addprefix $(lastword $(DIR)),\
+				input_edition.c			\
+				)
+
 DIR_TEST	:=	./tests/
 SRC_TEST	:=	$(addprefix $(DIR_TEST),\
 				)
