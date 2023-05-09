@@ -5,15 +5,15 @@
 ** builtin_env.c
 */
 
-#include "ice/printf.h"
+#include <stdio.h>
 
 #include "mysh.h"
 
-void builtin_env(mysh_t *context)
+void builtin_at(mysh_t *context)
 {
-    var_t *var; var_type_t type = VAR_ENV;
+    var_t *var; var_type_t type = VAR_SHELL;
     TAILQ_FOREACH(var, VARQ, entries)
-        if (ice_printf("%s\n", var->name) < 0)
+        if (printf("%s\n", var->name) < 0)
             DIE;
     STATUS = 0;
 }

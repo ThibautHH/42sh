@@ -11,5 +11,5 @@
 void load_env(mysh_t *context, char **env)
 {
     for (; *env; env++)
-        env_add(context, *env);
+        var_add(context, *env, VAR_ENV);
 }

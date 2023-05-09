@@ -18,7 +18,7 @@
     #include "ice/string.h"
 
     #include "mysh/parsing.h"
-    #include "mysh/env.h"
+    #include "mysh/var.h"
 
     #define IS_END(x) (((x) == '\0') || ((x) == '\n'))
     #define IS_SPACE(x) (((x) == ' ') || ((x) == '\t'))
@@ -40,9 +40,9 @@
     #define LINE (context->line)
     #define LINESZ (context->size)
     #define LEN (context->len)
-    #define ENV (&(context->env))
-    #define ENVQ (&(ENV)->head)
-    #define ENVC (ENV->count)
+    #define VAR (&(context->vars[type]))
+    #define VARQ (&(VAR)->head)
+    #define VARC (VAR->count)
     #define PIPEFDS (context->pipefds)
     #define STATUS (context->status)
     #define EXIT (context->exit)
@@ -58,7 +58,7 @@
     #define TTY_WRITE(s, l) tty_write(context, s, l)
 
 typedef struct mysh_s {
-    env_head_t env;
+    var_head_t vars[2];
     char *line;
     size_t size;
     ssize_t len;
