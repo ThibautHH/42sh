@@ -15,4 +15,7 @@ void new_command(mysh_t *context);
 void new_pipeline(mysh_t *context, sequence_mode_t mode);
 void free_pipelines(mysh_t *context);
 
+void run(mysh_t *context);
+void wait_for_cmd(mysh_t *context);
+
 #endif /* !COMMANDS_H_ */

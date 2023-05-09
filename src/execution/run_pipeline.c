@@ -6,20 +6,17 @@
 */
 
 #include <errno.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <sys/wait.h>
 #include <signal.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #include "ice/printf.h"
 
 #include "mysh.h"
-#include "mysh/builtins.h"
-#include "mysh/commands.h"
-#include "mysh/parsing.h"
 #include "mysh/piping.h"
+#include "mysh/commands.h"
 
 static const char EXECFMT_ERRFMT[] = "%s: Exec format error. \
 Wrong Architecture.\n";
@@ -49,7 +46,7 @@ static void execute_unforked_builtin(mysh_t *context)
     MVFD_STD(stdio[1], OUT);
 }
 
-static void wait_for_cmd(mysh_t *context)
+void wait_for_cmd(mysh_t *context)
 {
     int status;
 
@@ -68,7 +65,7 @@ static void wait_for_cmd(mysh_t *context)
         STATUS = WEXITSTATUS(status) ? WEXITSTATUS(status) : STATUS;
 }
 
-static void run(mysh_t *context)
+void run(mysh_t *context)
 {
     if (CMD->is_builtin
         && (CMD == TAILQ_LAST(&PIPELINE->commands, commands_s))) {

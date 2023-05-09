@@ -8,7 +8,7 @@
 #ifndef BUILTINS_H
     #define BUILTINS_H
 
-    #define BUILTIN_COUNT 11
+    #define BUILTIN_COUNT 12
 
     #include <stdbool.h>
 
@@ -24,7 +24,8 @@ typedef enum {
     BUILTIN_UNSET,
     BUILTIN_WHICH,
     BUILTIN_WHERE,
-    BUILTIN_ECHO
+    BUILTIN_ECHO,
+    BUILTIN_REPEAT
 } builtin_t;
 
 typedef struct mysh_s mysh_t;
@@ -40,6 +41,7 @@ void builtin_unsetenv(mysh_t *context);
 void builtin_which(mysh_t *context);
 void builtin_where(mysh_t *context);
 void builtin_echo(mysh_t *context);
+void builtin_repeat(mysh_t *context);
 
 static const struct {
     char *name;
@@ -56,7 +58,8 @@ static const struct {
     {"unset", BUILTIN_UNSET, builtin_unset},
     {"which", BUILTIN_WHICH, builtin_which},
     {"where", BUILTIN_WHERE, builtin_where},
-    {"echo", BUILTIN_ECHO, builtin_echo}
+    {"echo", BUILTIN_ECHO, builtin_echo},
+    {"repeat", BUILTIN_REPEAT, builtin_repeat}
 };
 
 #endif /* !BUILTINS_H */

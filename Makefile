@@ -36,6 +36,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				builtin_which.c					\
 				builtin_where.c					\
 				builtin_echo.c					\
+				builtin_repeat.c				\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), env/)
