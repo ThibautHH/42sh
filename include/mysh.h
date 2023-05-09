@@ -16,6 +16,7 @@
 
     #include "ice/macro.h"
     #include "ice/string.h"
+    #include "list/struct.h"
 
     #include "mysh/parsing.h"
     #include "mysh/var.h"
@@ -68,6 +69,8 @@ typedef struct mysh_s {
     int pipefds[2];
     uc_t status;
     bool exit;
+    list_t *history;
+    int idx;
 } mysh_t;
 
 void mysh(mysh_t *context, char **env);
