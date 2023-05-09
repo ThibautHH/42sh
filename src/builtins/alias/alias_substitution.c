@@ -42,9 +42,11 @@ static _Bool is_alias(mysh_t *context, int off)
 _Bool substitute_alias(mysh_t *context)
 {
     _Bool separator = false;
+    P = LINE;
 
-    for (int i = 0; LINE[i] != '\0'; i++) {
-        if (i != 0 && (LINE[i - 1] == '|' || LINE[i - 1] == ';'))
+    for (int i = 0; P[i] != '\0'; i++) {
+        if (i != 0 && (P[i - 1] == '|' || P[i - 1] == ';' || (P[i - 1] == '&'
+        && P[i] == '&') || (P[i - 1] == '|' && P[i] == '|')))
             separator = true;
         if ((i == 0 || separator) && is_alias(context, i))
             continue;

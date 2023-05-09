@@ -21,9 +21,9 @@ typedef enum {
     BUILTIN_SETENV,
     BUILTIN_SET,
     BUILTIN_UNSETENV,
+    BUILTIN_UNSET,
     BUILTIN_ALIAS,
-    BUILTIN_UNALIAS,
-    BUILTIN_UNSET
+    BUILTIN_UNALIAS
 } builtin_t;
 
 typedef struct mysh_s mysh_t;
