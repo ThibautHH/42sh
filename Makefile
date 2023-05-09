@@ -39,7 +39,6 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				builtin_echo.c					\
 				builtin_repeat.c				\
 				builtin_history.c				\
-				builtin_event.c 				\
 				builtin_alias.c					\
 				builtin_unalias.c				\
 				)
@@ -50,6 +49,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				is_alias_forbidden.c			\
 				print_alias.c					\
 				alias_substitution.c			\
+				builtin_history.c				\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), env/)
