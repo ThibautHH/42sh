@@ -44,7 +44,6 @@ void new_pipeline(mysh_t *context, sequence_mode_t mode)
     pipeline_t *ppl = malloc(sizeof(pipeline_t));
     if (!ppl) DIE;
     ppl->mode = mode;
-    ppl->command_count = 0;
     TAILQ_INIT(&ppl->commands);
     TAILQ_INSERT_TAIL(&context->pipelines, ppl, entries);
     PIPELINE = ppl;
@@ -63,5 +62,4 @@ void new_command(mysh_t *context)
         cmd->redirections[i].type = REDIR_NONE;
     TAILQ_INSERT_TAIL(&PIPELINE->commands, cmd, entries);
     CMD = cmd;
-    CMDC++;
 }

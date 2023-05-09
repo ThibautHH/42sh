@@ -7,7 +7,7 @@
 
 #include "mysh.h"
 
-void builtin_unsetenv(mysh_t *context)
+void builtin_unset(mysh_t *context)
 {
     if (CMDARGC < 2) {
         DWRITE(STDERR_FILENO, "unsetenv: Too few arguments.\n", 29);
@@ -15,6 +15,6 @@ void builtin_unsetenv(mysh_t *context)
         return;
     }
     for (size_t i = 1; CMDARGS[i]; i++)
-        var_remove(context, CMDARGS[i], VAR_ENV);
+        var_remove(context, CMDARGS[i], VAR_SHELL);
     STATUS = 0;
 }

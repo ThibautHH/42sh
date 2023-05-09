@@ -9,10 +9,10 @@
 #include "mysh/builtins.h"
 #include "mysh/parsing.h"
 
-void builtin_setenv(mysh_t *context)
+void builtin_set(mysh_t *context)
 {
     if (CMDARGC < 2)
-        return builtin_env(context);
+        return builtin_at(context);
     if (CMDARGC > 3) {
         DWRITE(STDERR_FILENO, "setenv: Too many arguments.\n", 28);
         STATUS = 1;
@@ -27,6 +27,6 @@ void builtin_setenv(mysh_t *context)
             return;
         }
     char *value = CMDARGC == 3 ? CMDARGS[2] : "";
-    var_update(context, name, value, VAR_ENV);
+    var_update(context, name, value, VAR_SHELL);
     STATUS = 0;
 }

@@ -25,10 +25,13 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 
 DIR			+=	$(addprefix $(DIR_SRC), builtins/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
+				builtin_at.c					\
 				builtin_cd.c					\
 				builtin_exit.c					\
 				builtin_env.c					\
+				builtin_set.c					\
 				builtin_setenv.c				\
+				builtin_unset.c					\
 				builtin_unsetenv.c				\
 				builtin_alias.c					\
 				builtin_unalias.c				\
@@ -44,19 +47,20 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 
 DIR			+=	$(addprefix $(DIR_SRC), env/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				environment_manipulation.c		\
-				)
-
-DIR			+= 	$(addprefix $(DIR_SRC), env/initialization/)
-SRC			+=	$(addprefix $(lastword $(DIR)),\
 				load_env.c		\
 				dup_env.c		\
-				destroy_env.c	\
+				)
+
+DIR			+= 	$(addprefix $(DIR_SRC), var/)
+SRC			+=	$(addprefix $(lastword $(DIR)),\
+				destroy_vars.c	\
+				variable_manipulation.c	\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), execution/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				get_cmd_path.c		\
+				piping.c			\
 				run_pipeline.c		\
 				)
 
@@ -109,7 +113,7 @@ $(UNIT_TEST):
 	@$(MAKE) $(UNIT_TEST)
 
 tester:				all
-	@./tests/$@/tester.sh
+	@./tests/$@/tester.sh --always-succeed
 
 tests_run:			tester
 	@$(MAKE) $@

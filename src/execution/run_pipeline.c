@@ -49,14 +49,18 @@ static void execute_unforked_builtin(mysh_t *context)
     MVFD_STD(stdio[1], OUT);
 }
 
-static void wait_for_cmd(mysh_t *context, pid_t pid)
+static void wait_for_cmd(mysh_t *context)
 {
     int status;
 
-    if (waitpid(pid, &status, 0) != pid)
+    if (CMDPID == -1)
+        return;
+    if (waitpid(CMDPID, &status, 0) != CMDPID)
         DIE;
     if (WIFSIGNALED(status)) {
         STATUS = WTERMSIG(status) + 128u;
+        if (WTERMSIG(status) == SIGPIPE && CMD->pipe_mode)
+            return;
         ice_dprintf(STDERR_FILENO, "%s%s\n", (WTERMSIG(status) == SIGFPE)
             ? "Floating exception" : strsignal(WTERMSIG(status)),
             (WCOREDUMP(status)) ? " (core dumped)" : "");
@@ -64,28 +68,28 @@ static void wait_for_cmd(mysh_t *context, pid_t pid)
         STATUS = WEXITSTATUS(status) ? WEXITSTATUS(status) : STATUS;
 }
 
-static pid_t run(mysh_t *context, pid_t *ppl_pids)
+static void run(mysh_t *context)
 {
     if (CMD->is_builtin
         && (CMD == TAILQ_LAST(&PIPELINE->commands, commands_s))) {
-            for (size_t i = 0; i < CMDC - 1; i++)
-                wait_for_cmd(context, ppl_pids[i]);
+            command_t *cmd; CMDPID = -1;
+            TAILQ_FOREACH(cmd, &PIPELINE->commands, entries)
+                wait_for_cmd(context);
             execute_unforked_builtin(context);
-            return 0;
+            return;
         }
     if ((CMD->pipe_mode || IS_REDIR_PIPED) && pipe(PIPEFDS) == -1) DIE;
-    pid_t pid = fork();
-    if (pid == -1) DIE;
-    if (pid == 0) {
+    CMDPID = fork();
+    if (CMDPID == -1) DIE;
+    if (CMDPID == 0) {
         setup_pipe_command(context); setup_redirections(context);
         if (!CMD->is_builtin)
             execute(context);
         BUILTINS[CMDCOMMAND.id].builtin(context);
-        exit(STATUS);
+        QUIT(STATUS);
     }
     feed_redirections(context);
     setup_pipe_shell(context);
-    return pid;
 }
 
 void run_pipeline(mysh_t *context)
@@ -96,12 +100,9 @@ void run_pipeline(mysh_t *context)
     TAILQ_FOREACH(CMD, &PIPELINE->commands, entries)
         if (get_cmd_path(context))
             return;
-    pid_t *ppl_pids = malloc(sizeof(pid_t) * CMDC);
-    size_t i = 0;
     TAILQ_FOREACH(CMD, &PIPELINE->commands, entries)
-        ppl_pids[i++] = run(context, ppl_pids);
-    if (ppl_pids[CMDC - 1])
-        for (i = 0; i < CMDC; i++)
-            wait_for_cmd(context, ppl_pids[i]);
-    free(ppl_pids);
+        run(context);
+    if (TAILQ_LAST(&PIPELINE->commands, commands_s)->pid != -1)
+        TAILQ_FOREACH(CMD, &PIPELINE->commands, entries)
+            wait_for_cmd(context);
 }

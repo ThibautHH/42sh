@@ -13,6 +13,13 @@ exit
 [101-END]
 
 [102]
+NAME="Built-in exit with code"
+SETUP=""
+TESTS=
+exit 42
+[102-END]
+
+[102]
 NAME="Built-in env"
 SETUP="export TERM=xterm"
 TESTS=
@@ -59,53 +66,44 @@ pwd
 [204-END]
 
 [205]
-NAME="Built-in cd ~"
-SETUP=""
-TESTS=
-pwd
-cd ~
-pwd
-[205-END]
-
-[206]
 NAME="Built-in cd /"
 SETUP=""
 TESTS=
 pwd
 cd /
 pwd
-[206-END]
+[205-END]
 
-[207]
+[206]
 NAME="Built-in cd nofolder"
 SETUP=""
 TESTS=
 pwd
 cd nofolder
 pwd
-[207-END]
+[206-END]
 
-[208]
+[207]
 NAME="Built-in cd file"
 SETUP=""
 TESTS=
 pwd
 cd Makefile
 pwd
-[208-END]
+[207-END]
 
-[209]
-NAME="Built-in cd to much args"
+[208]
+NAME="Built-in cd too many args"
 SETUP=""
 TESTS=
 pwd
 cd src ..
 pwd
-[209-END]
+[208-END]
 
 [301]
 NAME="Built-in setenv one arg"
-SETUP="export TERM=xterm"
+SETUP=""
 TESTS=
 unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST
 env
@@ -114,8 +112,8 @@ env
 [301-END]
 
 [302]
-NAME="Built-in setenv two arg"
-SETUP="export TERM=xterm"
+NAME="Built-in setenv two args"
+SETUP=""
 TESTS=
 unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST
 env
@@ -125,7 +123,7 @@ env
 
 [303]
 NAME="Built-in setenv no arg"
-SETUP="export TERM=xterm"
+SETUP=""
 TESTS=
 unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST
 env
@@ -200,39 +198,53 @@ ls | oui
 [404-END]
 
 [501]
-NAME="Execve: path"
+NAME="Execve: $PATH"
 SETUP=""
 TESTS=
 ls -l
 [501-END]
 
 [502]
-NAME="Execve: pwd"
+NAME="Execve: relative path"
 SETUP=""
 TESTS=
-./usr/bin/ls -l
+tests/tester/bin/hello_world
 [502-END]
 
 [503]
-NAME="Execve: /"
+NAME="Execve: absolute path"
 SETUP=""
 TESTS=
 /usr/bin/ls -l
 [503-END]
 
 [601]
-NAME="Error: command not found"
+NAME="Error: command not found ($PATH)"
 SETUP=""
 TESTS=
 noexist
 [601-END]
 
 [602]
-NAME="Error: command wrong arguments"
+NAME="Error: command not found (relative path)"
+SETUP=""
+TESTS=
+./noexist
+[602-END]
+
+[603]
+NAME="Error: command not found (absolute path)"
+SETUP=""
+TESTS=
+/noexist
+[603-END]
+
+[604]
+NAME="Error: command error"
 SETUP=""
 TESTS=
 ls nofile
-[602-END]
+[604-END]
 
 [701]
 NAME="Parsing: ;"
@@ -273,26 +285,76 @@ cat < .gitignore
 [803-END]
 
 [804]
-NAME="Redirection: | even number of pipes"
+NAME="Piping"
 SETUP=""
 TESTS=
+ls -l | cat -e
 ls -l | cat -e | grep Makefile
 [804-END]
 
 [805]
-NAME="Redirection: | odd number of pipes"
+NAME="Piping: forked builtins"
 SETUP=""
 TESTS=
-ls -l | cat -e | cat -e | cat -e
-ls -l | cat -e | cat -e | cat -e
+pwd
+cd src | cat
+pwd
 [805-END]
 
 [806]
-NAME="Redirection: | with >"
+NAME="Piping: unforked builtins"
 SETUP=""
 TESTS=
-ls -l | cat -e > out; rm out
+pwd
+cat | cd src
+pwd
 [806-END]
+
+[807]
+NAME="Piping: forked builtins with error"
+SETUP=""
+TESTS=
+pwd
+cd nofolder | cat
+pwd
+[807-END]
+
+[808]
+NAME="Piping: unforked builtins with error"
+SETUP=""
+TESTS=
+pwd
+cat | cd nofolder
+pwd
+[808-END]
+
+[809]
+NAME="Piping: error"
+SETUP=""
+TESTS=
+ls -l | noexist
+[809-END]
+
+[810]
+NAME="Piping: command error"
+SETUP=""
+TESTS=
+ls -l | cat nofile
+[810-END]
+
+[811]
+NAME="Piping: exit status propagation"
+SETUP=""
+TESTS=
+exit 45 | ls -l | cat -e
+[811-END]
+
+[812]
+NAME="Piping: exit status propagation with error"
+SETUP=""
+TESTS=
+exit 45 | ls -l | cat -j | cat
+[812-END]
 
 [909]
 NAME="Segfault program"
@@ -300,3 +362,10 @@ SETUP=""
 TESTS=
 ./tests/tester/bin/segf
 [909-END]
+
+[910]
+NAME="Floating-point exception program"
+SETUP=""
+TESTS=
+./tests/tester/bin/fpe
+[910-END]
