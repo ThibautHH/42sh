@@ -11,6 +11,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "list.h"
+
+#include "mysh.h"
+#include "mysh/alias.h"
 #include "mysh/commands.h"
 #include "mysh/history.h"
 
@@ -19,7 +23,7 @@ static bool init(mysh_t *context, char **env)
     for (var_type_t type = VAR_ENV; type <= VAR_SHELL; type++)
         TAILQ_INIT(VARQ);
     TAILQ_INIT(&context->pipelines);
-    context->history = malloc(sizeof(history_t));
+    context->history = list_create();
     load_env(context, env);
     TAILQ_INIT(ALIASQ);
     return false;
