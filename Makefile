@@ -38,6 +38,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				builtin_where.c					\
 				builtin_echo.c					\
 				builtin_repeat.c				\
+				builtin_history.c				\
 				builtin_alias.c					\
 				builtin_unalias.c				\
 				)
@@ -54,6 +55,12 @@ DIR			+=	$(addprefix $(DIR_SRC), env/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				load_env.c		\
 				dup_env.c		\
+				)
+
+DIR			+= $(addprefix $(DIR_SRC), history/)
+SRC			+= $(addprefix $(lastword $(DIR)),\
+				get_history_data.c				\
+				flag_c.c					\
 				)
 
 DIR			+= 	$(addprefix $(DIR_SRC), var/)

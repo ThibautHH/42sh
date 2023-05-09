@@ -12,12 +12,14 @@
 #include <unistd.h>
 
 #include "mysh/commands.h"
+#include "mysh/history.h"
 
 static bool init(mysh_t *context, char **env)
 {
     for (var_type_t type = VAR_ENV; type <= VAR_SHELL; type++)
         TAILQ_INIT(VARQ);
     TAILQ_INIT(&context->pipelines);
+    context->history = malloc(sizeof(history_t));
     load_env(context, env);
     TAILQ_INIT(ALIASQ);
     return false;
@@ -38,12 +40,14 @@ void mysh(mysh_t *context, char **env)
     prompt(context);
     errno = 0;
     for (; GET_LINE != -1; LINE_ITERATION) {
+        get_history_data(LINE, context); {
         if (LEN > 1 && *LINE != '#' && substitute_alias(context)
             && !parse_command_line(context))
             TAILQ_FOREACH(PIPELINE, &context->pipelines, entries)
                 run_pipeline(context);
         if (EXIT)
             break;
+        }
     }
     if (errno)
         DIE;
