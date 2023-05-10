@@ -42,7 +42,6 @@ static bool is_binary(mysh_t *context, char *arg)
     }
     ice_free_array((void **)path);
     return found;
-
 }
 
 void builtin_where(mysh_t *context)
