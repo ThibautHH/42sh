@@ -11,7 +11,7 @@
 #include <string.h>
 #include <stdio.h>
 
-char *sub_variable(int var_len, char *value, int off, char *line)
+static char *sub_variable(int var_len, char *value, int off, char *line)
 {
     int len = strlen(line) - (var_len + 1) + strlen(value);
     char *newline = malloc(sizeof(char) * (len + 1));
@@ -30,12 +30,14 @@ char *sub_variable(int var_len, char *value, int off, char *line)
     return line;
 }
 
-_Bool variable_exist(mysh_t *context, int off, int len)
+static _Bool variable_exist(mysh_t *context, int off, int len)
 {
     var_t *var;
     var_type_t type = VAR_ENV;
     char variable[len];
 
+    for (int i = 0; i <= len; i++)
+        variable[i] = 0;
     strncpy(variable, LINE + off, len);
     TAILQ_FOREACH(var, VARQ, entries) {
         if (strncmp(var->name, variable, len) == 0) {
@@ -47,7 +49,7 @@ _Bool variable_exist(mysh_t *context, int off, int len)
     return false;
 }
 
-_Bool handle_variable(mysh_t *context, int off)
+static _Bool handle_variable(mysh_t *context, int off)
 {
     int len = 0;
 
@@ -62,9 +64,13 @@ _Bool substitute_variables(mysh_t *context)
     if (handle_curly(context) == false)
         return false;
     for (int i = 0; LINE[i] != '\0'; i++) {
+        if (LINE[i] != '$')
+        continue;
         P = LINE + i + 1;
-        if (LINE[i] == '$' && !IS_SEPARATOR && *P != '\n')
-            return handle_variable(context, i);;
+        if (IS_SEPARATOR || *P == '\n')
+        continue;
+        if (handle_variable(context, i) == false)
+            return false;
     }
     return true;
 }
