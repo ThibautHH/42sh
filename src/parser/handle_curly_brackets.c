@@ -23,7 +23,7 @@ static _Bool search_end(mysh_t *context, int off)
     return false;
 }
 
-_Bool handle_curly(mysh_t *context)
+_Bool handle_curly_brackets(mysh_t *context)
 {
     for (int i = 0; LINE[i] != '\0'; i++) {
         if (LINE[i] != '{')
@@ -31,8 +31,10 @@ _Bool handle_curly(mysh_t *context)
         P = LINE + i + 1;
         if (IS_SEPARATOR || *P == '\n')
             continue;
-        if (search_end(context, i) == false)
+        if (search_end(context, i) == false) {
+            STATUS = 1;
             return false;
+        }
     }
     return true;
 }

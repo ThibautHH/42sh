@@ -22,6 +22,10 @@ static char *sub_variable(int var_len, char *value, int off, char *line)
         newline[i] = 0;
     newline = ice_strncpy2(newline, line, off);
     line += off + var_len + 1;
+    if (*line == '}') {
+        line++;
+        off++;
+    }
     ice_strcat(newline, value);
     ice_strcat(newline, line);
     line -= off + var_len + 1;
@@ -30,7 +34,7 @@ static char *sub_variable(int var_len, char *value, int off, char *line)
     return line;
 }
 
-static _Bool variable_exist(mysh_t *context, int off, int len)
+static _Bool variable_exist(mysh_t *context, int off, int len, int curly)
 {
     var_t *var;
     var_type_t type = VAR_ENV;
@@ -41,7 +45,8 @@ static _Bool variable_exist(mysh_t *context, int off, int len)
     strncpy(variable, LINE + off, len);
     TAILQ_FOREACH(var, VARQ, entries) {
         if (strncmp(var->name, variable, len) == 0) {
-            LINE = sub_variable(len, var->name + len + 1, off - 1, LINE);
+            LINE = sub_variable(len + curly, var->name + len + 1,
+                                off - 1 - curly, LINE);
             return true;
         }
     }
@@ -52,16 +57,21 @@ static _Bool variable_exist(mysh_t *context, int off, int len)
 static _Bool handle_variable(mysh_t *context, int off)
 {
     int len = 0;
+    int curly = 0;
 
+    if (LINE[off + 1] == '{') {
+        off += 1;
+        curly = 1;
+    }
     for (; IS_ALPHANUM(LINE[off + len + 1]); len++);
-    if (variable_exist(context, off + 1, len))
+    if (variable_exist(context, off + 1, len, curly))
         return true;
     return false;
 }
 
 _Bool substitute_variables(mysh_t *context)
 {
-    if (handle_curly(context) == false)
+    if (handle_curly_brackets(context) == false)
         return false;
     for (int i = 0; LINE[i] != '\0'; i++) {
         if (LINE[i] != '$')
@@ -69,8 +79,10 @@ _Bool substitute_variables(mysh_t *context)
         P = LINE + i + 1;
         if (IS_SEPARATOR || *P == '\n')
         continue;
-        if (handle_variable(context, i) == false)
+        if (handle_variable(context, i) == false) {
+            STATUS = 1;
             return false;
+        }
     }
     return true;
 }

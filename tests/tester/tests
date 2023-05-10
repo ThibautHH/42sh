@@ -407,5 +407,5 @@ SETUP=""
 CLEAN=""
 TESTS=
 setenv oui ls
-${oui}
+${oui} ; ${oui} | cat -e ; ${ez} ; ${ezar
 [1004-END]

@@ -155,5 +155,7 @@ static const struct {
 };
 
 _Bool parse_command_line(mysh_t *context);
+_Bool substitute_variables(mysh_t *context);
+_Bool handle_curly_brackets(mysh_t *context);
 
 #endif /* !PARSING_H_ */
