@@ -12,6 +12,8 @@ static char *swap_line(char *line, char *alias, int i, int alias_name_len)
     int len = ice_strlen(line) + ice_strlen(alias) - alias_name_len;
     char *newline = malloc(sizeof(char) * (len + 1));
 
+    if (newline == NULL)
+        return NULL;
     for (int i = 0; i <= len; i++)
         newline[i] = 0;
     newline = ice_strncpy2(newline, line, i);
@@ -44,6 +46,8 @@ _Bool substitute_alias(mysh_t *context)
     _Bool separator = false;
     P = LINE;
 
+    if (substitute_variables(context) == false)
+        return false;
     for (int i = 0; P[i] != '\0'; i++) {
         if (i != 0 && (P[i - 1] == '|' || P[i - 1] == ';' || (P[i - 1] == '&'
         && P[i] == '&') || (P[i - 1] == '|' && P[i] == '|')))
