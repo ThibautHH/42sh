@@ -65,6 +65,8 @@ bool print_alias(mysh_t *context, char *name);
 _Bool substitute_alias(mysh_t *context);
 
 alias_t *search_for_alias(mysh_t *context, char *name);
+
 _Bool substitute_variables(mysh_t *context);
+_Bool handle_curly(mysh_t *context);
 
 #endif /* !ALIAS_H_ */

@@ -69,6 +69,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				parse_command_line.c		\
 				commands.c					\
 				variables_substitution.c	\
+				handle_curly_brackets.c		\
 				)
 
 DIR_TEST	:=	./tests/
