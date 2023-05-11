@@ -11,7 +11,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "mysh.h"
 #include "mysh/commands.h"
 
 static bool init(mysh_t *context, char **env)

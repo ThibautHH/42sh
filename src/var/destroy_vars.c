@@ -8,7 +8,6 @@
 #include <malloc.h>
 
 #include "mysh.h"
-#include "ice/array.h"
 
 void destroy_vars(mysh_t *context, var_type_t type)
 {

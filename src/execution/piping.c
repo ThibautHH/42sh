@@ -12,13 +12,13 @@ void feed_redirections(mysh_t *context)
 {
     char *line = NULL;
     size_t size = 0;
-    ssize_t len = 0;
+    ssize_t len;
 
     if (!IS_REDIR_PIPED)
         return;
     if (CMDRED(STDIN_FILENO).type == REDIR_STRING)
-        write(PIPEFDS[1], CMDREDSTR(STDIN_FILENO),
-            strlen(CMDREDSTR(STDIN_FILENO)));
+        if (dprintf(PIPEFDS[1], "%s\n", CMDREDSTR(STDIN_FILENO)) < 0)
+            DIE;
     if (CMDRED(STDIN_FILENO).type == REDIR_TIL_LINE)
         while (((len = getline(&line, &size, stdin)) != -1)
             && !(line[len - 1] = '\0')
@@ -35,10 +35,11 @@ void setup_redirections(mysh_t *context)
     const FILE *STD[3] = {stdin, stdout, stderr};
 
     for (uc_t i = 0; i < 3; i++)
-        if (CMDRED(i).type == REDIR_FILE
-            && !freopen(CMDREDFILE(i).name, CMDREDFILE(i).mode,
-                (FILE *)STD[i]))
-            perror(CMDREDFILE(i).name), DIE;
+        if (CMDRED(i).type == REDIR_FILE && !freopen(CMDREDFILE(i).name,
+            CMDREDFILE(i).mode, (FILE *)STD[i])) {
+            perror(CMDREDFILE(i).name);
+            DIE;
+        }
     if (IS_REDIR_PIPED) {
         if (close(PIPEFDS[1]))
             DIE;

@@ -7,17 +7,14 @@
 
 #include <string.h>
 
-#include "ice/memory.h"
-#include "ice/string.h"
 
 #include "mysh.h"
 #include "mysh/commands.h"
-#include "mysh/parsing.h"
 #include "mysh/parsing_functions.h"
 
 static void parse_output_redirection(mysh_t *context)
 {
-    redirection_t red = { .type = REDIR_FILE, .target.file.mode = "w" };
+    redirection_t red = {.type = REDIR_FILE, .target.file.mode = "w"};
     uc_t target = STDOUT_FILENO;
 
     P++;
@@ -35,7 +32,7 @@ static void parse_output_redirection(mysh_t *context)
 
 static void parse_input_redirection(mysh_t *context)
 {
-    redirection_t red = { .type = REDIR_FILE, .target.file.mode = "r\0" };
+    redirection_t red = {.type = REDIR_FILE, .target.file.mode = "r\0"};
     char **value;
 
     P++;
@@ -47,8 +44,8 @@ static void parse_input_redirection(mysh_t *context)
         red.type = REDIR_TIL_LINE + (P[1] == '<'), P += 1 + (P[1] == '<');
     if (IS_SEPARATOR)
         TO_NEXT_TOKEN;
-    value = (red.type == REDIR_FILE) ? &red.target.file.name
-        : &red.target.string;
+    value = (red.type == REDIR_FILE) ?
+        &red.target.file.name : &red.target.string;
     DUP_ARG(*value);
     if (red.type == REDIR_FILE && red.target.file.mode[1]
         && access(*value, F_OK))
@@ -63,7 +60,8 @@ static void tokenize(mysh_t *context)
             continue;
         CMDARGC++;
         CMDARGS = realloc(CMDARGS, CMDARGSZ + sizeof(char *));
-        if (!CMDARGS) DIE;
+        if (!CMDARGS)
+            DIE;
         DUP_ARG(CMDARGS[CMDARGC - 1]);
     }
     CMDARGS[CMDARGC] = NULL;
@@ -80,10 +78,11 @@ static void handle_pplsep(mysh_t *context, size_t *separator_count)
     if (CMDPREV && CMDPREV->pipe_mode && CMDRED(STDIN_FILENO).type)
         PARSE_ERR("Ambiguous input redirect.\n", 26);
     switch (PPLSEP) {
-    case PPLSEP_PIPE: CMD->pipe_mode = PIPE_OUT; break;
-    case PPLSEP_PIPE_ERROUT: CMD->pipe_mode = PIPE_ERROUT; break;
-    case PPLSEP_END: return;
-    default: return new_pipeline(context, (COND_PPLSEP_SEQMODE : SEQ_NONE));
+        case PPLSEP_PIPE: CMD->pipe_mode = PIPE_OUT; break;
+        case PPLSEP_PIPE_ERROUT: CMD->pipe_mode = PIPE_ERROUT; break;
+        case PPLSEP_END: return;
+        default:
+            new_pipeline(context, (COND_PPLSEP_SEQMODE : SEQ_NONE)); return;
     }
     if (CMD->pipe_mode & PIPE_OUT && CMDRED(STDOUT_FILENO).type)
         PARSE_ERR("Ambiguous output redirect.\n", 27);
@@ -91,15 +90,18 @@ static void handle_pplsep(mysh_t *context, size_t *separator_count)
         PARSE_ERR("Ambiguous error output redirect.\n", 33);
 }
 
-_Bool parse_command_line(mysh_t *context)
+bool parse_command_line(mysh_t *context)
 {
     size_t separator_count = 1;
-    P = LINE, S = LINE,
-    PARSING_ERROR = 0,
-    PPLSEP = PPLSEP_NONE, LAST_PPLSEP = PPLSEP_END;
+
+    P = LINE;
+    S = LINE;
+    PARSING_ERROR = 0;
+    PPLSEP = PPLSEP_NONE;
+    LAST_PPLSEP = PPLSEP_END;
     TO_NEXT_TOKEN;
     if (!*P)
-        return 1;
+        return true;
     new_pipeline(context, SEQ_NONE);
     for (; !PARSING_ERROR && *P; TO_NEXT_TOKEN)
         if (!IS_PPLSEP) {

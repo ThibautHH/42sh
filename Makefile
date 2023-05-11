@@ -21,6 +21,7 @@ SRC			+=	$(addprefix $(DIR_SRC),\
 DIR			+=	$(addprefix $(DIR_SRC), miscellaneous/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				prompt.c			\
+				shebang.c			\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), builtins/)

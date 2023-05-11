@@ -88,7 +88,7 @@ typedef enum sequence_mode_e {
 } sequence_mode_t;
 
 typedef enum pipe_type_e {
-    PIPE_NONE,
+    PIPE_NONE = 0,
     PIPE_OUT,
     PIPE_ERR,
     PIPE_ERROUT

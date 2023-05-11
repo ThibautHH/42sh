@@ -21,5 +21,6 @@ void builtin_exit(mysh_t *context)
         return;
     }
     EXIT = 1;
-    STATUS = (CMDARGC == 2) ? ice_atoi(CMDARGS[1]) : STATUS;
+    if (CMDARGC == 2)
+        STATUS = ice_atoi(CMDARGS[1]);
 }

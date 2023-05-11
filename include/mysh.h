@@ -74,6 +74,7 @@ void mysh(mysh_t *context, char **env);
 void prompt(mysh_t *context);
 void cleanup(mysh_t *context);
 void run_pipeline(mysh_t *context);
+void handle_shebang_invocation(char **argv);
 
 static inline bool is_stdin_tty(mysh_t *context)
 {
