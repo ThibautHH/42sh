@@ -5,8 +5,6 @@
 ** alias
 */
 
-
-
 #ifndef ALIAS_H_
     #define ALIAS_H_
 

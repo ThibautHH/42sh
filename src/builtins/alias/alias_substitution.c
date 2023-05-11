@@ -32,7 +32,7 @@ static char *swap_line(char *line, char *alias, int i, int alias_name_len)
 }
 
 static alias_t *is_loop(mysh_t *context, alias_t *alias,
-                        char *old_name, size_t rec)
+    char *old_name, size_t rec)
 {
     if (strcmp(old_name, alias->value) == 0 || rec > context->alias.count) {
         if (dprintf(2, "Alias loop.\n") < 0)
@@ -43,7 +43,7 @@ static alias_t *is_loop(mysh_t *context, alias_t *alias,
 }
 
 static alias_t *preshot_alias(mysh_t *context, char *old_name,
-                            char *old_value, size_t rec)
+    char *old_value, size_t rec)
 {
     alias_t *alias;
 
