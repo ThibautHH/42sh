@@ -13,5 +13,8 @@ void execute_event_history_cmd(mysh_t *context, char *str)
     mysh_t context2 = *context;
 
     context2.line = str;
-    run
+    parse_command_line(&context2);
+    TAILQ_FOREACH(context2.current_pipeline, &context2.pipelines, entries)
+        run_pipeline(&context2);
+    free_pipelines(&context2);
 }
