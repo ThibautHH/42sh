@@ -415,6 +415,26 @@ NAME="shell Variable substitution"
 SETUP=""
 CLEAN=""
 TESTS=
-set oui ls
+set oui=ls
 ${oui} ; ${oui} | cat -e
 [1005-END]
+
+[1100]
+NAME="built_in set"
+SETUP=""
+TESTS=
+set oui ls
+set non=ls
+ls $oui
+$non
+[1100-END]
+
+[1101]
+NAME="built_in set error handling"
+SETUP=""
+TESTS=
+set =e
+set =
+set oui)=ls
+set )=
+[1101-END]
