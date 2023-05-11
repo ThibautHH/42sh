@@ -10,6 +10,13 @@
 
 #include "mysh.h"
 
+static void write_error(mysh_t *context, char *error)
+{
+    if (fputs(error, stderr) < 0)
+        DIE;
+    STATUS = 1;
+}
+
 static void local_var_update(mysh_t *context, char *name, char *value)
 {
     var_t *var;
@@ -62,9 +69,8 @@ size_t get_name_len(mysh_t *context, size_t i)
     for (size_t y = 0; CMDARGS[i][y]; y++) {
         if (!IS_ALPHANUM(CMDARGS[i][y]) && (CMDARGS[i][y] != '='
             || CMDARGS[i][y + 1] == 0 || y == 0)) {
-            dprintf(2, "set: Variable name must contain"
+            write_error(context, "set: Variable name must contain"
                 " alphanumeric characters.\n");
-            STATUS = 1;
             return 0;
         }
         if (CMDARGS[i][y] == '=') {
