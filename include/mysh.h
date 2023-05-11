@@ -48,6 +48,7 @@
     #define PIPEFDS (context->pipefds)
     #define STATUS (context->status)
     #define EXIT (context->exit)
+    #define HISTORY (context->history)
 
     #define ARGV (CMDARGS ? CMDARGS : (char *[]){CMDCMD, NULL})
 
@@ -72,7 +73,6 @@ typedef struct mysh_s {
     uc_t status;
     bool exit;
     list_t *history;
-    int idx;
 } mysh_t;
 
 void mysh(mysh_t *context, char **env);

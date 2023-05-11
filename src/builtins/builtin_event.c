@@ -6,6 +6,7 @@
 */
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "mysh.h"
 #include "mysh/history.h"
@@ -23,11 +24,11 @@ static int handle_precise_event(mysh_t *context)
         str[j] = CMDARGS[0][i];
     str[j] = '\0';
     for (list_node_t *node = HISTORY->tail; node != NULL;
-    node = node->prev) {
+        node = node->prev) {
         tmp = node->value;
         if (ice_strstr(tmp->cmd, str) != NULL) {
             printf("%s\n", tmp->cmd);
-            handle_pipe(context, tmp->cmd);
+            execute_event_history_cmd(context, tmp->cmd);
             return 0;
         }
     }
@@ -39,15 +40,15 @@ static int handle_search_event(mysh_t *context)
 {
     int nb_event = ice_atoi(CMDARGS[0] + 1);
     history_t *tmp;
+
     if (nb_event <= 0)
         return 1;
-
     for (list_node_t *node = HISTORY->tail; node != NULL;
-    node = node->prev) {
+        node = node->prev) {
         tmp = node->value;
         if (nb_event == tmp->index) {
             printf("%s\n", tmp->cmd);
-            handle_pipe(tmp->cmd, context);
+            execute_event_history_cmd(context, tmp->cmd);
             return 0;
         }
     }
@@ -65,14 +66,14 @@ static int handle_last_event(mysh_t *context)
     tmp = node->value;
     if (CMDARGS[0][1] == '!' && CMDARGS[0][2] == '\0') {
         printf("%s\n", tmp->cmd);
-        handle_pipe(tmp->cmd, context);
+        execute_event_history_cmd(context, tmp->cmd);
         return 0;
     }
     return 1;
 }
 
 static int search_in_history(char *cmd, mysh_t *context,
-ull_t count)
+    ull_t count)
 {
     size_t cmd_size = ice_strlen(CMDARGS[0]) - 1;
     int j = 0;
@@ -87,7 +88,7 @@ ull_t count)
     ice_strncpy(str2, cmd, cmd_size);
     if (ice_strcmp(str2, str1) == 0) {
         printf("%s\n", cmd);
-        handle_pipe(cmd, context);
+        execute_event_history_cmd(context, cmd);
         return 1;
     }
     if (count > HISTORY->size)
@@ -95,7 +96,7 @@ ull_t count)
     return 0;
 }
 
-void event_history(mysh_t *context)
+void builtin_event(mysh_t *context)
 {
     history_t *tmp;
     ull_t count = 0;
@@ -107,7 +108,7 @@ void event_history(mysh_t *context)
     if (handle_last_event(context) == 0)
         return;
     for (list_node_t *node = HISTORY->tail; node != NULL;
-        node = node->prev, count++) {
+    node = node->prev, count++) {
         tmp = node->value;
         if (search_in_history(tmp->cmd, context, count) == 1)
             break;

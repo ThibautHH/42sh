@@ -16,6 +16,8 @@ static char *get_date(char *date)
 {
     char *r_date = malloc(sizeof(char) * 6);
 
+    if (r_date == NULL)
+        return NULL;
     for (int i = 0, j = 0; i < 16; i++)
         if (i >= 11 && i < 16) {
             r_date[j] = date[i];
@@ -35,8 +37,13 @@ void get_history_data(char *buffer, mysh_t *context)
         return;
     time(&curr_time);
     times = ice_strdup(asctime(localtime(&curr_time)));
+    if (times == NULL)
+        return;
     tmp->date = get_date(times);
     tmp->cmd = ice_strdup(buffer);
-    tmp->index = context->history->size + 1;
-    list_add(context->history, tmp);
+    if (tmp->cmd == NULL || tmp->date == NULL)
+        return;
+    tmp->index = HISTORY->size + 1;
+    if (list_add(HISTORY, tmp) == false)
+        return;
 }

@@ -17,7 +17,8 @@ typedef struct history_s {
     int check;
 } history_t;
 
-    void flag_c(mysh_t *context);
-    void get_history_data(char *buffer, mysh_t *context);
+void flag_c(mysh_t *context);
+void get_history_data(char *buffer, mysh_t *context);
+void execute_event_history_cmd(mysh_t *context, char *str);
 
 #endif

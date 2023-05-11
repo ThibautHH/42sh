@@ -23,7 +23,9 @@ static bool init(mysh_t *context, char **env)
     for (var_type_t type = VAR_ENV; type <= VAR_SHELL; type++)
         TAILQ_INIT(VARQ);
     TAILQ_INIT(&context->pipelines);
-    context->history = list_create();
+    HISTORY = list_create();
+    if (HISTORY == NULL)
+        return true;
     load_env(context, env);
     TAILQ_INIT(ALIASQ);
     return false;
@@ -33,6 +35,7 @@ void cleanup(mysh_t *context)
 {
     for (var_type_t type = VAR_ENV; type <= VAR_SHELL; type++)
         destroy_vars(context, type);
+    list_destroy(HISTORY);
     free_pipelines(context);
     destroy_alias(context);
     free(LINE);

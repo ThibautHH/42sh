@@ -39,6 +39,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				builtin_echo.c					\
 				builtin_repeat.c				\
 				builtin_history.c				\
+				builtin_event.c 				\
 				builtin_alias.c					\
 				builtin_unalias.c				\
 				)
@@ -60,7 +61,8 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 DIR			+= $(addprefix $(DIR_SRC), history/)
 SRC			+= $(addprefix $(lastword $(DIR)),\
 				get_history_data.c				\
-				flag_c.c					\
+				flag_c.c						\
+				execute_event_history_cmd.c		\
 				)
 
 DIR			+= 	$(addprefix $(DIR_SRC), var/)
