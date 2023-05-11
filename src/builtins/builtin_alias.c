@@ -66,7 +66,7 @@ void builtin_alias(mysh_t *context)
         print_alias(context, CMDARGS[1]);
         return;
     }
-    if (is_alias_forbidden(CMDARGS[1]) == true) {
+    if (is_alias_forbidden(context, CMDARGS[1]) == true) {
         STATUS = 1;
         return;
     }
