@@ -2,31 +2,100 @@
 ** EPITECH PROJECT, 2023
 ** 42sh
 ** File description:
-** builtin_setenv.c
+** builtin_set.c
 */
 
 #include "mysh.h"
 #include "mysh/builtins.h"
 #include "mysh/parsing.h"
+#include "mysh/parsing_functions.h"
+
+#include <stdio.h>
+#include <string.h>
+
+static void local_var_update(mysh_t *context, char *name, char *value)
+{
+    var_t *var;
+    var_type_t type = VAR_SHELL;
+
+    TAILQ_FOREACH(var, VARQ, entries)
+        if (is_var_named(var, name)) {
+            value == NULL ? *VARV(var) = 0 : ice_strcpy(VARV(var), value);
+            return;
+        }
+    var = malloc(sizeof(var_t));
+    if (!var)
+        DIE;
+    var->name = &(*VARV(var)) - (ice_strlen(name) + 1);
+    ice_strcpy(VARN(var), name);
+    if (value != NULL)
+        ice_strcpy(VARV(var), value);
+    VARV(var)[-1] = '=';
+    TAILQ_INSERT_TAIL(VARQ, var, entries);
+    VARC++;
+    free(name);
+}
+
+static void display_local_var(mysh_t *context)
+{
+    var_t *var;
+    var_type_t type = VAR_SHELL;
+    int len = 0;
+
+    TAILQ_FOREACH(var, VARQ, entries) {
+        for (; var->name[len] != '='; len++);
+        if (printf("%.*s", len, var->name) < 0)
+            DIE;
+        if (var->name[len + 1] != 0)
+            printf("\t");
+        else {
+            printf("\n");
+            continue;
+        }
+        if (printf("%s\n", var->name + len + 1) < 0)
+            DIE;
+    }
+    STATUS = 0;
+}
+
+size_t get_name_len(mysh_t *context, int i)
+{
+    size_t name_len = 1;
+
+    for (size_t y = 0; CMDARGS[i][y]; y++) {
+        if (!IS_ALPHANUM(CMDARGS[i][y]) && (CMDARGS[i][y] != '='
+            || CMDARGS[i][y + 1] == 0 || y == 0)) {
+            dprintf(2, "set: Variable name must contain"
+                    " alphanumeric characters.\n");
+            STATUS = 1;
+            return 0;
+        }
+        if (CMDARGS[i][y] == '=') {
+            return name_len;
+        }
+        name_len++;
+    }
+    return name_len;
+}
 
 void builtin_set(mysh_t *context)
 {
+    size_t name_len = 1;
+    char *value;
+    char *name;
+
     if (CMDARGC < 2)
-        return builtin_at(context);
-    if (CMDARGC > 3) {
-        DWRITE(STDERR_FILENO, "setenv: Too many arguments.\n", 28);
-        STATUS = 1;
-        return;
-    }
-    char *name = CMDARGS[1];
-    for (size_t i = 0; name[i]; i++)
-        if (!(IS_ALPHANUM(name[i]) || name[i] == '_')) {
-            DWRITE(STDERR_FILENO, "setenv: Variable name must contain "
-                "alphanumeric characters.\n", 60);
-            STATUS = 1;
+        return display_local_var(context);
+    for (size_t i = 1; i < CMDARGC; i++) {
+        value = NULL;
+        name_len = get_name_len(context, i);
+        if (name_len == 0)
             return;
-        }
-    char *value = CMDARGC == 3 ? CMDARGS[2] : "";
-    var_update(context, name, value, VAR_SHELL);
+        value = CMDARGS[i] + name_len;
+        name = malloc(sizeof(char) * name_len);
+        name[name_len - 1] = 0;
+        strncpy(name, CMDARGS[i], name_len - 1);
+        local_var_update(context, name, value);
+    }
     STATUS = 0;
 }

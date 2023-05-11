@@ -397,3 +397,72 @@ SETUP=""
 TESTS=
 ./tests/tester/bin/fpe
 [910-END]
+
+[1001]
+NAME="simple Variable substitution"
+SETUP=""
+CLEAN=""
+TESTS=
+setenv oui ls
+$oui
+setenv non include
+$oui $non | cat -e
+[1001-END]
+
+[1002]
+NAME="error handling Variable substitution"
+SETUP=""
+CLEAN=""
+TESTS=
+$
+$a
+[1002-END]
+
+[1003]
+NAME="error handling curly brackets"
+SETUP=""
+CLEAN=""
+TESTS=
+{
+{ 
+{e
+{ ere
+[1003-END]
+
+[1004]
+NAME="Variable substitution with curly brackets"
+SETUP=""
+CLEAN=""
+TESTS=
+setenv oui ls
+${oui} ; ${oui} | cat -e ; ${ez} ; ${ezar
+[1004-END]
+
+[1005]
+NAME="shell Variable substitution"
+SETUP=""
+CLEAN=""
+TESTS=
+set oui=ls
+${oui} ; ${oui} | cat -e
+[1005-END]
+
+[1100]
+NAME="built_in set"
+SETUP=""
+TESTS=
+set oui ls
+set non=ls
+ls $oui
+$non
+[1100-END]
+
+[1101]
+NAME="built_in set error handling"
+SETUP=""
+TESTS=
+set =e
+set =
+set oui)=ls
+set )=
+[1101-END]

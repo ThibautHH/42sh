@@ -44,5 +44,6 @@ var_t *var_get(mysh_t *context, char *name, var_type_t type);
 void var_add(mysh_t *context, char *var, var_type_t type);
 void var_remove(mysh_t *context, char *name, var_type_t type);
 void var_update(mysh_t *context, char *name, char *value, var_type_t type);
+bool is_var_named(var_t *var, char *name);
 
 #endif /* !VAR_H */
