@@ -34,6 +34,22 @@ static char *sub_variable(int var_len, char *value, int off, char *line)
     return line;
 }
 
+static _Bool exist_in_shell_var(mysh_t *context, int off, int curly,
+                                char *variable)
+{
+    var_t *var;
+    var_type_t type = VAR_SHELL;
+    int len = strlen(variable);
+
+    TAILQ_FOREACH(var, VARQ, entries) {
+        if (strncmp(var->name, variable, len) == 0) {
+            LINE = sub_variable(len + curly, var->name + len + 1, off, LINE);
+            return true;
+        }
+    }
+    return false;
+}
+
 static _Bool variable_exist(mysh_t *context, int off, int len, int curly)
 {
     var_t *var;
@@ -43,6 +59,8 @@ static _Bool variable_exist(mysh_t *context, int off, int len, int curly)
     for (int i = 0; i <= len; i++)
         variable[i] = 0;
     strncpy(variable, LINE + off, len);
+    if (exist_in_shell_var(context, off - 1 - curly, curly, variable))
+        return true;
     TAILQ_FOREACH(var, VARQ, entries) {
         if (strncmp(var->name, variable, len) == 0) {
             LINE = sub_variable(len + curly, var->name + len + 1,

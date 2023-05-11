@@ -13,11 +13,6 @@ void builtin_set(mysh_t *context)
 {
     if (CMDARGC < 2)
         return builtin_at(context);
-    if (CMDARGC > 3) {
-        DWRITE(STDERR_FILENO, "setenv: Too many arguments.\n", 28);
-        STATUS = 1;
-        return;
-    }
     char *name = CMDARGS[1];
     for (size_t i = 0; name[i]; i++)
         if (!(IS_ALPHANUM(name[i]) || name[i] == '_')) {

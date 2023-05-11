@@ -409,3 +409,12 @@ TESTS=
 setenv oui ls
 ${oui} ; ${oui} | cat -e ; ${ez} ; ${ezar
 [1004-END]
+
+[1005]
+NAME="shell Variable substitution"
+SETUP=""
+CLEAN=""
+TESTS=
+set oui ls
+${oui} ; ${oui} | cat -e
+[1005-END]
