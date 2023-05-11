@@ -47,6 +47,7 @@
     #define PIPEFDS (context->pipefds)
     #define STATUS (context->status)
     #define EXIT (context->exit)
+    #define HISTORY (context->history)
 
     #define ARGV (CMDARGS ? CMDARGS : (char *[]){CMDCMD, NULL})
 
@@ -70,14 +71,12 @@ typedef struct mysh_s {
     uc_t status;
     bool exit;
     list_t *history;
-    int idx;
 } mysh_t;
 
 void mysh(mysh_t *context, char **env);
 void prompt(mysh_t *context);
 void cleanup(mysh_t *context);
 void run_pipeline(mysh_t *context);
-char *input_edition(mysh_t *context);
 
 static inline bool is_stdin_tty(mysh_t *context)
 {

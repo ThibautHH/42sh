@@ -16,13 +16,14 @@
 #include "mysh.h"
 #include "mysh/commands.h"
 #include "mysh/history.h"
+#include "mysh/line_edition.h"
 
 static bool init(mysh_t *context, char **env)
 {
     for (var_type_t type = VAR_ENV; type <= VAR_SHELL; type++)
         TAILQ_INIT(VARQ);
     TAILQ_INIT(&context->pipelines);
-    context->history = list_create();
+    HISTORY = list_create();
     load_env(context, env);
     return false;
 }
@@ -41,7 +42,7 @@ void mysh(mysh_t *context, char **env)
         exit(84);
     prompt(context), errno = 0;
     for (; !EXIT && GET_LINE != -1; LINE_ITERATION) {
-        LINE = input_edition(context);
+        input_edition(context);
         get_history_data(LINE, context);
         if (LEN > 1 && *LINE != '#' && !parse_command_line(context))
             TAILQ_FOREACH(PIPELINE, &context->pipelines, entries)
