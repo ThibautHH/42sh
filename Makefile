@@ -34,6 +34,16 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				builtin_setenv.c				\
 				builtin_unset.c					\
 				builtin_unsetenv.c				\
+				builtin_alias.c					\
+				builtin_unalias.c				\
+				)
+
+DIR			+=	$(addprefix $(DIR_SRC), ./builtins/alias/)
+SRC			+=	$(addprefix $(lastword $(DIR)),\
+				destroy_alias.c					\
+				is_alias_forbidden.c			\
+				print_alias.c					\
+				alias_substitution.c			\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), env/)
@@ -59,8 +69,10 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 
 DIR			+=	$(addprefix $(DIR_SRC), parser/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				parse_command_line.c	\
-				commands.c				\
+				parse_command_line.c		\
+				commands.c					\
+				variables_substitution.c	\
+				handle_curly_brackets.c		\
 				)
 
 DIR_TEST	:=	./tests/

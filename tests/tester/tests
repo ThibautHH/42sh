@@ -144,6 +144,87 @@ TESTS=
 setenv arg1 arg2 arg3
 [305-END]
 
+[400]
+NAME="Built-in alias with and without arg"
+SETUP=""
+CLEAN=""
+TESTS=
+alias oui ls
+alias oui
+alias
+[400-END]
+
+[401]
+NAME="Built-in unalias simple"
+SETUP=""
+CLEAN=""
+TESTS=
+alias oui ls
+unalias oui
+alias
+[401-END]
+
+[402]
+NAME="Built-in unalias multiple"
+SETUP=""
+CLEAN=""
+TESTS=
+alias oui ls
+alias non ls
+alias win ls
+unalias oui non win
+alias
+[402-END]
+
+[403]
+NAME="Built-in alias substitution"
+SETUP=""
+CLEAN=""
+TESTS=
+alias oui ls
+oui
+unalias oui
+oui
+[403-END]
+
+[404]
+NAME="Built-in alias complex substitution"
+SETUP=""
+CLEAN=""
+TESTS=
+alias oui ls -a
+oui ; alias oui cat -e ; ls | oui
+ls | oui
+[404-END]
+
+[405]
+NAME="Built-in simple alias loop"
+SETUP=""
+CLEAN=""
+TESTS=
+alias a b
+alias b a
+a
+[405-END]
+
+[406]
+NAME="Built-in complex alias loop"
+SETUP=""
+CLEAN=""
+TESTS=
+alias a b ; alias b c ; alias c d ; alias d a
+a
+[406-END]
+
+[407]
+NAME="Built-in alias false loop"
+SETUP=""
+CLEAN=""
+TESTS=
+alias ls ls -a
+ls
+[407-END]
+
 [501]
 NAME="Execve: $PATH"
 SETUP=""
@@ -316,3 +397,72 @@ SETUP=""
 TESTS=
 ./tests/tester/bin/fpe
 [910-END]
+
+[1001]
+NAME="simple Variable substitution"
+SETUP=""
+CLEAN=""
+TESTS=
+setenv oui ls
+$oui
+setenv non include
+$oui $non | cat -e
+[1001-END]
+
+[1002]
+NAME="error handling Variable substitution"
+SETUP=""
+CLEAN=""
+TESTS=
+$
+$a
+[1002-END]
+
+[1003]
+NAME="error handling curly brackets"
+SETUP=""
+CLEAN=""
+TESTS=
+{
+{ 
+{e
+{ ere
+[1003-END]
+
+[1004]
+NAME="Variable substitution with curly brackets"
+SETUP=""
+CLEAN=""
+TESTS=
+setenv oui ls
+${oui} ; ${oui} | cat -e ; ${ez} ; ${ezar
+[1004-END]
+
+[1005]
+NAME="shell Variable substitution"
+SETUP=""
+CLEAN=""
+TESTS=
+set oui=ls
+${oui} ; ${oui} | cat -e
+[1005-END]
+
+[1100]
+NAME="built_in set"
+SETUP=""
+TESTS=
+set oui ls
+set non=ls
+ls $oui
+$non
+[1100-END]
+
+[1101]
+NAME="built_in set error handling"
+SETUP=""
+TESTS=
+set =e
+set =
+set oui)=ls
+set )=
+[1101-END]

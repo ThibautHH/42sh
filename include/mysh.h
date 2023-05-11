@@ -19,6 +19,7 @@
 
     #include "mysh/parsing.h"
     #include "mysh/var.h"
+    #include "mysh/alias.h"
 
     #define IS_END(x) (((x) == '\0') || ((x) == '\n'))
     #define IS_SPACE(x) (((x) == ' ') || ((x) == '\t'))
@@ -59,6 +60,7 @@
 
 typedef struct mysh_s {
     var_head_t vars[2];
+    alias_head_t alias;
     char *line;
     size_t size;
     ssize_t len;
