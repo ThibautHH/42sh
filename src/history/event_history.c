@@ -79,6 +79,8 @@ ull_t count)
     char *str1 = malloc(sizeof(char) * (cmd_size + 1));
     char *str2 = malloc(sizeof(char) * (cmd_size + 1));
 
+    if (str1 == NULL || str2 == NULL)
+        return 0;
     for (int i = 1; CMDARGS[0][i] != '\0'; i++, j++)
         str1[j] = CMDARGS[0][i];
     str1[j] = '\0';
