@@ -53,6 +53,8 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				get_cmd_path.c		\
 				piping.c			\
 				run_pipeline.c		\
+				print_sigerror.c	\
+				run_builtins.c		\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), parser/)
