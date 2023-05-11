@@ -83,7 +83,6 @@ _Bool substitute_alias(mysh_t *context)
     _Bool separator = false;
 
     P = LINE;
-
     if (substitute_variables(context) == false)
         return false;
     for (int i = 0; P[i] != '\0'; i++) {
