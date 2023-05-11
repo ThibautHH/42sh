@@ -22,7 +22,7 @@ static int handle_precise_event(mysh_t *context)
     for (int i = 2; CMDARGS[0][i] != '\0' && CMDARGS[0][i] != '?'; i++, j++)
         str[j] = CMDARGS[0][i];
     str[j] = '\0';
-    for (list_node_t *node = context->history->tail; node != NULL;
+    for (list_node_t *node = HISTORY->tail; node != NULL;
     node = node->prev) {
         tmp = node->value;
         if (ice_strstr(tmp->cmd, str) != NULL) {
@@ -42,7 +42,7 @@ static int handle_search_event(mysh_t *context)
     if (nb_event <= 0)
         return 1;
 
-    for (list_node_t *node = context->history->tail; node != NULL;
+    for (list_node_t *node = HISTORY->tail; node != NULL;
     node = node->prev) {
         tmp = node->value;
         if (nb_event == tmp->index) {
@@ -58,7 +58,7 @@ static int handle_search_event(mysh_t *context)
 static int handle_last_event(mysh_t *context)
 {
     history_t *tmp;
-    list_node_t *node = context->history->tail;
+    list_node_t *node = HISTORY->tail;
 
     if (node == NULL)
         return 0;
@@ -88,7 +88,7 @@ ull_t count)
         handle_pipe(cmd, context);
         return 1;
     }
-    if (count > context->history->size)
+    if (count > HISTORY->size)
         ice_printf("%s: Event not found.\n", str1);
     return 0;
 }
@@ -104,7 +104,7 @@ void event_history(mysh_t *context)
         return;
     if (handle_last_event(context) == 0)
         return;
-    for (list_node_t *node = context->history->tail; node != NULL;
+    for (list_node_t *node = HISTORY->tail; node != NULL;
     node = node->prev, count++) {
         tmp = node->value;
         if (search_in_history(tmp->cmd, context, count) == 1)

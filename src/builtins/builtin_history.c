@@ -36,7 +36,7 @@ void builtin_history(mysh_t *context)
         STATUS = 0;
         return;
     }
-    for (list_node_t *node = context->history->head; node; node = node->next) {
+    for (list_node_t *node = HISTORY->head; node; node = node->next) {
         tmp = node->value;
         if (tmp->index < 10)
             ice_printf("    %d  %s  %s", tmp->index, tmp->date, tmp->cmd);

@@ -11,6 +11,6 @@
 
 void flag_c(mysh_t *context)
 {
-    for (list_node_t *node = context->history->tail; node; node = node->prev)
-        list_remove_node(context->history, node);
+    for (list_node_t *node = HISTORY->tail; node; node = node->prev)
+        list_remove_node(HISTORY, node);
 }

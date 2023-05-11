@@ -31,12 +31,12 @@ void get_history_data(char *buffer, mysh_t *context)
     char *times;
     history_t *tmp = malloc(sizeof(history_t));
 
-    if (buffer[0] == '!')
+    if (buffer[0] == '!' || buffer[0] == '\n')
         return;
     time(&curr_time);
     times = ice_strdup(asctime(localtime(&curr_time)));
     tmp->date = get_date(times);
     tmp->cmd = ice_strdup(buffer);
-    tmp->index = context->history->size + 1;
-    list_add(context->history, tmp);
+    tmp->index = HISTORY->size + 1;
+    list_add(HISTORY, tmp);
 }
