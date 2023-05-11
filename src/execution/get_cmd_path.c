@@ -8,7 +8,7 @@
 #include <malloc.h>
 #include <unistd.h>
 
-#include "mysh.h"
+#include "mysh/commands.h"
 
 static bool set_cmd_path(mysh_t *context, char *path)
 {
@@ -22,39 +22,45 @@ static bool set_cmd_path(mysh_t *context, char *path)
     return false;
 }
 
+static char *set_bin_to_path(mysh_t *context, char **binpath, char **p,
+    path_size_t *pathsize)
+{
+    bool slash;
+    char *tmp;
+
+    slash = ((*binpath)[pathsize->dirlen - 1] == '/');
+    if (!slash)
+        (*binpath)[pathsize->dirlen++] = '/';
+    ice_strcpy(*binpath + pathsize->dirlen, CMDCMD);
+    (*binpath)[pathsize->pathsize - slash - 1] = '\0';
+    if (!access(*binpath, F_OK)) {
+        tmp = *binpath;
+        *binpath = NULL;
+        return tmp;
+    }
+    *p += pathsize->dirlen - !slash + 1;
+    return NULL;
+}
+
 static char *compose_path(mysh_t *context, char **p)
 {
     static char *binpath = NULL;
-    size_t pathsize;
-    size_t dirlen;
-    bool slash;
-    char *tmp;
+    path_size_t pathsize;
 
     if (!p) {
         free(binpath);
         binpath = NULL;
         return NULL;
     }
-    dirlen = ice_strtil(*p, ':');
-    if (!dirlen)
+    pathsize.dirlen = ice_strtil(*p, ':');
+    if (!pathsize.dirlen)
         return NULL;
-    pathsize = dirlen + ice_strlen(CMDCMD) + 2;
-    binpath = realloc(binpath, pathsize);
+    pathsize.pathsize = pathsize.dirlen + ice_strlen(CMDCMD) + 2;
+    binpath = realloc(binpath, pathsize.pathsize);
     if (!binpath)
         DIE;
-    ice_strncpy2(binpath, *p, dirlen);
-    slash = (binpath[dirlen - 1] == '/');
-    if (!slash)
-        binpath[dirlen++] = '/';
-    ice_strcpy(binpath + dirlen, CMDCMD);
-    binpath[pathsize - slash - 1] = '\0';
-    if (!access(binpath, F_OK)) {
-        tmp = binpath;
-        binpath = NULL;
-        return tmp;
-    }
-    *p += dirlen - !slash + 1;
-    return NULL;
+    ice_strncpy2(binpath, *p, pathsize.dirlen);
+    return set_bin_to_path(context, &binpath, p, &pathsize);
 }
 
 static char *get_bin_path(mysh_t *context)
