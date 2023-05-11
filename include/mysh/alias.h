@@ -42,10 +42,11 @@ void destroy_alias(mysh_t *context);
 /**
  * @brief Check if the alias name is OK
  *
+ * @param context Main structure of mysh
  * @param alias The name of the wanted alias
  * @return bool true if a forbidden name is used
  */
-bool is_alias_forbidden(char *alias);
+bool is_alias_forbidden(mysh_t *context, char *alias);
 
 /**
  * @brief Print the value of a given alias

@@ -6,7 +6,8 @@
 */
 
 #include "mysh.h"
-#include "ice/printf.h"
+
+#include <stdio.h>
 
 bool print_alias(mysh_t *context, char *name)
 {
@@ -14,14 +15,16 @@ bool print_alias(mysh_t *context, char *name)
 
     if (name == NULL) {
         TAILQ_FOREACH(alias, ALIASQ, entries) {
-            ice_printf("%s\t", alias->name);
-            ice_printf("%s\n", alias->value);
+            if (printf("%s\t", alias->name) < 0
+                || printf("%s\n", alias->value) < 0)
+                DIE;
         }
         return true;
     }
     TAILQ_FOREACH(alias, ALIASQ, entries) {
         if (ice_strcmp(alias->name, name) == 0) {
-            ice_printf("%s\n", alias->value);
+            if (printf("%s\n", alias->value) < 0)
+                DIE;
             return true;
         }
     }
