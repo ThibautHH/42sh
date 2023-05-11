@@ -58,7 +58,7 @@ static alias_t *preshot_alias(mysh_t *context, char *old_name,
     return NULL;
 }
 
-static _Bool aliasing(mysh_t *context, int off)
+static bool aliasing(mysh_t *context, int off)
 {
     alias_t *alias;
     int alias_name_len = 0;
@@ -78,9 +78,9 @@ static _Bool aliasing(mysh_t *context, int off)
     return true;
 }
 
-_Bool substitute_alias(mysh_t *context)
+bool substitute_alias(mysh_t *context)
 {
-    _Bool separator = false;
+    bool separator = false;
 
     P = LINE;
     if (substitute_variables(context) == false)

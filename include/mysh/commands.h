@@ -15,7 +15,7 @@ typedef struct path_size_s {
     size_t dirlen;
 } path_size_t;
 
-_Bool get_cmd_path(mysh_t *context);
+bool get_cmd_path(mysh_t *context);
 void new_command(mysh_t *context);
 void new_pipeline(mysh_t *context, sequence_mode_t mode);
 void free_pipelines(mysh_t *context);

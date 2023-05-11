@@ -10,7 +10,7 @@
 
     #include "mysh.h"
 
-static inline _Bool is_char_escaped(mysh_t *context)
+static inline bool is_char_escaped(mysh_t *context)
 {
     size_t escape_count = 0;
 

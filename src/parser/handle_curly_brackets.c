@@ -9,7 +9,7 @@
 
 #include "mysh/parsing_functions.h"
 
-static _Bool search_end(mysh_t *context, int off)
+static bool search_end(mysh_t *context, int off)
 {
     for (int i = off + 1; LINE[i] != '\0'; i++) {
         if (LINE[i] == '}')
@@ -23,7 +23,7 @@ static _Bool search_end(mysh_t *context, int off)
     return false;
 }
 
-_Bool handle_curly_brackets(mysh_t *context)
+bool handle_curly_brackets(mysh_t *context)
 {
     for (int i = 0; LINE[i] != '\0'; i++) {
         if (LINE[i] != '{')

@@ -63,7 +63,7 @@ bool print_alias(mysh_t *context, char *name);
  * @param context Main structure of mysh
  * @return bool return true everytime
  */
-_Bool substitute_alias(mysh_t *context);
+bool substitute_alias(mysh_t *context);
 
 alias_t *search_for_alias(mysh_t *context, char *name);
 

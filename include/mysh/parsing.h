@@ -118,7 +118,7 @@ typedef struct command_s {
         builtin_t id;
     } command;
     pid_t pid;
-    _Bool is_builtin;
+    bool is_builtin;
     char **args;
     size_t argc;
     pipe_type_t pipe_mode;
@@ -137,7 +137,7 @@ typedef struct pipeline_s {
 typedef struct parsing_context_s {
     pplsep_t pplsep, last_pplsep;
     char *p, *s;
-    _Bool error;
+    bool error;
 } parsing_context_t;
 
 static const struct {
@@ -154,8 +154,8 @@ static const struct {
     { "\n", 1, RS_NONE }
 };
 
-_Bool parse_command_line(mysh_t *context);
-_Bool substitute_variables(mysh_t *context);
-_Bool handle_curly_brackets(mysh_t *context);
+bool parse_command_line(mysh_t *context);
+bool substitute_variables(mysh_t *context);
+bool handle_curly_brackets(mysh_t *context);
 
 #endif /* !PARSING_H_ */
