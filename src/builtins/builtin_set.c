@@ -43,12 +43,12 @@ static void display_local_var(mysh_t *context)
         for (; var->name[len] != '='; len++);
         if (printf("%.*s", len, var->name) < 0)
             DIE;
-        if (var->name[len + 1] != 0)
-            printf("\t");
-        else {
-            printf("\n");
+        if (var->name[len + 1] != 0 && printf("\t") < 0)
+            DIE;
+        if (var->name[len + 1] == 0 && printf("\n") < 0)
+            DIE;
+        if (var->name[len + 1] == 0)
             continue;
-        }
         if (printf("%s\n", var->name + len + 1) < 0)
             DIE;
     }
