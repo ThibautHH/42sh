@@ -5,11 +5,11 @@
 ** environment_manipulation.c
 */
 
-#include <stdlib.h>
+#include <malloc.h>
 
 #include "mysh.h"
 
-static bool is_var_named(var_t *var, char *name)
+bool is_var_named(var_t *var, char *name)
 {
     size_t nlen = ice_strlen(name);
 

@@ -6,7 +6,6 @@
 */
 
 #include "mysh.h"
-#include "ice/memory.h"
 
 void load_env(mysh_t *context, char **env)
 {

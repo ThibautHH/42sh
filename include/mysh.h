@@ -19,6 +19,7 @@
 
     #include "mysh/parsing.h"
     #include "mysh/var.h"
+    #include "mysh/alias.h"
 
     #define IS_END(x) (((x) == '\0') || ((x) == '\n'))
     #define IS_SPACE(x) (((x) == ' ') || ((x) == '\t'))
@@ -59,6 +60,7 @@
 
 typedef struct mysh_s {
     var_head_t vars[2];
+    alias_head_t alias;
     char *line;
     size_t size;
     ssize_t len;
@@ -74,6 +76,7 @@ void mysh(mysh_t *context, char **env);
 void prompt(mysh_t *context);
 void cleanup(mysh_t *context);
 void run_pipeline(mysh_t *context);
+void handle_shebang_invocation(char **argv);
 
 static inline bool is_stdin_tty(mysh_t *context)
 {

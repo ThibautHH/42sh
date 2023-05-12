@@ -11,7 +11,9 @@
 
 void builtin_at(mysh_t *context)
 {
-    var_t *var; var_type_t type = VAR_SHELL;
+    var_t *var;
+    var_type_t type = VAR_SHELL;
+
     TAILQ_FOREACH(var, VARQ, entries)
         if (printf("%s\n", var->name) < 0)
             DIE;
