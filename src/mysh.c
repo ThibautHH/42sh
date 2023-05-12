@@ -41,8 +41,7 @@ void mysh(mysh_t *context, char **env)
             && !parse_command_line(context))
             TAILQ_FOREACH(PIPELINE, &context->pipelines, entries)
                 run_pipeline(context);
-    if (errno)
+    if (errno || puts("exit") == EOF)
         DIE;
-    TTY_WRITE("exit\n", 5);
     cleanup(context);
 }
