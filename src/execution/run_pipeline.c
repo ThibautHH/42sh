@@ -48,7 +48,7 @@ void wait_for_cmd(mysh_t *context)
         STATUS = WEXITSTATUS(status);
 }
 
-static void run(mysh_t *context)
+void run(mysh_t *context)
 {
     if (run_builtins(context))
         return;

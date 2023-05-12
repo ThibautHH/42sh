@@ -95,7 +95,7 @@ typedef enum pipe_type_e {
 } pipe_type_t;
 
 typedef enum redirection_type_e {
-    REDIR_NONE,
+    REDIR_NONE = 0,
     REDIR_FILE,
     REDIR_TIL_LINE,
     REDIR_STRING

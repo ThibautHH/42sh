@@ -34,6 +34,10 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				builtin_setenv.c				\
 				builtin_unset.c					\
 				builtin_unsetenv.c				\
+				builtin_which.c					\
+				builtin_where.c					\
+				builtin_echo.c					\
+				builtin_repeat.c				\
 				builtin_alias.c					\
 				builtin_unalias.c				\
 				)

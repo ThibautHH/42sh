@@ -19,8 +19,7 @@ static void write_error(mysh_t *context, char *error)
 void builtin_unsetenv(mysh_t *context)
 {
     if (CMDARGC < 2) {
-        write_error(context, "unset: Too few arguments.\n");
-        STATUS = 1;
+        write_error(context, "unsetenv: Too few arguments.\n");
         return;
     }
     for (size_t i = 1; CMDARGS[i]; i++)
