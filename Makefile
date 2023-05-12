@@ -9,7 +9,7 @@ NAME		:=	42sh
 
 DIR			:=
 SRC			:=
-LIB			:=	./lib/
+LIB			:=	lib/
 
 DIR_SRC		+=	src/
 
@@ -21,6 +21,7 @@ SRC			+=	$(addprefix $(DIR_SRC),\
 DIR			+=	$(addprefix $(DIR_SRC), miscellaneous/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				prompt.c			\
+				shebang.c			\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), builtins/)
@@ -37,7 +38,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				builtin_unalias.c				\
 				)
 
-DIR			+=	$(addprefix $(DIR_SRC), ./builtins/alias/)
+DIR			+=	$(addprefix $(DIR_SRC), builtins/alias/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				destroy_alias.c					\
 				is_alias_forbidden.c			\
@@ -62,6 +63,8 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				get_cmd_path.c		\
 				piping.c			\
 				run_pipeline.c		\
+				print_sigerror.c	\
+				run_builtins.c		\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), parser/)
@@ -72,17 +75,17 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				handle_curly_brackets.c		\
 				)
 
-DIR_TEST	:=	./tests/
+DIR_TEST	:=	tests/
 SRC_TEST	:=	$(addprefix $(DIR_TEST),\
 				)
 
-DIR_BUILD	:=	./build/
+DIR_BUILD	:=	build/
 
 ROOT_OBJ	:=	$(addprefix $(DIR_BUILD), obj/)
 DIR_OBJ		:=	$(addprefix $(ROOT_OBJ), $(DIR))
 OBJ			:=	$(patsubst %.c, $(ROOT_OBJ)%.o, $(SRC))
 
-UNIT_TEST	:=	./unit_test
+UNIT_TEST	:=	unit_test
 
 
 RM			:=	rm -rf

@@ -5,9 +5,9 @@
 ** unalias
 */
 
-#include "mysh.h"
+#include <malloc.h>
 
-#include <stdlib.h>
+#include "mysh.h"
 
 void builtin_unalias(struct mysh_s *context)
 {

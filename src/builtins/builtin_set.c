@@ -5,13 +5,17 @@
 ** builtin_set.c
 */
 
-#include "mysh.h"
-#include "mysh/builtins.h"
-#include "mysh/parsing.h"
-#include "mysh/parsing_functions.h"
-
 #include <stdio.h>
 #include <string.h>
+
+#include "mysh.h"
+
+static void write_error(mysh_t *context, char *error)
+{
+    if (fputs(error, stderr) < 0)
+        DIE;
+    STATUS = 1;
+}
 
 static void local_var_update(mysh_t *context, char *name, char *value)
 {
@@ -46,28 +50,27 @@ static void display_local_var(mysh_t *context)
         for (; var->name[len] != '='; len++);
         if (printf("%.*s", len, var->name) < 0)
             DIE;
-        if (var->name[len + 1] != 0)
-            printf("\t");
-        else {
-            printf("\n");
+        if (var->name[len + 1] != 0 && printf("\t") < 0)
+            DIE;
+        if (var->name[len + 1] == 0 && printf("\n") < 0)
+            DIE;
+        if (var->name[len + 1] == 0)
             continue;
-        }
         if (printf("%s\n", var->name + len + 1) < 0)
             DIE;
     }
     STATUS = 0;
 }
 
-size_t get_name_len(mysh_t *context, int i)
+size_t get_name_len(mysh_t *context, size_t i)
 {
     size_t name_len = 1;
 
     for (size_t y = 0; CMDARGS[i][y]; y++) {
         if (!IS_ALPHANUM(CMDARGS[i][y]) && (CMDARGS[i][y] != '='
             || CMDARGS[i][y + 1] == 0 || y == 0)) {
-            dprintf(2, "set: Variable name must contain"
-                    " alphanumeric characters.\n");
-            STATUS = 1;
+            write_error(context, "set: Variable name must contain"
+                " alphanumeric characters.\n");
             return 0;
         }
         if (CMDARGS[i][y] == '=') {
@@ -80,7 +83,7 @@ size_t get_name_len(mysh_t *context, int i)
 
 void builtin_set(mysh_t *context)
 {
-    size_t name_len = 1;
+    size_t name_len;
     char *value;
     char *name;
 

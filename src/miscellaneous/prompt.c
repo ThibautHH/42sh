@@ -5,8 +5,6 @@
 ** prompt.c
 */
 
-#include <unistd.h>
-
 #include "mysh.h"
 
 void prompt(UNUSED mysh_t *context)

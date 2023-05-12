@@ -9,29 +9,53 @@
 #include <malloc.h>
 #include <unistd.h>
 
-#include "ice/array.h"
-#include "ice/string.h"
-#include "ice/printf.h"
 #include "mysh.h"
+#include "ice/printf.h"
 
 static void handle_cd_errors(mysh_t *context, char *path)
 {
     switch (errno) {
-    case EACCES:
-        if (ice_dprintf(STDERR_FILENO, "%s: Permission denied.\n", path) < 0)
-            DIE;
-        break;
-    case ENOENT:
-        if (ice_dprintf(STDERR_FILENO, "%s: No such file "
-            "or directory.\n", path) < 0)
-            DIE;
-        break;
-    case ENOTDIR:
-        if (ice_dprintf(STDERR_FILENO, "%s: Not a directory.\n", path) < 0)
-            DIE;
-        break;
-    default: DIE;
+        case EACCES:
+            if (ice_dprintf(STDERR_FILENO, "%s: Permission denied.\n",
+                path) < 0)
+                DIE;
+            break;
+        case ENOENT:
+            if (ice_dprintf(STDERR_FILENO, "%s: No such file "
+                "or directory.\n", path) < 0)
+                DIE;
+            break;
+        case ENOTDIR:
+            if (ice_dprintf(STDERR_FILENO, "%s: Not a directory.\n",
+                path) < 0)
+                DIE;
+            break;
+        default: DIE;
     }
+}
+
+static void exec_cd(mysh_t *context)
+{
+    char *prev_pwd;
+    char *path;
+
+    prev_pwd = ice_strdup(GET_VAR("PWD", ENV));
+    if (CMDARGC == 2)
+        path = ice_strcmp(CMDARGS[1], "-") ? CMDARGS[1] :
+            GET_VAR("OLDPWD", ENV);
+    else
+        path = GET_VAR("HOME", ENV);
+    path = (path) ? path : "";
+    if (chdir(path) == -1) {
+        STATUS = 1;
+        free(prev_pwd);
+        handle_cd_errors(context, path);
+        return;
+    }
+    getcwd(GET_VAR("PWD", ENV), VARVLEN);
+    var_update(context, "OLDPWD", prev_pwd, VAR_ENV);
+    free(prev_pwd);
+    STATUS = 0;
 }
 
 void builtin_cd(mysh_t *context)
@@ -41,17 +65,5 @@ void builtin_cd(mysh_t *context)
         STATUS = 1;
         return;
     }
-    char *prev_pwd = ice_strdup(GET_VAR("PWD", ENV));
-    char *path = CMDARGC == 2
-        ? (ice_strcmp(CMDARGS[1], "-")
-            ? CMDARGS[1] : GET_VAR("OLDPWD", ENV))
-        : GET_VAR("HOME", ENV);
-    if (chdir(path ? path : "") == -1) {
-        STATUS = 1; free(prev_pwd);
-        return handle_cd_errors(context, path);
-    }
-    getcwd(GET_VAR("PWD", ENV), VARVLEN);
-    var_update(context, "OLDPWD", prev_pwd, VAR_ENV);
-    free(prev_pwd);
-    STATUS = 0;
+    exec_cd(context);
 }

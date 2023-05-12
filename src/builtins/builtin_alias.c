@@ -8,9 +8,9 @@
 ** av[1, ...] = substitution
 */
 
-#include "mysh.h"
+#include <malloc.h>
 
-#include <stdlib.h>
+#include "mysh.h"
 
 static void wipe_alias(alias_t *alias)
 {

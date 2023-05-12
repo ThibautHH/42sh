@@ -11,8 +11,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "mysh.h"
-#include "mysh/alias.h"
 #include "mysh/commands.h"
 
 static bool init(mysh_t *context, char **env)
@@ -36,8 +34,7 @@ void cleanup(mysh_t *context)
 
 void mysh(mysh_t *context, char **env)
 {
-    if (init(context, env))
-        exit(84);
+    init(context, env);
     prompt(context), errno = 0;
     for (; !EXIT && GET_LINE != -1; LINE_ITERATION)
         if (LEN > 1 && *LINE != '#' && substitute_alias(context)

@@ -5,25 +5,25 @@
 ** handle_curly_brackets
 */
 
-#include "mysh.h"
-#include "mysh/parsing_functions.h"
-
 #include <stdio.h>
 
-static _Bool search_end(mysh_t *context, int off)
+#include "mysh/parsing_functions.h"
+
+static bool search_end(mysh_t *context, int off)
 {
     for (int i = off + 1; LINE[i] != '\0'; i++) {
         if (LINE[i] == '}')
             return true;
-        if (!IS_ALPHANUM(LINE[i])) {
-            dprintf(2, "Missing '}'.\n");
-            return false;
-        }
+        if (IS_ALPHANUM(LINE[i]))
+            continue;
+        if (fprintf(stderr, "Missing '}'.\n") < 0)
+            DIE;
+        return false;
     }
     return false;
 }
 
-_Bool handle_curly_brackets(mysh_t *context)
+bool handle_curly_brackets(mysh_t *context)
 {
     for (int i = 0; LINE[i] != '\0'; i++) {
         if (LINE[i] != '{')

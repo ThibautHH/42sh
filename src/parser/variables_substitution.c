@@ -5,11 +5,10 @@
 ** substitute_variables
 */
 
-#include "mysh.h"
-#include "mysh/parsing_functions.h"
-
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
+
+#include "mysh/parsing_functions.h"
 
 static char *sub_variable(int var_len, char *value, int off, char *line)
 {
@@ -34,8 +33,8 @@ static char *sub_variable(int var_len, char *value, int off, char *line)
     return line;
 }
 
-static _Bool exist_in_shell_var(mysh_t *context, int off, int curly,
-                                char *variable)
+static bool exist_in_shell_var(mysh_t *context, int off, int curly,
+    char *variable)
 {
     var_t *var;
     var_type_t type = VAR_SHELL;
@@ -50,7 +49,7 @@ static _Bool exist_in_shell_var(mysh_t *context, int off, int curly,
     return false;
 }
 
-static _Bool variable_exist(mysh_t *context, int off, int len, int curly)
+static bool variable_exist(mysh_t *context, int off, int len, int curly)
 {
     var_t *var;
     var_type_t type = VAR_ENV;
@@ -68,11 +67,12 @@ static _Bool variable_exist(mysh_t *context, int off, int len, int curly)
             return true;
         }
     }
-    dprintf(2, "%s: Undefined variable.\n", variable);
+    if (fprintf(stderr, "%s: Undefined variable.\n", variable) < 0)
+        DIE;
     return false;
 }
 
-static _Bool handle_variable(mysh_t *context, int off)
+static bool handle_variable(mysh_t *context, int off)
 {
     int len = 0;
     int curly = 0;
@@ -82,21 +82,19 @@ static _Bool handle_variable(mysh_t *context, int off)
         curly = 1;
     }
     for (; IS_ALPHANUM(LINE[off + len + 1]); len++);
-    if (variable_exist(context, off + 1, len, curly))
-        return true;
-    return false;
+    return variable_exist(context, off + 1, len, curly);
 }
 
-_Bool substitute_variables(mysh_t *context)
+bool substitute_variables(mysh_t *context)
 {
     if (handle_curly_brackets(context) == false)
         return false;
     for (int i = 0; LINE[i] != '\0'; i++) {
         if (LINE[i] != '$')
-        continue;
+            continue;
         P = LINE + i + 1;
         if (IS_SEPARATOR || *P == '\n')
-        continue;
+            continue;
         if (handle_variable(context, i) == false) {
             STATUS = 1;
             return false;

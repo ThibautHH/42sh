@@ -5,12 +5,21 @@
 ** builtin_unsetenv.c
 */
 
+#include <stdio.h>
+
 #include "mysh.h"
+
+static void write_error(mysh_t *context, char *error)
+{
+    if (fputs(error, stderr) < 0)
+        DIE;
+    STATUS = 1;
+}
 
 void builtin_unsetenv(mysh_t *context)
 {
     if (CMDARGC < 2) {
-        DWRITE(STDERR_FILENO, "unsetenv: Too few arguments.\n", 29);
+        write_error(context, "unset: Too few arguments.\n");
         STATUS = 1;
         return;
     }

@@ -5,7 +5,7 @@
 ** environment_manipulation.c
 */
 
-#include <stdlib.h>
+#include <malloc.h>
 
 #include "mysh.h"
 
