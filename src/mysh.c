@@ -35,12 +35,16 @@ void cleanup(mysh_t *context)
 void mysh(mysh_t *context, char **env)
 {
     init(context, env);
-    prompt(context), errno = 0;
-    for (; !EXIT && GET_LINE != -1; LINE_ITERATION)
+    prompt(context);
+    errno = 0;
+    for (; GET_LINE != -1; LINE_ITERATION) {
         if (LEN > 1 && *LINE != '#' && substitute_alias(context)
             && !parse_command_line(context))
             TAILQ_FOREACH(PIPELINE, &context->pipelines, entries)
                 run_pipeline(context);
+        if (EXIT)
+            break;
+    }
     if (errno)
         DIE;
     TTY_WRITE("exit\n", 5);
