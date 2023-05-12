@@ -35,7 +35,8 @@ void cleanup(mysh_t *context)
 void mysh(mysh_t *context, char **env)
 {
     init(context, env);
-    prompt(context), errno = 0;
+    prompt(context);
+    errno = 0;
     for (; GET_LINE != -1; LINE_ITERATION) {
         if (LEN > 1 && *LINE != '#' && substitute_alias(context)
             && !parse_command_line(context))
