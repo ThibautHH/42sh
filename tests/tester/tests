@@ -546,3 +546,23 @@ set =
 set oui)=ls
 set )=
 [1101-END]
+
+[1200]
+NAME="built_in repeat"
+SETUP=""
+TESTS=
+repeat 5 ls
+repeat 0 ls
+repeat 1 ls
+repeat 1
+[1200-END]
+
+[1201]
+NAME="built_in repeat error handling"
+SETUP=""
+TESTS=
+repeat 1 ls ls
+repeat 1 ls ls ls
+repeat 1 ls ls ls ls
+repeat 1 ls ls ls ls ls
+[1201-END]
