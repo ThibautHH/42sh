@@ -63,11 +63,15 @@ static void tokenize(mysh_t *context)
         if (!CMDARGS)
             DIE;
         DUP_ARG(CMDARGS[CMDARGC - 1]);
-        char *tmp = P;
-        for (P = CMDARGS[CMDARGC - 1]; *P;)
-            if (!unquote(context))
-                P++;
-        P = tmp;
+        char *ptmp = P, *stmp = S;
+        for (P = (S = CMDARGS[CMDARGC - 1]); *P;)
+            (void)(unquote(context) || P++);
+        for (P = CMDARGS[CMDARGC - 1]; *P; P++)
+            (void)(IS_CHAR_ESCAPED && strcpy(P - 1, P));
+        for (P = CMDARGS[CMDARGC - 1]; *P; P++)
+            (void)(*P == '\\' && P[1] == '\\' && P[2] != '\\'
+                && strcpy(P, P + 1));
+        P = ptmp, S = stmp;
     }
     CMDARGS[CMDARGC] = NULL;
 }
