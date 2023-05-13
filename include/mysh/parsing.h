@@ -25,8 +25,7 @@
     #define IS_CHAR_ESCAPED (is_char_escaped(context))
     #define TO_NEXT_TOKEN (to_next_token(context))
     #define TO_TOKEN_END (to_token_end(context))
-    #define IS_ESC_NL (*P == '\n' && IS_CHAR_ESCAPED)
-    #define IS_SEPARATOR ((IS_SPC(*P) && !IS_CHAR_ESCAPED) || IS_ESC_NL)
+    #define IS_SEPARATOR (IS_SPC(*P) && !IS_CHAR_ESCAPED)
     #define IS_PPLSEP (get_ppl_separator(context), PPLSEP >= 0)
     #define PPLSEPS(i) PPL_SEPARATORS[i]
     #define IS_PPLSEP_STR (!ice_strncmp2(P, PPLSEPS(i).sep, PPLSEPS(i).len))

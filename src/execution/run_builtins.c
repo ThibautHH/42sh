@@ -10,15 +10,18 @@
 
 static void execute_unforked_builtin(mysh_t *context)
 {
-    int stdio[] = {dup(STDIN_FILENO), dup(STDOUT_FILENO)};
+    int stdio[] = {dup(STDIN_FILENO), dup(STDOUT_FILENO), dup(STDERR_FILENO)};
 
-    if (stdio[0] == -1 || stdio[1] == -1)
+    if (stdio[0] == -1 || stdio[1] == -1 || stdio[2] == -1)
         DIE;
     if (CMDPREV && CMDPREV->pipe_mode)
         MVFD_STD(CMDPREV->outlet, IN);
+    setup_redirections(context);
     BUILTINS[CMDCOMMAND.id].builtin(context);
     MVFD_STD(stdio[0], IN);
     MVFD_STD(stdio[1], OUT);
+    MVFD_STD(stdio[2], ERR);
+    feed_redirections(context);
 }
 
 bool run_builtins(mysh_t *context)
