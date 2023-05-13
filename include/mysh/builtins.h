@@ -45,7 +45,6 @@ void builtin_which(mysh_t *context);
 void builtin_where(mysh_t *context);
 void builtin_echo(mysh_t *context);
 void builtin_repeat(mysh_t *context);
-void builtin_history(mysh_t *context);
 void builtin_alias(mysh_t *context);
 void builtin_unalias(mysh_t *context);
 void builtin_history(mysh_t *context);
@@ -63,11 +62,11 @@ static const struct {
     {"set", BUILTIN_SET, builtin_set},
     {"unsetenv", BUILTIN_UNSETENV, builtin_unsetenv},
     {"unset", BUILTIN_UNSET, builtin_unset},
+    {"history", BUILTIN_HISTORY, builtin_history},
     {"which", BUILTIN_WHICH, builtin_which},
     {"where", BUILTIN_WHERE, builtin_where},
     {"echo", BUILTIN_ECHO, builtin_echo},
     {"repeat", BUILTIN_REPEAT, builtin_repeat},
-    {"history", BUILTIN_HISTORY, builtin_history},
     {"alias", BUILTIN_ALIAS, builtin_alias},
     {"unalias", BUILTIN_UNALIAS, builtin_unalias}
 };

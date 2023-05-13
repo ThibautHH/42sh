@@ -28,7 +28,7 @@ static int handle_precise_event(mysh_t *context, int offset)
         tmp = node->value;
         if (ice_strstr(tmp->cmd, str) != NULL) {
             realloc_line(context, tmp->cmd, offset);
-            printf("1%s\n", LINE);
+            printf("%s\n", LINE);
             return 0;
         }
     }
