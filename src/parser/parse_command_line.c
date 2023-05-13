@@ -63,6 +63,11 @@ static void tokenize(mysh_t *context)
         if (!CMDARGS)
             DIE;
         DUP_ARG(CMDARGS[CMDARGC - 1]);
+        char *tmp = P;
+        for (P = CMDARGS[CMDARGC - 1]; *P;)
+            if (!unquote(context))
+                P++;
+        P = tmp;
     }
     CMDARGS[CMDARGC] = NULL;
 }
