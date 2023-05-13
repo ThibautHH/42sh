@@ -43,7 +43,7 @@ static alias_t *is_loop(mysh_t *context, alias_t *alias,
 }
 
 static alias_t *preshot_alias(mysh_t *context, char *old_name,
-                            char *old_value, size_t rec)
+    char *old_value, size_t rec)
 {
     alias_t *alias;
 
@@ -82,13 +82,13 @@ bool substitute_alias(mysh_t *context)
 {
     bool separator = false;
 
-    P = LINE;
     if (substitute_variables(context) == false)
         return false;
-    for (int i = 0; P[i] != '\0'; i++) {
-        if (i != 0 && (P[i - 1] == '|' || P[i - 1] == ';'
-            || (i > 1 && ((P[i - 2] == '&' && P[i - 1] == '&')
-            || (P[i - 2] == '|' && P[i - 1] == '|')))))
+    for (int i = 0; LINE[i] != '\0'; i++) {
+        if (i > 0 && (LINE[i - 1] == '|' || LINE[i - 1] == ';'))
+            separator = true;
+        if (i > 1 && ((LINE[i - 2] == '&' && LINE[i - 1] == '&')
+            || (LINE[i - 2] == '|' && LINE[i - 1] == '|')))
             separator = true;
         if ((i == 0 || separator) && aliasing(context, i) == false) {
             STATUS = 1;
