@@ -10,27 +10,28 @@
 
 #include "mysh/parsing_functions.h"
 
-static char *sub_variable(int var_len, char *value, int off, char *line)
+static void sub_variable(int var_len, char *value, int off, mysh_t *context)
 {
-    int len = strlen(line) - (var_len + 1) + strlen(value);
+    int len = LEN - (var_len + 1) + strlen(value);
     char *newline = malloc(sizeof(char) * (len + 1));
 
-    if (newline == NULL)
-        return NULL;
+    if (!newline)
+        DIE;
     for (int i = 0; i <= len; i++)
         newline[i] = 0;
-    newline = ice_strncpy2(newline, line, off);
-    line += off + var_len + 1;
-    if (*line == '}') {
-        line++;
+    strncpy(newline, LINE, off);
+    LINE += off + var_len + 1;
+    if (*LINE == '}') {
+        LINE++;
         off++;
     }
-    ice_strcat(newline, value);
-    ice_strcat(newline, line);
-    line -= off + var_len + 1;
-    ice_strcpy(line, newline);
+    strcat(newline, value);
+    strcat(newline, LINE);
+    LINE -= off + var_len + 1;
+    LINE = realloc(LINE, len + 1);
+    LEN = len;
+    ice_strcpy(LINE, newline);
     free(newline);
-    return line;
 }
 
 static bool exist_in_shell_var(mysh_t *context, int off, int curly,
@@ -42,7 +43,7 @@ static bool exist_in_shell_var(mysh_t *context, int off, int curly,
 
     TAILQ_FOREACH(var, VARQ, entries) {
         if (strncmp(var->name, variable, len) == 0) {
-            LINE = sub_variable(len + curly, var->name + len + 1, off, LINE);
+            sub_variable(len + curly, VARV(var), off, context);
             return true;
         }
     }
@@ -62,8 +63,7 @@ static bool variable_exist(mysh_t *context, int off, int len, int curly)
         return true;
     TAILQ_FOREACH(var, VARQ, entries) {
         if (strncmp(var->name, variable, len) == 0) {
-            LINE = sub_variable(len + curly, var->name + len + 1,
-                                off - 1 - curly, LINE);
+            sub_variable(len + curly, VARV(var), off - 1 - curly, context);
             return true;
         }
     }
@@ -81,7 +81,8 @@ static bool handle_variable(mysh_t *context, int off)
         off += 1;
         curly = 1;
     }
-    for (; IS_ALPHANUM(LINE[off + len + 1]); len++);
+    for (; IS_ALPHANUM(LINE[off + len + 1])
+        || LINE[off + len + 1] == '_'; len++);
     return variable_exist(context, off + 1, len, curly);
 }
 
