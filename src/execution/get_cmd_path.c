@@ -67,9 +67,16 @@ static char *get_bin_path(mysh_t *context)
 {
     char *path = GET_VAR("PATH", ENV);
     char *binpath = NULL;
+    size_t confstrlen = confstr(_CS_PATH, NULL, 0);
 
-    if (!path)
-        return NULL;
+    if (!path) {
+        if (!confstrlen)
+            return NULL;
+        path = malloc(confstrlen * sizeof(char));
+        if (!path)
+            DIE;
+        confstr(_CS_PATH, path, confstrlen);
+    }
     for (char *p = path; p == path || p[-1] == ':';) {
         binpath = compose_path(context, &p);
         if (binpath)
