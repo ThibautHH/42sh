@@ -20,9 +20,8 @@ static void exec_cmd(int idx_history, mysh_t *context)
 
     for (list_node_t *node = HISTORY->tail; node; node = node->prev) {
         tmp = node->value;
-        if (tmp->index == idx_history) {
+        if (tmp->index == idx_history)
             execute_event_history_cmd(context, tmp->cmd);
-        }
     }
 }
 

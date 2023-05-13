@@ -12,23 +12,23 @@
 #include "mysh/history.h"
 #include "ice/int.h"
 
-static int handle_precise_event(mysh_t *context)
+static int handle_precise_event(mysh_t *context, int offset)
 {
-    size_t cmd_size = ice_strlen(CMDARGS[0]) - 2;
+    size_t cmd_size = ice_strlen(LINE) - 2;
     int j = 0;
     char *str = malloc(sizeof(char) * (cmd_size + 2));
     history_t *tmp;
 
-    if (CMDARGS[0][1] != '?' || str == NULL) return 1;
-    for (int i = 2; CMDARGS[0][i] != '\0' && CMDARGS[0][i] != '?'; i++, j++)
-        str[j] = CMDARGS[0][i];
+    if (LINE[1] != '?' || str == NULL) return 1;
+    for (int i = 2; LINE[i] != '\0' && LINE[i] != '?'; i++, j++)
+        str[j] = LINE[i];
     str[j] = '\0';
     for (list_node_t *node = HISTORY->tail; node != NULL;
         node = node->prev) {
         tmp = node->value;
         if (ice_strstr(tmp->cmd, str) != NULL) {
-            printf("%s\n", tmp->cmd);
-            execute_event_history_cmd(context, tmp->cmd);
+            realloc_line(context, tmp->cmd, offset);
+            printf("1%s\n", LINE);
             return 0;
         }
     }
@@ -36,9 +36,9 @@ static int handle_precise_event(mysh_t *context)
     return 0;
 }
 
-static int handle_search_event(mysh_t *context)
+static int handle_search_event(mysh_t *context, int offset)
 {
-    int nb_event = ice_atoi(CMDARGS[0] + 1);
+    int nb_event = ice_atoi(LINE + 1);
     history_t *tmp;
 
     if (nb_event <= 0)
@@ -47,16 +47,16 @@ static int handle_search_event(mysh_t *context)
         node = node->prev) {
         tmp = node->value;
         if (nb_event == tmp->index) {
-            printf("%s\n", tmp->cmd);
-            execute_event_history_cmd(context, tmp->cmd);
+            realloc_line(context, tmp->cmd, offset);
+            printf("%s\n", LINE);
             return 0;
         }
     }
-    printf("%s: Event not found.\n", CMDARGS[0] + 1);
+    printf("%s: Event not found.\n", LINE + 1);
     return 1;
 }
 
-static int handle_last_event(mysh_t *context)
+static int handle_last_event(mysh_t *context, int offset)
 {
     history_t *tmp;
     list_node_t *node = HISTORY->tail;
@@ -64,31 +64,28 @@ static int handle_last_event(mysh_t *context)
     if (node == NULL)
         return 0;
     tmp = node->value;
-    if (CMDARGS[0][1] == '!' && CMDARGS[0][2] == '\0') {
-        printf("%s\n", tmp->cmd);
-        execute_event_history_cmd(context, tmp->cmd);
+    if (LINE[1] == '!' && LINE[2] == '\0') {
+        realloc_line(context, tmp->cmd, offset);
+        printf("%s\n", LINE);
         return 0;
     }
     return 1;
 }
 
-static int search_in_history(char *cmd, mysh_t *context,
+static int search_in_history(char *cmd, mysh_t *context, int offset,
     ull_t count)
 {
-    size_t cmd_size = ice_strlen(CMDARGS[0]) - 1;
-    int j = 0;
+    size_t cmd_size = ice_strlen(LINE) - 1;
     char *str1 = malloc(sizeof(char) * (cmd_size + 1));
     char *str2 = malloc(sizeof(char) * (cmd_size + 1));
 
     if (str1 == NULL || str2 == NULL)
         return 0;
-    for (int i = 1; CMDARGS[0][i] != '\0'; i++, j++)
-        str1[j] = CMDARGS[0][i];
-    str1[j] = '\0';
+    ice_strcpy(str1, LINE + 1);
     ice_strncpy(str2, cmd, cmd_size);
     if (ice_strcmp(str2, str1) == 0) {
-        printf("%s\n", cmd);
-        execute_event_history_cmd(context, cmd);
+        realloc_line(context, cmd, offset);
+        printf("%s\n", LINE);
         return 1;
     }
     if (count > HISTORY->size)
@@ -96,21 +93,21 @@ static int search_in_history(char *cmd, mysh_t *context,
     return 0;
 }
 
-void builtin_event(mysh_t *context)
+void history_event(mysh_t *context, int offset)
 {
     history_t *tmp;
     ull_t count = 0;
 
-    if (handle_precise_event(context) == 0)
+    if (handle_precise_event(context, offset) == 0)
         return;
-    if (handle_search_event(context) == 0)
+    if (handle_search_event(context, offset) == 0)
         return;
-    if (handle_last_event(context) == 0)
+    if (handle_last_event(context, offset) == 0)
         return;
     for (list_node_t *node = HISTORY->tail; node != NULL;
     node = node->prev, count++) {
         tmp = node->value;
-        if (search_in_history(tmp->cmd, context, count) == 1)
+        if (search_in_history(tmp->cmd, context, offset, count) == 1)
             break;
     }
     return;

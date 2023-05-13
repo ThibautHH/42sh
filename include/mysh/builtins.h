@@ -48,6 +48,7 @@ void builtin_repeat(mysh_t *context);
 void builtin_history(mysh_t *context);
 void builtin_alias(mysh_t *context);
 void builtin_unalias(mysh_t *context);
+void builtin_history(mysh_t *context);
 
 static const struct {
     char *name;

@@ -48,8 +48,8 @@ void mysh(mysh_t *context, char **env)
     errno = 0;
     for (; GET_LINE != -1; LINE_ITERATION) {
         get_history_data(LINE, context); {
-        if (LEN > 1 && *LINE != '#' && substitute_alias(context)
-            && !parse_command_line(context))
+        if (LEN > 1 && *LINE != '#' && handle_history_event(context)
+        && substitute_alias(context) && !parse_command_line(context))
             TAILQ_FOREACH(PIPELINE, &context->pipelines, entries)
                 run_pipeline(context);
         if (EXIT)
