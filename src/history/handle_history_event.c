@@ -13,14 +13,20 @@
 void realloc_line(mysh_t *context, char *line, int offset)
 {
     size_t len = LEN + strlen(line) + 1;
+    char *tmp;
 
     if (len > LINESZ) {
         LINESZ = len;
         LINE = realloc(LINE, LINESZ);
-        if (LINE == NULL)
+        if (!LINE)
             DIE;
     }
-    sprintf(LINE, "%s%s", line, LINE + offset + 1);
+    tmp = calloc(LINESZ, sizeof(char));
+    if (!tmp)
+        DIE;
+    memccpy(tmp, LINE, '\0', offset);
+    sprintf(LINE, "%s%s", line, tmp + offset + 1);
+    free(tmp);
 }
 
 static void get_offset(mysh_t *context, int *offset)
@@ -36,5 +42,6 @@ bool handle_history_event(mysh_t *context)
             history_event(context, i);
         }
     }
+    get_history_data(LINE, context);
     return true;
 }

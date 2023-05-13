@@ -35,7 +35,7 @@ void cleanup(mysh_t *context)
 {
     for (var_type_t type = VAR_ENV; type <= VAR_SHELL; type++)
         destroy_vars(context, type);
-    list_destroy(HISTORY);
+    list_destroy_node(HISTORY, free);
     free_pipelines(context);
     destroy_alias(context);
     free(LINE);
@@ -47,7 +47,6 @@ void mysh(mysh_t *context, char **env)
     prompt(context);
     errno = 0;
     for (; GET_LINE != -1; LINE_ITERATION) {
-        get_history_data(LINE, context);
         if (LEN > 1 && *LINE != '#' && handle_history_event(context)
         && substitute_alias(context) && !parse_command_line(context))
             TAILQ_FOREACH(PIPELINE, &context->pipelines, entries)

@@ -6,44 +6,28 @@
 */
 
 #include <time.h>
-#include <stdlib.h>
 
-#include "mysh.h"
 #include "mysh/history.h"
-#include "list.h"
-
-static char *get_date(char *date)
-{
-    char *r_date = malloc(sizeof(char) * 6);
-
-    if (r_date == NULL)
-        return NULL;
-    for (int i = 0, j = 0; i < 16; i++)
-        if (i >= 11 && i < 16) {
-            r_date[j] = date[i];
-            j++;
-        }
-    r_date[5] = '\0';
-    return r_date;
-}
 
 void get_history_data(char *buffer, mysh_t *context)
 {
+    history_t *history = malloc(sizeof(history_t));
     time_t curr_time;
-    char *times;
-    history_t *tmp = malloc(sizeof(history_t));
+    void *times;
 
-    if (buffer[0] == '!' || tmp == NULL || buffer[0] == '\n')
+    if (!history || buffer[0] == '!' || buffer[0] == '\n')
         return;
-    time(&curr_time);
-    times = ice_strdup(asctime(localtime(&curr_time)));
-    if (times == NULL)
-        return;
-    tmp->date = get_date(times);
-    tmp->cmd = ice_strdup(buffer);
-    if (tmp->cmd == NULL || tmp->date == NULL)
-        return;
-    tmp->index = HISTORY->size + 1;
-    if (list_add(HISTORY, tmp) == false)
-        return;
+    if (time(&curr_time) == -1)
+        DIE;
+    times = localtime(&curr_time);
+    if (!times)
+        DIE;
+    times = asctime(times);
+    if (!times)
+        DIE;
+    *history = (history_t){ice_strdup(buffer),
+        HISTORY->size + 1, times + 11, 0};
+    history->date[5] = '\0';
+    if (!history->cmd || !list_add(HISTORY, history))
+        DIE;
 }

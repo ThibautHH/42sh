@@ -14,6 +14,7 @@
     #include <stdlib.h>
     #include <unistd.h>
 
+    #include "list.h"
     #include "ice/macro.h"
     #include "ice/string.h"
     #include "list/struct.h"
