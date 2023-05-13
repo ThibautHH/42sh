@@ -29,7 +29,6 @@ static void run_repeat(mysh_t *context, uint64_t nb_iter)
         wait_for_cmd(context);
     }
     CMD = tmp;
-    STATUS = 0;
 }
 
 void builtin_repeat(mysh_t *context)
