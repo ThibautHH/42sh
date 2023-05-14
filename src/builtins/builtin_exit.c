@@ -5,6 +5,8 @@
 ** builtin_exit.c
 */
 
+#include <stdio.h>
+
 #include "mysh.h"
 
 void builtin_exit(mysh_t *context)
@@ -19,9 +21,10 @@ void builtin_exit(mysh_t *context)
     EXIT = 1;
     if (CMDARGC == 2) {
         STATUS = strtol(CMDARGS[1], &endptr, 10);
-        if (*endptr) {
-            DWRITE(STDERR_FILENO, "exit: Badly formed number.\n", 27);
-            STATUS = 1;
-        }
+        if (!*endptr)
+            return;
+        if (fprintf(stderr, "exit: Badly formed number.\n") < 0)
+            DIE;
+        STATUS = 1;
     }
 }
