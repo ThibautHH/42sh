@@ -27,7 +27,10 @@ static bool is_binary(mysh_t *context, char *arg)
     char **path = ice_strsplit(GET_VAR("PATH", ENV), ":");
 
     for (ull_t i = 0; path[i]; i++) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wimplicit-function-declaration"
         if (asprintf(&binary, "%s/%s", path[i], arg) < 0)
+#pragma GCC diagnostic pop
             DIE;
         if (!access(binary, F_OK)) {
             PRINT("%s\n", binary);
