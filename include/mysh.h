@@ -69,6 +69,7 @@ typedef struct mysh_s {
     ssize_t len;
     TAILQ_HEAD(, pipeline_s) pipelines;
     pipeline_t *current_pipeline;
+    command_t *current_command;
     parsing_context_t parsing;
     int pipefds[2];
     uc_t status;

@@ -35,7 +35,7 @@
 
     #define PIPELINE (context->current_pipeline)
 
-    #define CMD (PIPELINE->current_command)
+    #define CMD (context->current_command)
     #define CMDPREV TAILQ_PREV(CMD, commands_s, entries)
     #define CMDARGS (CMD->args)
     #define CMDCMD CMDARGS[0]
@@ -129,7 +129,6 @@ typedef struct command_s {
 typedef struct pipeline_s {
     sequence_mode_t mode;
     TAILQ_HEAD(commands_s, command_s) commands;
-    command_t *current_command;
     TAILQ_ENTRY(pipeline_s) entries;
 } pipeline_t;
 
