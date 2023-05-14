@@ -51,18 +51,18 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				alias_substitution.c			\
 				)
 
-DIR			+=	$(addprefix $(DIR_SRC), env/)
-SRC			+=	$(addprefix $(lastword $(DIR)),\
-				load_env.c		\
-				dup_env.c		\
-				)
-
-DIR			+= $(addprefix $(DIR_SRC), history/)
+DIR			+= $(addprefix $(DIR_SRC), builtins/history/)
 SRC			+= $(addprefix $(lastword $(DIR)),\
 				get_history_data.c				\
 				flag_c.c						\
 				history_event.c					\
 				handle_history_event.c			\
+				)
+
+DIR			+=	$(addprefix $(DIR_SRC), env/)
+SRC			+=	$(addprefix $(lastword $(DIR)),\
+				load_env.c		\
+				dup_env.c		\
 				)
 
 DIR			+= 	$(addprefix $(DIR_SRC), var/)
