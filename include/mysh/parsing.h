@@ -46,10 +46,10 @@
     #define CMDREDSTR(i) (CMDRED(i).target.string)
     #define CMDPATH (CMDCOMMAND.path)
     #define CMDARGC (CMD->argc)
-    #define CMDARGSZ (CMDARGC * sizeof(char *))
+    #define CMDARGSZ ((CMDARGC + 1) * sizeof(char *))
 
     #define PARSE_RED(d) (parse_##d##put_redirection(context), 1)
-    #define SET_PARSE_ERR PARSING_ERROR = (STATUS = 1)
+    #define SET_PARSE_ERR (PARSING_ERROR = (STATUS = 1))
     #define PARSE_ERR(s, l) ({DWRITE(2, s, l); SET_PARSE_ERR; return;})
 
     #define PREP_DUP_ARG ({char t, *b; b = P; TO_TOKEN_END; t = *P; *P = '\0'

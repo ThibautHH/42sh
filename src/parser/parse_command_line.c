@@ -59,19 +59,11 @@ static void tokenize(mysh_t *context)
         if ((*P == '<' && PARSE_RED(in)) || (*P == '>' && PARSE_RED(out)))
             continue;
         CMDARGC++;
-        CMDARGS = realloc(CMDARGS, CMDARGSZ + sizeof(char *));
+        CMDARGS = realloc(CMDARGS, CMDARGSZ);
         if (!CMDARGS)
             DIE;
         DUP_ARG(CMDARGS[CMDARGC - 1]);
-        char *ptmp = P, *stmp = S;
-        for (P = (S = CMDARGS[CMDARGC - 1]); *P;)
-            (void)(unquote(context) || P++);
-        for (P = CMDARGS[CMDARGC - 1]; *P; P++)
-            (void)(IS_CHAR_ESCAPED && strcpy(P - 1, P));
-        for (P = CMDARGS[CMDARGC - 1]; *P; P++)
-            (void)(*P == '\\' && P[1] == '\\' && P[2] != '\\'
-                && strcpy(P, P + 1));
-        P = ptmp, S = stmp;
+        do_globbing(context);
     }
     CMDARGS[CMDARGC] = NULL;
 }

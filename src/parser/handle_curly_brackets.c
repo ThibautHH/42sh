@@ -25,8 +25,8 @@ static bool search_end(mysh_t *context, int off)
 
 bool handle_curly_brackets(mysh_t *context)
 {
-    for (int i = 0; LINE[i] != '\0'; i++) {
-        if (LINE[i] != '{')
+    for (size_t i = 1; LINE[i] != '\0'; i++) {
+        if (!(LINE[i - 1] == '$' && LINE[i] == '{'))
             continue;
         P = LINE + i + 1;
         if (IS_SEPARATOR || *P == '\n')
