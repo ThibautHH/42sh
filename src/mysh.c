@@ -11,12 +11,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "list.h"
-
-#include "mysh.h"
-#include "mysh/alias.h"
-#include "mysh/commands.h"
 #include "mysh/history.h"
+#include "mysh/commands.h"
 
 static bool init(mysh_t *context, char **env)
 {
@@ -24,7 +20,7 @@ static bool init(mysh_t *context, char **env)
         TAILQ_INIT(VARQ);
     TAILQ_INIT(&context->pipelines);
     HISTORY = list_create();
-    if (HISTORY == NULL)
+    if (!HISTORY)
         return true;
     load_env(context, env);
     TAILQ_INIT(ALIASQ);
