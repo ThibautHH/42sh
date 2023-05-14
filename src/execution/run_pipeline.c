@@ -6,7 +6,6 @@
 */
 
 #include <errno.h>
-#include <malloc.h>
 #include <signal.h>
 #include <string.h>
 #include <unistd.h>
