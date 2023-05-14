@@ -31,7 +31,7 @@ void cleanup(mysh_t *context)
 {
     for (var_type_t type = VAR_ENV; type <= VAR_SHELL; type++)
         destroy_vars(context, type);
-    list_destroy_node(HISTORY, free);
+    list_destroy_node(HISTORY, (void (*)(void *))free_history);
     free_pipelines(context);
     destroy_alias(context);
     free(LINE);
