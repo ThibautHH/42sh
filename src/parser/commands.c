@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2023
-** Minishell 2
+** 42sh
 ** File description:
 ** Command structure management
 */

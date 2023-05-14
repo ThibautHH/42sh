@@ -88,7 +88,7 @@ static bool handle_variable(mysh_t *context, int off)
 
 bool substitute_variables(mysh_t *context)
 {
-    if (handle_curly_brackets(context) == false)
+    if (!handle_curly_brackets(context))
         return false;
     for (int i = 0; LINE[i] != '\0'; i++) {
         if (LINE[i] != '$')
@@ -96,7 +96,7 @@ bool substitute_variables(mysh_t *context)
         P = LINE + i + 1;
         if (IS_SEPARATOR || *P == '\n')
             continue;
-        if (handle_variable(context, i) == false) {
+        if (!handle_variable(context, i)) {
             STATUS = 1;
             return false;
         }

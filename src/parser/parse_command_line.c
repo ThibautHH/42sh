@@ -7,8 +7,6 @@
 
 #include <string.h>
 
-
-#include "mysh.h"
 #include "mysh/commands.h"
 #include "mysh/parsing_functions.h"
 

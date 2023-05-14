@@ -6,6 +6,7 @@
 */
 
 #include <string.h>
+
 #include "mysh.h"
 
 bool is_char_escaped(mysh_t *context)

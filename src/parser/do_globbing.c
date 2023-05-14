@@ -5,16 +5,19 @@
 ** Globbing and unquoting/unescaping functions
 */
 
-#include <errno.h>
 #include <glob.h>
-#include <string.h>
 #include <stdio.h>
+#include <errno.h>
+#include <string.h>
+
 #include "mysh.h"
 #include "mysh/parsing_functions.h"
 
 static void unescape_arg(mysh_t *context, size_t i)
 {
-    char *ptmp = P, *stmp = S;
+    char *ptmp = P;
+    char *stmp = S;
+
     for (P = (S = CMDARGS[i]); *P;)
         if (!unquote(context))
             P++;
@@ -24,7 +27,8 @@ static void unescape_arg(mysh_t *context, size_t i)
     for (P = CMDARGS[i]; *P; P++)
         if (*P == '\\' && P[1] == '\\' && P[2] != '\\')
             strcpy(P, P + 1);
-    P = ptmp, S = stmp;
+    P = ptmp;
+    S = stmp;
 }
 
 static int readerr(const char *path, int globerrno)
@@ -36,15 +40,18 @@ static int readerr(const char *path, int globerrno)
 static bool is_pattern(mysh_t *context)
 {
     static const char specials[6] = "*?[{";
-    char *ptmp = P, *stmp = S;
+    char *ptmp = P;
+    char *stmp = S;
     bool result = false;
 
     S = CMDARGS[CMDARGC - 1];
     for (P = S; *P; P++)
         if (strchr(specials, *P) && !IS_CHAR_ESCAPED) {
-            result = true; break;
+            result = true;
+            break;
         }
-    P = ptmp, S = stmp;
+    P = ptmp;
+    S = stmp;
     return result;
 }
 
@@ -82,7 +89,8 @@ void do_globbing(mysh_t *context)
     CMDARGS = realloc(CMDARGS, CMDARGSZ);
     for (size_t i = oldargc; i < CMDARGC; i++) {
         CMDARGS[i] = strdup(globbuf.gl_pathv[i - oldargc]);
-        if (!CMDARGS[i]) DIE;
+        if (!CMDARGS[i])
+            DIE;
         unescape_arg(context, i);
     }
     globfree(&globbuf);
