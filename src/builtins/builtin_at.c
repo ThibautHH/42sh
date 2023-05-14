@@ -14,8 +14,11 @@ void builtin_at(mysh_t *context)
     var_t *var;
     var_type_t type = VAR_SHELL;
 
-    TAILQ_FOREACH(var, VARQ, entries)
+    TAILQ_FOREACH(var, VARQ, entries) {
+        VARV(var)[-1] = '\t';
         if (printf("%s\n", var->name) < 0)
             DIE;
+        VARV(var)[-1] = '=';
+    }
     STATUS = 0;
 }
