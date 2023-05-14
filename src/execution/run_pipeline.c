@@ -49,7 +49,7 @@ void wait_for_cmd(mysh_t *context)
 
 void run(mysh_t *context)
 {
-    if (run_builtins(context))
+    if (run_unforked_builtin(context))
         return;
     if ((CMD->pipe_mode || IS_REDIR_PIPED) && pipe(PIPEFDS) == -1)
         DIE;

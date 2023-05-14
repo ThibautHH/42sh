@@ -24,17 +24,16 @@ static void execute_unforked_builtin(mysh_t *context)
     feed_redirections(context);
 }
 
-bool run_builtins(mysh_t *context)
+bool run_unforked_builtin(mysh_t *context)
 {
     command_t *cmd;
 
-    if (CMD->is_builtin
-        && (CMD == TAILQ_LAST(&PIPELINE->commands, commands_s))) {
-        CMDPID = -1;
-        TAILQ_FOREACH(cmd, &PIPELINE->commands, entries)
+    if (!(CMD->is_builtin &&
+        (CMD == TAILQ_LAST(&PIPELINE->commands, commands_s))))
+        return false;
+    CMDPID = -1;
+    TAILQ_FOREACH(cmd, &PIPELINE->commands, entries)
         wait_for_cmd(context);
-        execute_unforked_builtin(context);
-        return true;
-    }
-    return false;
+    execute_unforked_builtin(context);
+    return true;
 }
