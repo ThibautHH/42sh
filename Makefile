@@ -85,6 +85,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				parse_command_line.c		\
 				parsing_functions.c			\
 				commands.c					\
+				do_globbing.c				\
 				variables_substitution.c	\
 				handle_curly_brackets.c		\
 				)

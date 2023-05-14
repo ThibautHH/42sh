@@ -12,6 +12,8 @@ bool is_char_escaped(mysh_t *context)
 {
     size_t escape_count = 0;
 
+    if (!P || !*P)
+        return false;
     for (char *p = P; p > S && p[-1] == '\\'; p--)
         escape_count++;
     return (escape_count & 1);

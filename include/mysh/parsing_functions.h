@@ -15,5 +15,6 @@ void get_ppl_separator(mysh_t *context);
 void to_next_token(mysh_t *context);
 bool unquote(mysh_t *context);
 void to_token_end(mysh_t *context);
+void do_globbing(mysh_t *context);
 
 #endif /* !PARSING_FUNCTIONS_H_ */
