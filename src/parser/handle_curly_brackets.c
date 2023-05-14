@@ -16,8 +16,7 @@ static bool search_end(mysh_t *context, size_t off)
             return true;
         if (IS_ALPHANUM(LINE[i]))
             continue;
-        if (fprintf(stderr, "Missing '}'.\n") < 0)
-            DIE;
+        ERRPRINT("Missing '}'.\n");
         return false;
     }
     return false;

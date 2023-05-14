@@ -36,13 +36,13 @@ void builtin_repeat(mysh_t *context)
     char *endptr;
 
     if (CMDARGC < 3) {
-        DWRITE(STDERR_FILENO, "repeat: Too few arguments.\n", 27);
+        ERRPRINT("repeat: Too few arguments.\n");
         STATUS = 1;
         return;
     }
     nb_iter = strtol(CMDARGS[1], &endptr, 10);
     if (*endptr) {
-        DWRITE(STDERR_FILENO, "repeat: Badly formed number.\n", 29);
+        ERRPRINT("repeat: Badly formed number.\n");
         STATUS = 1;
         return;
     }

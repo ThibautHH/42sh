@@ -59,18 +59,15 @@ static bool handle_glob_result(mysh_t *context, glob_t *globbuf, int result)
 {
     if (globbuf->gl_pathc == 1
         && !strcmp(globbuf->gl_pathv[0], CMDARGS[CMDARGC - 1])) {
-        if (is_pattern(context) && SET_PARSE_ERR
-            && (fprintf(stderr, "%s: No match.\n", CMDCMD) < 0))
-            DIE;
-        else
+        if (is_pattern(context) && SET_PARSE_ERR) {
+            ERRPRINT("%s: No match.\n", CMDCMD);
+        } else
             unescape_arg(context, CMDARGC - 1);
         globfree(globbuf);
         return true;
     }
-    if (result && result != GLOB_NOMATCH) {
-        globfree(globbuf);
+    if (result && result != GLOB_NOMATCH)
         DIE;
-    }
     return false;
 }
 

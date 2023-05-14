@@ -52,6 +52,6 @@ void mysh(mysh_t *context, char **env)
     }
     if (errno)
         DIE;
-    TTY_WRITE("exit\n", 5);
+    TTY_WRITE("exit\n");
     cleanup(context);
 }

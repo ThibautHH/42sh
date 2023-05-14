@@ -9,5 +9,5 @@
 
 void prompt(UNUSED mysh_t *context)
 {
-    TTY_WRITE("$> ", 3);
+    TTY_WRITE("$> ");
 }

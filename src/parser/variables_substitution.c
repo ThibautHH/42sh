@@ -67,8 +67,7 @@ static bool variable_exist(mysh_t *context, int off, int len, int curly)
             return true;
         }
     }
-    if (fprintf(stderr, "%s: Undefined variable.\n", variable) < 0)
-        DIE;
+    ERRPRINT("%s: Undefined variable.\n", variable);
     return false;
 }
 

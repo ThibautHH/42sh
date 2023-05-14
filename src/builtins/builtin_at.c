@@ -16,8 +16,7 @@ void builtin_at(mysh_t *context)
 
     TAILQ_FOREACH(var, VARQ, entries) {
         VARV(var)[-1] = '\t';
-        if (printf("%s\n", var->name) < 0)
-            DIE;
+        PRINT("%s\n", var->name);
         VARV(var)[-1] = '=';
     }
     STATUS = 0;

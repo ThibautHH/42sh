@@ -5,7 +5,8 @@
 ** get_cmd_path.c
 */
 
-#include <malloc.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "mysh/commands.h"
@@ -13,8 +14,7 @@
 static bool set_cmd_path(mysh_t *context, char *path)
 {
     if (access(path, X_OK)) {
-        if (fprintf(stderr, "%s: Permission denied.\n", path) < 0)
-            DIE;
+        ERRPRINT("%s: Permission denied.\n", path);
         STATUS = 1;
         return true;
     }
@@ -31,7 +31,7 @@ static char *set_bin_to_path(mysh_t *context, char **binpath, char **p,
     slash = ((*binpath)[pathsize->dirlen - 1] == '/');
     if (!slash)
         (*binpath)[pathsize->dirlen++] = '/';
-    ice_strcpy(*binpath + pathsize->dirlen, CMDCMD);
+    strcpy(*binpath + pathsize->dirlen, CMDCMD);
     (*binpath)[pathsize->pathsize - slash - 1] = '\0';
     if (!access(*binpath, F_OK)) {
         tmp = *binpath;
@@ -55,7 +55,7 @@ static char *compose_path(mysh_t *context, char **p)
     pathsize.dirlen = ice_strtil(*p, ':');
     if (!pathsize.dirlen)
         return NULL;
-    pathsize.pathsize = pathsize.dirlen + ice_strlen(CMDCMD) + 2;
+    pathsize.pathsize = pathsize.dirlen + strlen(CMDCMD) + 2;
     binpath = realloc(binpath, pathsize.pathsize);
     if (!binpath)
         DIE;
@@ -90,7 +90,7 @@ bool get_cmd_path(mysh_t *context)
     char *binary;
 
     for (size_t i = 0; i < BUILTIN_COUNT; i++)
-        if (!ice_strcmp(CMDCMD, BUILTINS[i].name)) {
+        if (!strcmp(CMDCMD, BUILTINS[i].name)) {
             CMD->is_builtin = true;
             CMDCOMMAND.id = BUILTINS[i].id;
             return false;
@@ -101,8 +101,7 @@ bool get_cmd_path(mysh_t *context)
             return set_cmd_path(context, binary);
     } else if (!access(CMDCMD, F_OK))
         return set_cmd_path(context, ice_strdup(CMDCMD));
-    if (fprintf(stderr, "%s: Command not found.\n", CMDCMD) < 0)
-        DIE;
+    ERRPRINT("%s: Command not found.\n", CMDCMD);
     STATUS = 1;
     return true;
 }

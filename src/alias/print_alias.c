@@ -14,17 +14,13 @@ bool print_alias(mysh_t *context, char *name)
     alias_t *alias;
 
     if (name == NULL) {
-        TAILQ_FOREACH(alias, ALIASQ, entries) {
-            if (printf("%s\t", alias->name) < 0
-                || printf("%s\n", alias->value) < 0)
-                DIE;
-        }
+        TAILQ_FOREACH(alias, ALIASQ, entries)
+            PRINT("%s\t%s\n", alias->name, alias->value);
         return true;
     }
     TAILQ_FOREACH(alias, ALIASQ, entries) {
         if (ice_strcmp(alias->name, name) == 0) {
-            if (printf("%s\n", alias->value) < 0)
-                DIE;
+            PRINT("%s\n", alias->value);
             return true;
         }
     }

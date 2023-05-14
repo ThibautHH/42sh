@@ -15,7 +15,6 @@ void builtin_env(mysh_t *context)
     var_type_t type = VAR_ENV;
 
     TAILQ_FOREACH(var, VARQ, entries)
-        if (printf("%s\n", var->name) < 0)
-            DIE;
+        PRINT("%s\n", var->name);
     STATUS = 0;
 }

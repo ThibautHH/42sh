@@ -35,8 +35,7 @@ static alias_t *is_loop(mysh_t *context, alias_t *alias,
                         char *old_name, size_t rec)
 {
     if (strcmp(old_name, alias->value) == 0 || rec > context->alias.count) {
-        if (dprintf(2, "Alias loop.\n") < 0)
-            DIE;
+        ERRPRINT("Alias loop.\n");
         return NULL;
     }
     return preshot_alias(context, alias->name, alias->value, rec + 1);

@@ -15,16 +15,13 @@ static void handle_cd_errors(mysh_t *context, char *path)
 {
     switch (errno) {
         case EACCES:
-            if (fprintf(stderr, "%s: Permission denied.\n", path) < 0)
-                DIE;
+            ERRPRINT("%s: Permission denied.\n", path);
             break;
         case ENOENT:
-            if (fprintf(stderr, "%s: No such file or directory.\n", path) < 0)
-                DIE;
+            ERRPRINT("%s: No such file or directory.\n", path);
             break;
         case ENOTDIR:
-            if (fprintf(stderr, "%s: Not a directory.\n", path) < 0)
-                DIE;
+            ERRPRINT("%s: Not a directory.\n", path);
             break;
         default: DIE;
     }
@@ -57,7 +54,7 @@ static void exec_cd(mysh_t *context)
 void builtin_cd(mysh_t *context)
 {
     if (CMDARGC > 2) {
-        DWRITE(STDERR_FILENO, "cd: Too many arguments.\n", 24);
+        ERRPRINT("cd: Too many arguments.\n");
         STATUS = 1;
         return;
     }
