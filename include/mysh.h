@@ -14,8 +14,10 @@
     #include <stdlib.h>
     #include <unistd.h>
 
+    #include "list.h"
     #include "ice/macro.h"
     #include "ice/string.h"
+    #include "list/struct.h"
 
     #include "mysh/parsing.h"
     #include "mysh/var.h"
@@ -47,6 +49,7 @@
     #define PIPEFDS (context->pipefds)
     #define STATUS (context->status)
     #define EXIT (context->exit)
+    #define HISTORY (context->history)
 
     #define ARGV (CMDARGS ? CMDARGS : (char *[]){CMDCMD, NULL})
 
@@ -70,6 +73,7 @@ typedef struct mysh_s {
     int pipefds[2];
     uc_t status;
     bool exit;
+    list_t *history;
 } mysh_t;
 
 void mysh(mysh_t *context, char **env);
