@@ -43,7 +43,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				builtin_unalias.c				\
 				)
 
-DIR			+=	$(addprefix $(DIR_SRC), builtins/alias/)
+DIR			+=	$(addprefix $(DIR_SRC), alias/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				destroy_alias.c					\
 				is_alias_forbidden.c			\
@@ -51,7 +51,7 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				alias_substitution.c			\
 				)
 
-DIR			+= $(addprefix $(DIR_SRC), builtins/history/)
+DIR			+= $(addprefix $(DIR_SRC), history/)
 SRC			+= $(addprefix $(lastword $(DIR)),\
 				get_history_data.c				\
 				flag_c.c						\
