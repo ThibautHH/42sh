@@ -5,29 +5,25 @@
 ** builtin_cd.c
 */
 
+#include <stdio.h>
 #include <errno.h>
-#include <malloc.h>
 #include <unistd.h>
 
 #include "mysh.h"
-#include "ice/printf.h"
 
 static void handle_cd_errors(mysh_t *context, char *path)
 {
     switch (errno) {
         case EACCES:
-            if (ice_dprintf(STDERR_FILENO, "%s: Permission denied.\n",
-                path) < 0)
+            if (fprintf(stderr, "%s: Permission denied.\n", path) < 0)
                 DIE;
             break;
         case ENOENT:
-            if (ice_dprintf(STDERR_FILENO, "%s: No such file "
-                "or directory.\n", path) < 0)
+            if (fprintf(stderr, "%s: No such file or directory.\n", path) < 0)
                 DIE;
             break;
         case ENOTDIR:
-            if (ice_dprintf(STDERR_FILENO, "%s: Not a directory.\n",
-                path) < 0)
+            if (fprintf(stderr, "%s: Not a directory.\n", path) < 0)
                 DIE;
             break;
         default: DIE;

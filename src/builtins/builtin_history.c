@@ -47,10 +47,12 @@ void builtin_history(mysh_t *context)
         return;
     if (CMDARGS[1]) {
         idx_history = strtol(CMDARGS[1], &endptr, 10);
-        if (*endptr != '\0' || idx_history < 0) {
+        if (*endptr || idx_history < 0) {
             fprintf(stderr, "history: Badly formed number.\n");
-            STATUS = 1; return;
-        } c = idx_history + (idx_history == 0);
+            STATUS = 1;
+            return;
+        }
+        c = (idx_history == 0) ? 1 : idx_history;
     }
     print_nodes(context, c);
     STATUS = 0;

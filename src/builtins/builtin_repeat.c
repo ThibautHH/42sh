@@ -5,7 +5,6 @@
 ** builtin_repeat.c
 */
 
-#include "mysh.h"
 #include "mysh/commands.h"
 
 static void run_repeat(mysh_t *context, uint64_t nb_iter)

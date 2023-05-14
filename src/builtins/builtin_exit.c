@@ -5,13 +5,7 @@
 ** builtin_exit.c
 */
 
-#include <unistd.h>
-
-#include "ice/array.h"
-#include "ice/int.h"
-
 #include "mysh.h"
-#include "mysh/parsing.h"
 
 void builtin_exit(mysh_t *context)
 {
@@ -22,5 +16,5 @@ void builtin_exit(mysh_t *context)
     }
     EXIT = 1;
     if (CMDARGC == 2)
-        STATUS = ice_atoi(CMDARGS[1]);
+        STATUS = atoi(CMDARGS[1]);
 }
