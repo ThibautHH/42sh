@@ -11,7 +11,7 @@
 #include "mysh/history.h"
 #include "mysh/parsing_functions.h"
 
-static int handle_search_event(mysh_t *context)
+int handle_search_event(mysh_t *context)
 {
     size_t kwlen;
     char *kw;
@@ -44,7 +44,7 @@ static void select_node(list_node_t **node, long event_id)
             break;
 }
 
-static int handle_precise_event(mysh_t *context)
+int handle_precise_event(mysh_t *context)
 {
     list_node_t *node = HISTORY->tail;
     char *ptmp = P;
@@ -68,7 +68,7 @@ static int handle_precise_event(mysh_t *context)
     return !!node;
 }
 
-static int handle_prefix_event(mysh_t *context)
+int handle_prefix_event(mysh_t *context)
 {
     char *prefix, *ptmp = P;
     size_t prefix_len;

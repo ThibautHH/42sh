@@ -22,6 +22,9 @@ typedef struct history_s {
 void get_history_data(char *buffer, mysh_t *context);
 bool expand_history(mysh_t *context);
 void free_history(history_t *node);
+int handle_prefix_event(mysh_t *context);
+int handle_precise_event(mysh_t *context);
+int handle_search_event(mysh_t *context);
 
 static inline bool handle_history(mysh_t *context)
 {
