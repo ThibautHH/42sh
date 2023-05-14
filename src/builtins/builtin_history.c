@@ -31,9 +31,7 @@ static void print_nodes(mysh_t *context, size_t c)
             node = node->prev;
     for (size_t i = 0; node && (c ? i <= c : true); node = node->next, i++) {
         history = node->value;
-        if (printf("% 6d\t%s\t%s", history->index,
-            history->date, history->cmd) < 0)
-            DIE;
+        PRINT("% 6d\t%s\t%s", history->index, history->date, history->cmd);
     }
 }
 
@@ -47,10 +45,12 @@ void builtin_history(mysh_t *context)
         return;
     if (CMDARGS[1]) {
         idx_history = strtol(CMDARGS[1], &endptr, 10);
-        if (*endptr != '\0' || idx_history < 0) {
-            fprintf(stderr, "history: Badly formed number.\n");
-            STATUS = 1; return;
-        } c = idx_history + (idx_history == 0);
+        if (*endptr || idx_history < 0) {
+            ERRPRINT("history: Badly formed number.\n");
+            STATUS = 1;
+            return;
+        }
+        c = (idx_history == 0) ? 1 : idx_history;
     }
     print_nodes(context, c);
     STATUS = 0;

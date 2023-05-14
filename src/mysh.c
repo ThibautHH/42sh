@@ -11,12 +11,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "list.h"
-
-#include "mysh.h"
-#include "mysh/alias.h"
-#include "mysh/commands.h"
 #include "mysh/history.h"
+#include "mysh/commands.h"
 
 static bool init(mysh_t *context, char **env)
 {
@@ -24,7 +20,7 @@ static bool init(mysh_t *context, char **env)
         TAILQ_INIT(VARQ);
     TAILQ_INIT(&context->pipelines);
     HISTORY = list_create();
-    if (HISTORY == NULL)
+    if (!HISTORY)
         return true;
     load_env(context, env);
     TAILQ_INIT(ALIASQ);
@@ -35,7 +31,7 @@ void cleanup(mysh_t *context)
 {
     for (var_type_t type = VAR_ENV; type <= VAR_SHELL; type++)
         destroy_vars(context, type);
-    list_destroy_node(HISTORY, free);
+    list_destroy_node(HISTORY, (void (*)(void *))free_history);
     free_pipelines(context);
     destroy_alias(context);
     free(LINE);
@@ -56,6 +52,6 @@ void mysh(mysh_t *context, char **env)
     }
     if (errno)
         DIE;
-    TTY_WRITE("exit\n", 5);
+    TTY_WRITE("exit\n");
     cleanup(context);
 }

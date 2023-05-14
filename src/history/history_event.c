@@ -10,7 +10,7 @@
 
 #include "mysh/history.h"
 
-static bool handle_precise_event(mysh_t *context, int offset)
+static bool handle_search_event(mysh_t *context, int offset)
 {
     char *str = malloc(sizeof(char) * (strlen(LINE) - 1));
     int j = 0;
@@ -23,32 +23,31 @@ static bool handle_precise_event(mysh_t *context, int offset)
     for (list_node_t *node = HISTORY->tail; node; node = node->prev) {
         if (strstr(((history_t *)node->value)->cmd, str)) {
             realloc_line(context, ((history_t *)node->value)->cmd, offset);
-            DWRITE(1, LINE, strlen(LINE));
+            PRINT(LINE);
             free(str);
             return false;
         }
     }
-    if (fprintf(stderr, "%s: Event not found.\n", str) < 0)
-        DIE;
+    ERRPRINT("%s: Event not found.\n", str);
     free(str);
     return false;
 }
 
-static bool handle_search_event(mysh_t *context, int offset)
+static bool handle_precise_event(mysh_t *context, int offset)
 {
-    int nb_event = atoi(LINE + 1);
+    char *endptr;
+    long nb_event = strtol(LINE + 1, &endptr, 10);
 
-    if (nb_event <= 0)
+    if (*endptr || nb_event < 0)
         return true;
     for (list_node_t *node = HISTORY->tail; node; node = node->prev) {
         if (nb_event == ((history_t *)node->value)->index) {
             realloc_line(context, ((history_t *)node->value)->cmd, offset);
-            DWRITE(1, LINE, strlen(LINE));
+            PRINT(LINE);
             return false;
         }
     }
-    if (fprintf(stderr, "%s: Event not found.\n", LINE + 1) < 0)
-        DIE;
+    ERRPRINT("%ld: Event not found.\n", nb_event);
     return true;
 }
 
@@ -58,9 +57,9 @@ static bool handle_last_event(mysh_t *context, int offset)
 
     if (!node)
         return false;
-    if (LINE[0] == '!' && LINE[1] == '!') {
+    if (LINE[0] == '!' && LINE[1] == '!' && !LINE[2]) {
         realloc_line(context, ((history_t *)node->value)->cmd, offset);
-        DWRITE(1, LINE, strlen(LINE));
+        PRINT(LINE);
         return false;
     }
     return true;
@@ -78,12 +77,11 @@ static bool search_in_history(mysh_t *context, int offset)
     for (list_node_t *node = HISTORY->tail; node; node = node->prev)
         if (!strncmp(str, ((history_t *)node->value)->cmd, len - 1)) {
             realloc_line(context, ((history_t *)node->value)->cmd, offset);
-            DWRITE(1, LINE, strlen(LINE));
+            PRINT(LINE);
             free(str);
             return true;
         }
-    if (fprintf(stderr, "%s: Event not found.\n", str) < 0)
-        DIE;
+    ERRPRINT("%s: Event not found.\n", str);
     free(str);
     return false;
 }

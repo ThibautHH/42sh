@@ -43,18 +43,12 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				builtin_unalias.c				\
 				)
 
-DIR			+=	$(addprefix $(DIR_SRC), builtins/alias/)
+DIR			+=	$(addprefix $(DIR_SRC), alias/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				destroy_alias.c					\
 				is_alias_forbidden.c			\
 				print_alias.c					\
 				alias_substitution.c			\
-				)
-
-DIR			+=	$(addprefix $(DIR_SRC), env/)
-SRC			+=	$(addprefix $(lastword $(DIR)),\
-				load_env.c		\
-				dup_env.c		\
 				)
 
 DIR			+= $(addprefix $(DIR_SRC), history/)
@@ -65,6 +59,12 @@ SRC			+= $(addprefix $(lastword $(DIR)),\
 				handle_history_event.c			\
 				)
 
+DIR			+=	$(addprefix $(DIR_SRC), env/)
+SRC			+=	$(addprefix $(lastword $(DIR)),\
+				load_env.c		\
+				dup_env.c		\
+				)
+
 DIR			+= 	$(addprefix $(DIR_SRC), var/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
 				destroy_vars.c	\
@@ -73,11 +73,11 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 
 DIR			+=	$(addprefix $(DIR_SRC), execution/)
 SRC			+=	$(addprefix $(lastword $(DIR)),\
-				get_cmd_path.c		\
-				piping.c			\
-				run_pipeline.c		\
-				print_sigerror.c	\
-				run_builtins.c		\
+				get_cmd_path.c			\
+				piping.c				\
+				run_pipeline.c			\
+				print_sigerror.c		\
+				run_unforked_builtin.c	\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), parser/)

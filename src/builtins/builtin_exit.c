@@ -5,22 +5,25 @@
 ** builtin_exit.c
 */
 
-#include <unistd.h>
-
-#include "ice/array.h"
-#include "ice/int.h"
+#include <stdio.h>
 
 #include "mysh.h"
-#include "mysh/parsing.h"
 
 void builtin_exit(mysh_t *context)
 {
+    char *endptr;
+
     if (CMDARGC > 2) {
-        DWRITE(STDERR_FILENO, "exit: Expression Syntax.\n", 25);
+        ERRPRINT("exit: Expression Syntax.\n");
         STATUS = 1;
         return;
     }
     EXIT = 1;
-    if (CMDARGC == 2)
-        STATUS = ice_atoi(CMDARGS[1]);
+    if (CMDARGC == 2) {
+        STATUS = strtol(CMDARGS[1], &endptr, 10);
+        if (*endptr) {
+            ERRPRINT("exit: Badly formed number.\n");
+            STATUS = 1;
+        }
+    }
 }

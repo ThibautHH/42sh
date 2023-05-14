@@ -14,8 +14,8 @@ static void exec_setenv(mysh_t *context)
 
     for (size_t i = 0; name[i]; i++)
         if (!(IS_ALPHANUM(name[i]) || name[i] == '_')) {
-            DWRITE(STDERR_FILENO, "setenv: Variable name must contain "
-                "alphanumeric characters.\n", 60);
+            ERRPRINT("setenv: Variable name must contain alphanumeric "
+                "characters.\n");
             STATUS = 1;
             return;
         }
@@ -29,7 +29,7 @@ void builtin_setenv(mysh_t *context)
     if (CMDARGC < 2)
         return builtin_env(context);
     if (CMDARGC > 3) {
-        DWRITE(STDERR_FILENO, "setenv: Too many arguments.\n", 28);
+        ERRPRINT("setenv: Too many arguments.\n");
         STATUS = 1;
         return;
     }

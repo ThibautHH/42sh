@@ -35,7 +35,7 @@
 
     #define PIPELINE (context->current_pipeline)
 
-    #define CMD (PIPELINE->current_command)
+    #define CMD (context->current_command)
     #define CMDPREV TAILQ_PREV(CMD, commands_s, entries)
     #define CMDARGS (CMD->args)
     #define CMDCMD CMDARGS[0]
@@ -50,7 +50,7 @@
 
     #define PARSE_RED(d) (parse_##d##put_redirection(context), 1)
     #define SET_PARSE_ERR (PARSING_ERROR = (STATUS = 1))
-    #define PARSE_ERR(s, l) ({DWRITE(2, s, l); SET_PARSE_ERR; return;})
+    #define PARSE_ERR(a...) ({ERRPRINT(a); SET_PARSE_ERR; return;})
 
     #define PREP_DUP_ARG ({char t, *b; b = P; TO_TOKEN_END; t = *P; *P = '\0'
     #define DUP_ARG(d) PREP_DUP_ARG; d = strdup(b); if (!d) DIE; *P = t;})
@@ -129,7 +129,6 @@ typedef struct command_s {
 typedef struct pipeline_s {
     sequence_mode_t mode;
     TAILQ_HEAD(commands_s, command_s) commands;
-    command_t *current_command;
     TAILQ_ENTRY(pipeline_s) entries;
 } pipeline_t;
 

@@ -6,7 +6,6 @@
 */
 
 #include <errno.h>
-#include <malloc.h>
 #include <signal.h>
 #include <string.h>
 #include <unistd.h>
@@ -21,12 +20,9 @@ static void execute(mysh_t *context)
 
     execve(CMDPATH, ARGV, env);
     if (errno == ENOEXEC) {
-        if (fprintf(stderr, "%s: Exec format error."
-            " Wrong Architecture.\n", CMDPATH) < 0)
-            DIE;
-    } else if (fprintf(stderr, "%s: Permission denied.\n",
-        CMDPATH) < 0)
-        DIE;
+        ERRPRINT("%s: Exec format error. Wrong Architecture.\n", CMDPATH);
+    } else
+        ERRPRINT("%s: %s.\n", CMDPATH, strerror(errno));
     free(env);
     QUIT(1);
 }
@@ -50,7 +46,7 @@ void wait_for_cmd(mysh_t *context)
 
 void run(mysh_t *context)
 {
-    if (run_builtins(context))
+    if (run_unforked_builtin(context))
         return;
     if ((CMD->pipe_mode || IS_REDIR_PIPED) && pipe(PIPEFDS) == -1)
         DIE;

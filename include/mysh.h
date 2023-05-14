@@ -12,6 +12,8 @@
 
     #include <stdbool.h>
     #include <stdlib.h>
+    #define _GNU_SOURCE
+    #include <stdio.h>
     #include <unistd.h>
 
     #include "list.h"
@@ -56,10 +58,9 @@
     #define QUIT(status) (cleanup(context), exit(status))
     #define DIE QUIT(84)
 
-    #define DW_STRLEN(s, l) (l > 0 ? l : ice_strlen(s))
-    #define DWRITE(fd, s, l) if (write(fd, s, DW_STRLEN(s, l)) < 0)DIE
-    #define WRITE(s, l) DWRITE(STDOUT_FILENO, s, l)
-    #define TTY_WRITE(s, l) tty_write(context, s, l)
+    #define ERRPRINT(a...) if (fprintf(stderr, a) < 0)DIE
+    #define PRINT(a...) if (printf(a) < 0)DIE
+    #define TTY_WRITE(s) tty_write(context, s)
 
 typedef struct mysh_s {
     var_head_t vars[2];
@@ -69,6 +70,7 @@ typedef struct mysh_s {
     ssize_t len;
     TAILQ_HEAD(, pipeline_s) pipelines;
     pipeline_t *current_pipeline;
+    command_t *current_command;
     parsing_context_t parsing;
     int pipefds[2];
     uc_t status;
@@ -91,11 +93,11 @@ static inline bool is_stdin_tty(mysh_t *context)
     return is_tty;
 }
 
-static inline void tty_write(mysh_t *context, const char *str, size_t len)
+static inline void tty_write(mysh_t *context, const char *str)
 {
     if (!is_stdin_tty(context))
         return;
-    WRITE(str, len);
+    PRINT("%s", str);
 }
 
 #endif /* !MYSH_H */
