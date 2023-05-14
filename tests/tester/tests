@@ -227,7 +227,7 @@ ls
 
 [411]
 NAME="Built-in unsetenv"
-SETUP="export TERM=xterm"
+SETUP=""
 TESTS=
 unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST LOGNAME USER
 env
@@ -239,7 +239,7 @@ env
 
 [412]
 NAME="Built-in unsetenv no arg"
-SETUP="export TERM=xterm"
+SETUP=""
 TESTS=
 unsetenv _ SHLVL NLSPATH HOSTTYPE VENDOR OSTYPE MACHTYPE GROUP HOST LOGNAME USER
 env
@@ -504,7 +504,7 @@ SETUP=""
 CLEAN=""
 TESTS=
 {
-{ 
+{
 {e
 { ere
 [1003-END]
