@@ -17,88 +17,35 @@ static void write_error(mysh_t *context, char *error)
     STATUS = 1;
 }
 
-static void local_var_update(mysh_t *context, char *name, char *value)
+static bool check_name(mysh_t *context, char *name)
 {
-    var_t *var;
-    var_type_t type = VAR_SHELL;
-
-    TAILQ_FOREACH(var, VARQ, entries)
-        if (is_var_named(var, name)) {
-            value == NULL ? *VARV(var) = 0 : ice_strcpy(VARV(var), value);
-            return;
-        }
-    var = malloc(sizeof(var_t));
-    if (!var)
-        DIE;
-    var->name = &(*VARV(var)) - (ice_strlen(name) + 1);
-    ice_strcpy(VARN(var), name);
-    if (value != NULL)
-        ice_strcpy(VARV(var), value);
-    VARV(var)[-1] = '=';
-    TAILQ_INSERT_TAIL(VARQ, var, entries);
-    VARC++;
-    free(name);
-}
-
-static void display_local_var(mysh_t *context)
-{
-    var_t *var;
-    var_type_t type = VAR_SHELL;
-    int len = 0;
-
-    TAILQ_FOREACH(var, VARQ, entries) {
-        for (; var->name[len] != '='; len++);
-        if (printf("%.*s", len, var->name) < 0)
-            DIE;
-        if (var->name[len + 1] != 0 && printf("\t") < 0)
-            DIE;
-        if (var->name[len + 1] == 0 && printf("\n") < 0)
-            DIE;
-        if (var->name[len + 1] == 0)
-            continue;
-        if (printf("%s\n", var->name + len + 1) < 0)
-            DIE;
-    }
-    STATUS = 0;
-}
-
-size_t get_name_len(mysh_t *context, size_t i)
-{
-    size_t name_len = 1;
-
-    for (size_t y = 0; CMDARGS[i][y]; y++) {
-        if (!IS_ALPHANUM(CMDARGS[i][y]) && (CMDARGS[i][y] != '='
-            || CMDARGS[i][y + 1] == 0 || y == 0)) {
+    for (; *name && *name != '='; name++)
+        if (!IS_ALPHANUM(*name)) {
             write_error(context, "set: Variable name must contain"
                 " alphanumeric characters.\n");
-            return 0;
+            return true;
         }
-        if (CMDARGS[i][y] == '=') {
-            return name_len;
-        }
-        name_len++;
-    }
-    return name_len;
+    return false;
 }
 
 void builtin_set(mysh_t *context)
 {
-    size_t name_len;
-    char *value;
-    char *name;
-
     if (CMDARGC < 2)
-        return display_local_var(context);
-    for (size_t i = 1; i < CMDARGC; i++) {
-        value = NULL;
-        name_len = get_name_len(context, i);
-        if (name_len == 0)
+        return builtin_at(context);
+    for (size_t i = 1, nlen; i < CMDARGC; i++) {
+        if (!IS_ALPHA(*(CMDARGS[i]))) {
+            write_error(context, "set: Variable name must"
+                " begin with a letter.\n");
             return;
-        value = CMDARGS[i] + name_len;
-        name = malloc(sizeof(char) * name_len);
-        name[name_len - 1] = 0;
-        strncpy(name, CMDARGS[i], name_len - 1);
-        local_var_update(context, name, value);
+        }
+        nlen = ice_strtil(CMDARGS[i], '=');
+        if (check_name(context, CMDARGS[i]))
+            return;
+        if (CMDARGS[i][nlen]) {
+            CMDARGS[i][nlen] = '\0';
+            var_update(context, CMDARGS[i], CMDARGS[i] + nlen + 1, VAR_SHELL);
+        } else
+            var_update(context, CMDARGS[i], "", VAR_SHELL);
     }
     STATUS = 0;
 }
