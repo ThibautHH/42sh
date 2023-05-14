@@ -53,10 +53,8 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 
 DIR			+= $(addprefix $(DIR_SRC), history/)
 SRC			+= $(addprefix $(lastword $(DIR)),\
-				get_history_data.c				\
-				flag_c.c						\
-				history_event.c					\
-				handle_history_event.c			\
+				get_history_data.c	\
+				expand_history.c	\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), env/)
@@ -78,6 +76,11 @@ SRC			+=	$(addprefix $(lastword $(DIR)),\
 				run_pipeline.c			\
 				print_sigerror.c		\
 				run_unforked_builtin.c	\
+				)
+
+DIR			+=	$(addprefix $(DIR_SRC), expansion/)
+SRC			+=	$(addprefix $(lastword $(DIR)),\
+				insert_at_p.c	\
 				)
 
 DIR			+=	$(addprefix $(DIR_SRC), parser/)
