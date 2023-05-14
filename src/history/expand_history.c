@@ -89,17 +89,6 @@ static int handle_prefix_event(mysh_t *context)
     return !!node;
 }
 
-static bool handle_history(mysh_t *context)
-{
-    int ret;
-
-    if (((ret = handle_precise_event(context)) >= 0)
-        || ((ret = handle_search_event(context)) >= 0)
-        || ((ret = handle_prefix_event(context)) >= 0))
-        return ret;
-    return false;
-}
-
 bool expand_history(mysh_t *context)
 {
     bool is_event = true;

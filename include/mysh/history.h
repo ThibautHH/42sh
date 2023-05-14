@@ -23,4 +23,15 @@ void get_history_data(char *buffer, mysh_t *context);
 bool expand_history(mysh_t *context);
 void free_history(history_t *node);
 
+static inline bool handle_history(mysh_t *context)
+{
+    int ret;
+
+    if (((ret = handle_precise_event(context)) >= 0)
+        || ((ret = handle_search_event(context)) >= 0)
+        || ((ret = handle_prefix_event(context)) >= 0))
+        return ret;
+    return false;
+}
+
 #endif
