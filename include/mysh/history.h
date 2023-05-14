@@ -10,6 +10,8 @@
 
     #include "mysh.h"
 
+    #define EVENT_NOT_FOUND_ID ((event_id >= 0) ? event_id : event_id + 1)
+
 typedef struct history_s {
     char *cmd;
     int index;
@@ -17,11 +19,22 @@ typedef struct history_s {
     int check;
 } history_t;
 
-void flag_c(mysh_t *context);
-void history_event(mysh_t *context, int offset);
 void get_history_data(char *buffer, mysh_t *context);
-bool handle_history_event(mysh_t *context);
-void realloc_line(mysh_t *context, char *line, int offset);
+bool expand_history(mysh_t *context);
 void free_history(history_t *node);
+int handle_prefix_event(mysh_t *context);
+int handle_precise_event(mysh_t *context);
+int handle_search_event(mysh_t *context);
+
+static inline bool handle_history(mysh_t *context)
+{
+    int ret;
+
+    if (((ret = handle_precise_event(context)) >= 0)
+        || ((ret = handle_search_event(context)) >= 0)
+        || ((ret = handle_prefix_event(context)) >= 0))
+        return ret;
+    return false;
+}
 
 #endif

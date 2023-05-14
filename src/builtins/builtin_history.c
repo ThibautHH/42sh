@@ -10,13 +10,14 @@
 
 #include "mysh/history.h"
 
-static bool history_flag(mysh_t *context)
+static bool clear_history(mysh_t *context)
 {
-    if (CMDARGS[1] && !strcmp("-c", CMDARGS[1])) {
-        flag_c(context);
-        return true;
-    }
-    return false;
+    if (!CMDARGS[1] || strcmp("-c", CMDARGS[1]))
+        return false;
+    for (list_node_t *node = HISTORY->tail, *tmp;
+        node && ((tmp = node->prev), 1); node = tmp)
+        free_history((history_t *)(list_remove_node(HISTORY, node)));
+    return true;
 }
 
 static void print_nodes(mysh_t *context, size_t c)
@@ -41,7 +42,7 @@ void builtin_history(mysh_t *context)
     char *endptr;
     size_t c = 0;
 
-    if (history_flag(context))
+    if (clear_history(context))
         return;
     if (CMDARGS[1]) {
         idx_history = strtol(CMDARGS[1], &endptr, 10);

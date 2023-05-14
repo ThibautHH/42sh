@@ -82,6 +82,7 @@ void prompt(mysh_t *context);
 void cleanup(mysh_t *context);
 void run_pipeline(mysh_t *context);
 void handle_shebang_invocation(char **argv);
+void insert_at_p(mysh_t *context, char *str, size_t len);
 
 static inline bool is_stdin_tty(mysh_t *context)
 {
