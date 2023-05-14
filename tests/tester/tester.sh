@@ -37,7 +37,6 @@ load_test()
   NAME=`test_field "$id" NAME`
   TESTS=`test_field "$id" | tac | sed -n '/\s*TESTS\s*=\s*/q;p' | tac`
   [ -z "$NAME" ] && NAME="Test $id"
-  [ -z "$SETUP" ] && SETUP="echo No setup"
   [ -z "$TESTS" ] && TESTS="echo No tests"
   refsh_out="/tmp/.refer.$$"
   mysh_out="/tmp/.myshell.$$"
