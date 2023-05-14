@@ -32,7 +32,7 @@ static bool history_flag(mysh_t *context)
             printf("history: Badly formed number.\n");
             return false;
         }
-        idx_history = atoi(CMDARGS[1]);
+        idx_history = strtol(CMDARGS[1], NULL, 10);
         if (idx_history > 0) {
             exec_cmd(idx_history, context);
             return false;
@@ -50,6 +50,6 @@ void builtin_history(mysh_t *context)
         return;
     for (list_node_t *node = HISTORY->head; node; node = node->next) {
         history = node->value;
-        printf("%5i  %s  %s", history->index, history->date, history->cmd);
+        printf("%5i  %s   %s", history->index, history->date, history->cmd);
     }
 }

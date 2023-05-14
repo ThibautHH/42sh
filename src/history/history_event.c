@@ -12,8 +12,12 @@
 
 static bool handle_precise_event(mysh_t *context, int offset)
 {
-    char *str = ice_strndup(LINE, ice_strtil(LINE + 2, '?'));
+    char *str = malloc(sizeof(char) * (strlen(LINE) - 1));
+    int j = 0;
 
+    for (int i = 2; LINE[i]; i++, j++)
+        str[j] = LINE[i];
+    str[j - 1] = '\0';
     if (!str || LINE[1] != '?')
         return true;
     for (list_node_t *node = HISTORY->tail; node; node = node->prev) {
@@ -54,7 +58,7 @@ static bool handle_last_event(mysh_t *context, int offset)
 
     if (!node)
         return false;
-    if (LINE[1] == '!' && !LINE[2]) {
+    if (LINE[0] == '!' && LINE[1] == '!') {
         realloc_line(context, ((history_t *)node->value)->cmd, offset);
         DWRITE(1, LINE, strlen(LINE));
         return false;
@@ -86,9 +90,9 @@ static bool search_in_history(mysh_t *context, int offset)
 
 void history_event(mysh_t *context, int offset)
 {
-    if (!handle_precise_event(context, offset)
+    if (!handle_last_event(context, offset)
+        || !handle_precise_event(context, offset)
         || !handle_search_event(context, offset)
-        || !handle_last_event(context, offset)
         || !search_in_history(context, offset))
         return;
 }
