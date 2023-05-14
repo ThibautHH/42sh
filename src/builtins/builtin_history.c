@@ -10,46 +10,40 @@
 
 #include "mysh/history.h"
 
-static void exec_cmd(int idx_history, mysh_t *context)
-{
-    for (list_node_t *node = HISTORY->tail; node; node = node->prev) {
-        if (((history_t *)node->value)->index != idx_history)
-            continue;
-        execute_event_history_cmd(context, ((history_t *)node->value)->cmd);
-    }
-}
-
 static bool history_flag(mysh_t *context)
 {
-    int idx_history;
-
     if (CMDARGS[1] && !strcmp("-c", CMDARGS[1])) {
         flag_c(context);
-        return false;
+        return true;
     }
-    if (CMDARGS[1]) {
-        if (CMDARGS[1][0] < '0' || CMDARGS[1][0] > '9') {
-            printf("history: Badly formed number.\n");
-            return false;
-        }
-        idx_history = strtol(CMDARGS[1], NULL, 10);
-        if (idx_history > 0) {
-            exec_cmd(idx_history, context);
-            return false;
-        }
-    }
-    return true;
+    return false;
 }
 
 void builtin_history(mysh_t *context)
 {
+    long idx_history;
+    char *endptr;
+    size_t c = 0;
     history_t *history;
+    list_node_t *node = HISTORY->tail;
 
-    STATUS = 0;
-    if (!history_flag(context))
+    if (history_flag(context))
         return;
-    for (list_node_t *node = HISTORY->head; node; node = node->next) {
-        history = node->value;
-        printf("%5i  %s   %s", history->index, history->date, history->cmd);
+    if (CMDARGS[1]) {
+        idx_history = strtol(CMDARGS[1], &endptr, 10);
+        if (*endptr != '\0' || idx_history < 0) {
+            fprintf(stderr, "history: Badly formed number.\n");
+            STATUS = 1; return;
+        } c = idx_history + (idx_history == 0);
     }
+    if (!c)
+        node = HISTORY->head;
+    else
+        for (size_t i = 0; node && i < c - 1; i++)
+            node = node->prev;
+    for (size_t i = 0; node && (c ? i <= c : true); node = node->next, i++) {
+        history = node->value;
+        printf("% 6d\t%s\t%s", history->index, history->date, history->cmd);
+    }
+    STATUS = 0;
 }

@@ -12,21 +12,17 @@
 void get_history_data(char *buffer, mysh_t *context)
 {
     history_t *history = malloc(sizeof(history_t));
-    time_t curr_time;
-    void *times;
+    time_t t;
+    struct tm *tm;
+    char *tstr;
 
-    if (!history || buffer[0] == '!' || buffer[0] == '\n')
-        return;
-    if (time(&curr_time) == -1)
+    if (!history || time(&t) == -1
+        || !(tm = localtime(&t))
+        || !(tstr = asctime(tm)))
         DIE;
-    times = localtime(&curr_time);
-    if (!times)
-        DIE;
-    times = asctime(times);
-    if (!times)
-        DIE;
-    *history = (history_t){ice_strdup(buffer),
-        HISTORY->size + 1, times + 11, 0};
+    history->cmd = ice_strdup(buffer);
+    history->index = HISTORY->size + 1;
+    ice_strncpy2(history->date, tstr + 11, 5);
     history->date[5] = '\0';
     if (!history->cmd || !list_add(HISTORY, history))
         DIE;
